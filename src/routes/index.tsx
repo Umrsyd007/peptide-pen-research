@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 
 const PRODUCT_NAME = "Research Peptide Pen (Standard)";
 const PRODUCT_DESCRIPTION =
@@ -136,12 +136,18 @@ function LandingWireframe() {
             <Box className="h-10 w-32" label="logo">LOGO</Box>
           </a>
           <nav className="hidden md:flex gap-6" aria-label="Primary">
-            {["Products", "How it Works", "Research", "FAQ", "Contact"].map(
+            <Link
+              to="/products"
+              className="text-sm text-muted-foreground border-b border-dashed border-foreground/30 pb-0.5 hover:text-foreground transition-colors"
+            >
+              Products
+            </Link>
+            {["How it Works", "Research", "FAQ", "Contact"].map(
               (n) => (
                 <a
                   key={n}
                   href={`#${n.toLowerCase().replace(/\s+/g, "-")}`}
-                  className="text-sm text-muted-foreground border-b border-dashed border-foreground/30 pb-0.5"
+                  className="text-sm text-muted-foreground border-b border-dashed border-foreground/30 pb-0.5 hover:text-foreground transition-colors"
                 >
                   {n}
                 </a>
@@ -160,7 +166,7 @@ function LandingWireframe() {
         >
           <p className="text-xs text-muted-foreground">
             <a href="/" className="underline">Home</a> /{" "}
-            <a href="#products" className="underline">Products</a> /{" "}
+            <Link to="/products" className="underline">Products</Link> /{" "}
             <span>Metabolic & Fat Optimization</span>
           </p>
         </nav>

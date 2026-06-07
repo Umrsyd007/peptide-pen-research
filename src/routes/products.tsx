@@ -150,26 +150,35 @@ function ProductCard({ product }: { product: Product }) {
 function ProductsPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <header className="border-b border-border bg-card">
-        <nav
-          aria-label="Primary"
-          className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between"
-        >
-          <Link to="/" className="text-lg font-bold tracking-tight">
-            Peptide Co.
+      <header className="border-b border-dashed border-foreground/30" role="banner">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+          <Link to="/" aria-label="Peptide Pen Research home" className="text-lg font-bold tracking-tight">
+            Peptide Pen Research
           </Link>
-          <div className="flex gap-6 text-sm text-muted-foreground">
-            <Link to="/" className="hover:text-foreground">
-              Home
-            </Link>
-            <Link to="/products" className="text-foreground font-medium">
+          <nav className="hidden md:flex gap-6" aria-label="Primary">
+            <Link
+              to="/products"
+              className="text-sm text-foreground font-medium border-b border-dashed border-foreground/30 pb-0.5"
+            >
               Products
             </Link>
+            {["How it Works", "Research", "FAQ", "Contact"].map((n) => (
+              <a
+                key={n}
+                href={`/#${n.toLowerCase().replace(/\s+/g, "-")}`}
+                className="text-sm text-muted-foreground border-b border-dashed border-foreground/30 pb-0.5 hover:text-foreground transition-colors"
+              >
+                {n}
+              </a>
+            ))}
+          </nav>
+          <div className="h-10 w-24 rounded-md border-2 border-dashed border-foreground/40 bg-muted/30 flex items-center justify-center text-muted-foreground text-sm">
+            Cart
           </div>
-        </nav>
+        </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-8">
+      <main className="max-w-6xl mx-auto px-6 py-8" role="main">
         <div className="flex flex-col gap-4 mb-8">
           <nav aria-label="Breadcrumb" className="text-xs text-muted-foreground">
             <Link to="/" className="hover:text-foreground">
@@ -211,10 +220,10 @@ function ProductsPage() {
         </section>
       </main>
 
-      <footer className="border-t border-border mt-16 py-8">
-        <div className="max-w-7xl mx-auto px-4 text-xs text-muted-foreground text-center">
-          © {new Date().getFullYear()} Peptide Co. — Research use only. Not for
-          human consumption.
+      <footer className="border-t border-dashed border-foreground/30 mt-16 py-8" role="contentinfo">
+        <div className="max-w-6xl mx-auto px-6 text-xs text-muted-foreground text-center">
+          © {new Date().getFullYear()} Peptide Pen Research — Research use only. Not for
+          human or veterinary consumption.
         </div>
       </footer>
     </div>

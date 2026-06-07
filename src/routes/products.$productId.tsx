@@ -36,6 +36,7 @@ export const Route = createFileRoute("/products/$productId")({
                 name: p.name,
                 description,
                 category: p.categories,
+                image: p.image ? [`https://getpeptidepen.com${p.image}`] : undefined,
                 url,
                 offers: {
                   "@type": "Offer",

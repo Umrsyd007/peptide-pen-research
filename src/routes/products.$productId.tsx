@@ -423,7 +423,9 @@ function ProductDetailPage() {
                 params={{ productId: r.id }}
                 className="block space-y-2 group"
               >
-                <Box className="aspect-square" label="product image" />
+                <div className="aspect-square rounded-md border border-border bg-muted overflow-hidden flex items-center justify-center">
+                  <img src={r.image} alt={r.name} loading="lazy" className="w-full h-full object-contain p-3 group-hover:scale-105 transition-transform" />
+                </div>
                 <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
                   {r.categories.split("•")[0]?.trim()}
                 </p>

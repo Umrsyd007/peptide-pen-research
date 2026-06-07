@@ -222,12 +222,26 @@ function ProductDetailPage() {
         >
           {/* Gallery */}
           <div className="space-y-3">
-            <Box className="aspect-square w-full" label="main product image">
-              {product.name}
-            </Box>
+            <div className="aspect-square w-full rounded-lg border border-border bg-muted overflow-hidden flex items-center justify-center">
+              <img
+                src={product.image}
+                alt={product.name}
+                className="w-full h-full object-contain p-6"
+              />
+            </div>
             <div className="grid grid-cols-4 gap-3">
               {[1, 2, 3, 4].map((i) => (
-                <Box key={i} className="aspect-square" label={`thumb ${i}`} />
+                <div
+                  key={i}
+                  className="aspect-square rounded-md border border-border bg-muted overflow-hidden flex items-center justify-center"
+                >
+                  <img
+                    src={product.image}
+                    alt=""
+                    aria-hidden="true"
+                    className="w-full h-full object-contain p-2 opacity-70"
+                  />
+                </div>
               ))}
             </div>
           </div>

@@ -136,7 +136,7 @@ function HomeWireframe() {
       <main id="main" role="main">
         {/* 1. HERO */}
         <section
-          className="max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center"
+          className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-16 grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 items-center"
           aria-labelledby="hero-heading"
         >
           <div className="space-y-6">

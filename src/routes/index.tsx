@@ -14,10 +14,10 @@ export const Route = createFileRoute("/")({
       { name: "description", content: PAGE_DESCRIPTION },
       { property: "og:title", content: PAGE_TITLE },
       { property: "og:description", content: PAGE_DESCRIPTION },
-      { property: "og:url", content: "/" },
+      { property: "og:url", content: "https://getpeptidepen.com/" },
       { property: "og:type", content: "website" },
     ],
-    links: [{ rel: "canonical", href: "/" }],
+    links: [{ rel: "canonical", href: "https://getpeptidepen.com/" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -26,7 +26,7 @@ export const Route = createFileRoute("/")({
           "@type": "Organization",
           name: BRAND,
           description: PAGE_DESCRIPTION,
-          url: "/",
+          url: "https://getpeptidepen.com/",
         }),
       },
     ],

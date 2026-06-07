@@ -7,7 +7,7 @@ export const Route = createFileRoute("/products/$productId")({
     if (!product) throw notFound();
     return { product };
   },
-  head: ({ loaderData }) => {
+  head: ({ loaderData, params }) => {
     const p = loaderData?.product;
     const title = p
       ? `${p.name} — Research Peptide Pen`
@@ -15,6 +15,7 @@ export const Route = createFileRoute("/products/$productId")({
     const description = p
       ? `${p.name} (${p.categories}). Pre-mixed research peptide pen with batch-matched COA. For research use only.`
       : "Research peptide pen with batch-matched COA. For research use only.";
+    const url = `https://getpeptidepen.com/products/${params.productId}`;
     return {
       meta: [
         { title },
@@ -22,7 +23,43 @@ export const Route = createFileRoute("/products/$productId")({
         { property: "og:title", content: title },
         { property: "og:description", content: description },
         { property: "og:type", content: "product" },
+        { property: "og:url", content: url },
       ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: p
+        ? [
+            {
+              type: "application/ld+json",
+              children: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "Product",
+                name: p.name,
+                description,
+                category: p.categories,
+                url,
+                offers: {
+                  "@type": "Offer",
+                  price: p.price.replace(/[^0-9.]/g, ""),
+                  priceCurrency: "USD",
+                  availability: "https://schema.org/InStock",
+                  url,
+                },
+              }),
+            },
+            {
+              type: "application/ld+json",
+              children: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                itemListElement: [
+                  { "@type": "ListItem", position: 1, name: "Home", item: "https://getpeptidepen.com/" },
+                  { "@type": "ListItem", position: 2, name: "Products", item: "https://getpeptidepen.com/products" },
+                  { "@type": "ListItem", position: 3, name: p.name, item: url },
+                ],
+              }),
+            },
+          ]
+        : [],
     };
   },
   notFoundComponent: () => (

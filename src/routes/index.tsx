@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 
 const PRODUCT_NAME = "Research Peptide Pen (Standard)";
 const PRODUCT_DESCRIPTION =

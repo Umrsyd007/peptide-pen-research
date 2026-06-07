@@ -178,7 +178,7 @@ function ProductsPage() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-8">
+      <main className="max-w-6xl mx-auto px-6 py-8" role="main">
         <div className="flex flex-col gap-4 mb-8">
           <nav aria-label="Breadcrumb" className="text-xs text-muted-foreground">
             <Link to="/" className="hover:text-foreground">
@@ -220,10 +220,10 @@ function ProductsPage() {
         </section>
       </main>
 
-      <footer className="border-t border-border mt-16 py-8">
-        <div className="max-w-7xl mx-auto px-4 text-xs text-muted-foreground text-center">
-          © {new Date().getFullYear()} Peptide Co. — Research use only. Not for
-          human consumption.
+      <footer className="border-t border-dashed border-foreground/30 mt-16 py-8" role="contentinfo">
+        <div className="max-w-6xl mx-auto px-6 text-xs text-muted-foreground text-center">
+          © {new Date().getFullYear()} Peptide Pen Research — Research use only. Not for
+          human or veterinary consumption.
         </div>
       </footer>
     </div>

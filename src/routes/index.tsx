@@ -141,7 +141,7 @@ function HomeWireframe() {
         >
           <div className="space-y-6">
             <SectionTag>Research Use Only</SectionTag>
-            <h1 id="hero-heading" className="text-4xl md:text-5xl font-semibold leading-tight">
+            <h1 id="hero-heading" className="text-3xl sm:text-4xl md:text-5xl font-semibold leading-tight">
               {TAGLINE}
             </h1>
             <p className="text-base text-muted-foreground max-w-lg">

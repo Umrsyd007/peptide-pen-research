@@ -1,10 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 const BRAND = "Peptide Pen Research";
-const TAGLINE = "Lab-grade peptide pens, engineered for serious research.";
-const PAGE_TITLE = `${BRAND} | Research-Grade Peptide Pens`;
+const PRODUCT_NAME = "Retatrutide";
+const PRODUCT_VARIANT = "Standard Pen";
+const PRODUCT_FULL = `${PRODUCT_NAME} (${PRODUCT_VARIANT})`;
+const PRODUCT_PRICE = "$307.40";
+const PRODUCT_CATEGORY = "Metabolic & Fat Optimization";
+const TAGLINE = `${PRODUCT_NAME} research, in a pre-mixed pen.`;
+const PAGE_TITLE = `${PRODUCT_FULL} | ${BRAND}`;
 const PAGE_DESCRIPTION =
-  "Pre-mixed, lab-tested research peptide pens with full COA documentation, cold-chain shipping and dosing references. For in-vitro laboratory use only.";
+  "Retatrutide Standard Pen — pre-mixed, lab-tested GLP-1/GIP/glucagon triple-agonist research peptide with batch-matched COA and cold-chain shipping. For in-vitro laboratory use only.";
 
 export const Route = createFileRoute("/")({
   component: HomeWireframe,
@@ -15,7 +20,7 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: PAGE_TITLE },
       { property: "og:description", content: PAGE_DESCRIPTION },
       { property: "og:url", content: "/" },
-      { property: "og:type", content: "website" },
+      { property: "og:type", content: "product" },
     ],
     links: [{ rel: "canonical", href: "/" }],
     scripts: [
@@ -23,10 +28,17 @@ export const Route = createFileRoute("/")({
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "Organization",
-          name: BRAND,
+          "@type": "Product",
+          name: PRODUCT_FULL,
+          category: PRODUCT_CATEGORY,
+          brand: { "@type": "Brand", name: BRAND },
           description: PAGE_DESCRIPTION,
-          url: "/",
+          offers: {
+            "@type": "Offer",
+            price: "307.40",
+            priceCurrency: "USD",
+            availability: "https://schema.org/InStock",
+          },
         }),
       },
     ],
@@ -105,33 +117,41 @@ function HomeWireframe() {
       </header>
 
       <main id="main" role="main">
-        {/* 1. HERO */}
+        {/* 1. HERO — product-focused */}
         <section
           className="max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center"
           aria-labelledby="hero-heading"
         >
           <div className="space-y-6">
-            <SectionTag>Research Use Only</SectionTag>
+            <div className="flex flex-wrap gap-2">
+              <SectionTag>Research Use Only</SectionTag>
+              <SectionTag>Bestseller</SectionTag>
+              <SectionTag>{PRODUCT_CATEGORY}</SectionTag>
+            </div>
             <h1 id="hero-heading" className="text-4xl md:text-5xl font-semibold leading-tight">
               {TAGLINE}
             </h1>
             <p className="text-base text-muted-foreground max-w-lg">
-              {BRAND} supplies pre-mixed peptide pens with batch-level COAs,
-              cold-chain shipping and transparent dosing references — built
-              for laboratories that can&apos;t afford guesswork.
+              {PRODUCT_FULL} is a pre-mixed research peptide pen featuring a
+              triple GLP-1 / GIP / glucagon receptor agonist — shipped cold-chain
+              with batch-matched COA. No reconstitution. No guesswork.
             </p>
+            <div className="flex items-baseline gap-3">
+              <span className="text-3xl font-semibold">{PRODUCT_PRICE}</span>
+              <span className="text-xs text-muted-foreground">per pen · ships cold-chain</span>
+            </div>
             <div className="flex flex-wrap gap-3">
-              <Box className="h-12 w-44" label="primary cta">Shop Peptide Pens</Box>
-              <Box className="h-12 w-40" label="secondary cta">View the Science</Box>
+              <Box className="h-12 w-44" label="primary cta">Add Pen to Cart</Box>
+              <Box className="h-12 w-40" label="secondary cta">Download COA</Box>
             </div>
             <ul className="flex flex-wrap gap-4 text-xs text-muted-foreground pt-2 list-none p-0">
               <li>✓ ≥99% purity (HPLC)</li>
-              <li>✓ Third-party tested</li>
-              <li>✓ Tracked cold-chain delivery</li>
+              <li>✓ MS identity confirmed</li>
+              <li>✓ Endotoxin screened</li>
             </ul>
           </div>
           <Box className="aspect-[4/5] w-full" label="hero image">
-            Peptide Pen — Hero Visual
+            {PRODUCT_FULL} — Pen Visual
           </Box>
         </section>
 
@@ -141,13 +161,13 @@ function HomeWireframe() {
           aria-labelledby="trust-heading"
         >
           <div className="max-w-6xl mx-auto px-6 py-10">
-            <h2 id="trust-heading" className="sr-only">Why researchers choose us</h2>
+            <h2 id="trust-heading" className="sr-only">Why researchers choose this pen</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                { t: "Lab-Verified Purity", s: "HPLC + MS reports on every batch" },
-                { t: "Pre-Mixed Pens", s: "No reconstitution, no waste" },
+                { t: "Triple Agonist", s: "GLP-1 / GIP / Glucagon profile" },
+                { t: "Pre-Mixed Pen", s: "No reconstitution, no waste" },
+                { t: "Batch-Matched COA", s: "HPLC + MS on every pen" },
                 { t: "Cold-Chain Shipping", s: "Temperature-monitored 2–8°C" },
-                { t: "Researcher Support", s: "Speak to a real scientist" },
               ].map((b) => (
                 <Box key={b.t} className="h-28 flex-col" label="value prop">
                   <div>
@@ -160,42 +180,48 @@ function HomeWireframe() {
           </div>
         </section>
 
-        {/* 3. FEATURED PRODUCTS */}
+        {/* 3. PRODUCT SPECS / VARIANTS */}
         <section
+          id="product"
           className="max-w-6xl mx-auto px-6 py-16"
-          aria-labelledby="products-heading"
+          aria-labelledby="product-heading"
         >
           <div className="flex items-end justify-between mb-8">
             <div className="space-y-2">
-              <SectionTag>Featured Catalog</SectionTag>
-              <h2 id="products-heading" className="text-3xl font-semibold">
-                The pens our labs reorder most
+              <SectionTag>Product Detail</SectionTag>
+              <h2 id="product-heading" className="text-3xl font-semibold">
+                Inside the {PRODUCT_NAME} Standard Pen
               </h2>
               <p className="text-sm text-muted-foreground max-w-xl">
-                A curated slice of our research peptide range — every pen
-                ships with a batch-matched certificate of analysis.
+                Each pen is filled, sealed and assayed in a controlled
+                environment, then matched to its lab report by batch ID.
               </p>
             </div>
             <Link to="/products" className="hidden md:block">
-              <Box className="h-10 w-36" label="link">View all products →</Box>
+              <Box className="h-10 w-36" label="link">All peptide pens →</Box>
             </Link>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              { n: "Research Peptide Pen — Standard", c: "Metabolic & Fat Research", p: "$XXX" },
-              { n: "Recovery Pen — Tissue Series", c: "Repair & Recovery Research", p: "$XXX" },
-              { n: "Cognition Pen — Nootropic Series", c: "Neurological Research", p: "$XXX" },
-            ].map((p) => (
-              <article key={p.n} className="space-y-3">
-                <Box className="aspect-square" label="product image" />
-                <div className="space-y-1">
-                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{p.c}</p>
-                  <h3 className="text-sm font-medium">{p.n}</h3>
-                  <p className="text-sm font-semibold">{p.p}</p>
-                </div>
-                <Box className="h-10" label="cta">View Details</Box>
-              </article>
-            ))}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <Box className="aspect-square" label="product image">Pen — Front</Box>
+            <div className="lg:col-span-2 grid grid-cols-2 gap-4">
+              {[
+                { k: "Peptide", v: "Retatrutide" },
+                { k: "Format", v: "Pre-mixed pen" },
+                { k: "Category", v: PRODUCT_CATEGORY },
+                { k: "Purity (HPLC)", v: "≥ 99%" },
+                { k: "Identity", v: "MS confirmed ±1 Da" },
+                { k: "Storage", v: "2–8°C, protect from light" },
+                { k: "Shipping", v: "Insulated cold-chain" },
+                { k: "Price", v: PRODUCT_PRICE },
+              ].map((s) => (
+                <Box key={s.k} className="p-3" label="spec">
+                  <div className="text-left w-full">
+                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{s.k}</p>
+                    <p className="text-sm font-medium">{s.v}</p>
+                  </div>
+                </Box>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -218,7 +244,7 @@ function HomeWireframe() {
             </div>
             <ol className="grid grid-cols-1 md:grid-cols-4 gap-6 list-none p-0">
               {[
-                { n: "01", t: "Browse the catalog", s: "Filter by research area, peptide and pen size." },
+                { n: "01", t: "Select your pen", s: `Choose ${PRODUCT_NAME} Standard or browse the full catalog.` },
                 { n: "02", t: "Verify the COA", s: "Download the batch-matched lab report before you buy." },
                 { n: "03", t: "Cold-chain shipping", s: "Insulated, tracked, 2–3 day delivery in supported regions." },
                 { n: "04", t: "Run your protocol", s: "Use our dosing references and researcher support team." },
@@ -242,17 +268,18 @@ function HomeWireframe() {
           aria-labelledby="science-heading"
         >
           <Box className="aspect-video w-full" label="lab image">
-            COA / Lab Visual
+            {PRODUCT_NAME} COA / Assay Visual
           </Box>
           <div className="space-y-6">
             <SectionTag>The Science</SectionTag>
             <h2 id="science-heading" className="text-3xl font-semibold">
-              Documentation that stands up to peer review
+              A triple-agonist research tool, fully documented
             </h2>
             <p className="text-sm text-muted-foreground">
-              Every {BRAND} batch is independently assayed for identity,
-              purity and concentration. We publish the raw reports — no
-              redactions, no marketing math.
+              {PRODUCT_NAME} is a long-acting agonist at the GLP-1, GIP and
+              glucagon receptors — one of the most studied targets in current
+              metabolic research. Every {BRAND} pen is independently assayed
+              for identity, purity and concentration.
             </p>
             <ul className="space-y-3 list-none p-0">
               {[
@@ -270,7 +297,7 @@ function HomeWireframe() {
                 </li>
               ))}
             </ul>
-            <Box className="h-12 w-48" label="cta">Download Sample COA</Box>
+            <Box className="h-12 w-56" label="cta">Download {PRODUCT_NAME} COA</Box>
           </div>
         </section>
 
@@ -283,13 +310,13 @@ function HomeWireframe() {
             <div className="space-y-2 text-center max-w-2xl mx-auto">
               <SectionTag>Trusted by Researchers</SectionTag>
               <h2 id="cta-heading" className="text-3xl font-semibold">
-                The supplier labs keep coming back to
+                Why labs reorder the {PRODUCT_NAME} pen
               </h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
-                { q: "COAs match every time. That alone is rare in this space.", a: "— Principal Investigator, Independent Lab" },
-                { q: "The pens removed an entire reconstitution step from our workflow.", a: "— Research Coordinator, Biotech Startup" },
+                { q: "The pre-mixed pen removed an entire reconstitution step from our metabolic protocol.", a: "— Research Coordinator, Biotech Startup" },
+                { q: "COA matched the batch every time. That alone is rare in this space.", a: "— Principal Investigator, Independent Lab" },
                 { q: "Cold-chain arrived on schedule, fully temperature-logged.", a: "— Procurement Lead, University Research Group" },
               ].map((t) => (
                 <Box key={t.q} className="p-6 flex-col" label="testimonial">
@@ -303,14 +330,14 @@ function HomeWireframe() {
             <Box className="p-10" label="final cta">
               <div className="text-center space-y-4">
                 <h3 className="text-2xl font-semibold text-foreground">
-                  Ready to upgrade your peptide supply?
+                  Ready to order your {PRODUCT_NAME} pen?
                 </h3>
                 <p className="text-sm text-muted-foreground max-w-xl mx-auto">
-                  Browse the catalog or talk to a researcher on our team
-                  about custom protocols and bulk lab pricing.
+                  {PRODUCT_PRICE} per pen, shipped cold-chain with a
+                  batch-matched certificate of analysis.
                 </p>
                 <div className="flex flex-wrap gap-3 justify-center">
-                  <Box className="h-12 w-44" label="primary cta">Shop Peptide Pens</Box>
+                  <Box className="h-12 w-44" label="primary cta">Add Pen to Cart</Box>
                   <Box className="h-12 w-44" label="secondary cta">Contact Our Team</Box>
                 </div>
               </div>

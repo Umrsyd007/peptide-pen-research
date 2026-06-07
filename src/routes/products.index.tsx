@@ -65,27 +65,15 @@ function ProductCard({ product }: { product: Product }) {
         to="/products/$productId"
         params={{ productId: product.id }}
         aria-label={`View details for ${product.name}`}
-        className="relative aspect-square bg-muted flex items-center justify-center border-b border-border focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="relative aspect-square bg-muted flex items-center justify-center border-b border-border focus:outline-none focus-visible:ring-2 focus-visible:ring-ring overflow-hidden"
       >
         <TagBadge tag={product.tag} />
-        <div className="flex flex-col items-center gap-2 text-muted-foreground">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            className="w-12 h-12 opacity-40"
-            aria-hidden="true"
-          >
-            <rect x="3" y="3" width="18" height="18" rx="2" />
-            <circle cx="9" cy="9" r="2" />
-            <path d="m21 15-5-5L5 21" />
-          </svg>
-          <span className="text-xs uppercase tracking-wider opacity-60">
-            Product image
-          </span>
-        </div>
+        <img
+          src={product.image}
+          alt={product.name}
+          loading="lazy"
+          className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform"
+        />
       </Link>
       <div className="flex flex-col flex-1 p-4 gap-3">
         <div className="flex flex-col gap-1">

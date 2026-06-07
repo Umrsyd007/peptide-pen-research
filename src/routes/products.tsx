@@ -151,8 +151,8 @@ function ProductsPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b border-dashed border-foreground/30" role="banner">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link to="/" aria-label="Peptide Pen Research home" className="text-lg font-bold tracking-tight">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-3">
+          <Link to="/" aria-label="Peptide Pen Research home" className="text-base sm:text-lg font-bold tracking-tight shrink-0">
             Peptide Pen Research
           </Link>
           <nav className="hidden md:flex gap-6" aria-label="Primary">
@@ -172,13 +172,42 @@ function ProductsPage() {
               </a>
             ))}
           </nav>
-          <div className="h-10 w-24 rounded-md border-2 border-dashed border-foreground/40 bg-muted/30 flex items-center justify-center text-muted-foreground text-sm">
-            Cart
+          <div className="flex items-center gap-2">
+            <div className="h-9 sm:h-10 w-20 sm:w-24 rounded-md border-2 border-dashed border-foreground/40 bg-muted/30 flex items-center justify-center text-muted-foreground text-sm">
+              Cart
+            </div>
+            <details className="md:hidden relative">
+              <summary
+                className="list-none cursor-pointer inline-flex items-center justify-center h-11 w-11 rounded border border-dashed border-foreground/40 text-foreground"
+                aria-label="Open menu"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5" aria-hidden="true">
+                  <line x1="3" y1="6" x2="21" y2="6" />
+                  <line x1="3" y1="12" x2="21" y2="12" />
+                  <line x1="3" y1="18" x2="21" y2="18" />
+                </svg>
+              </summary>
+              <nav
+                aria-label="Mobile primary"
+                className="absolute right-0 top-full mt-2 w-56 z-50 rounded-md border border-dashed border-foreground/40 bg-background shadow-lg p-2 flex flex-col"
+              >
+                <Link to="/products" className="px-3 py-2 text-sm rounded hover:bg-muted">Products</Link>
+                {["How it Works", "Research", "FAQ", "Contact"].map((n) => (
+                  <a
+                    key={n}
+                    href={`/#${n.toLowerCase().replace(/\s+/g, "-")}`}
+                    className="px-3 py-2 text-sm rounded hover:bg-muted"
+                  >
+                    {n}
+                  </a>
+                ))}
+              </nav>
+            </details>
           </div>
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-6 py-8" role="main">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8" role="main">
         <div className="flex flex-col gap-4 mb-8">
           <nav aria-label="Breadcrumb" className="text-xs text-muted-foreground">
             <Link to="/" className="hover:text-foreground">

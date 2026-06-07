@@ -79,10 +79,10 @@ function HomeWireframe() {
 
       {/* Nav */}
       <header className="border-b border-dashed border-foreground/30" role="banner">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <a href="/" aria-label={`${BRAND} home`}>
-            <Box className="h-10 w-32" label="logo">{BRAND}</Box>
-          </a>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-3">
+          <Link to="/" aria-label={`${BRAND} home`} className="shrink-0">
+            <Box className="h-9 sm:h-10 w-28 sm:w-32" label="logo">{BRAND}</Box>
+          </Link>
           <nav className="hidden md:flex gap-6" aria-label="Primary">
             <Link
               to="/products"
@@ -100,19 +100,48 @@ function HomeWireframe() {
               </a>
             ))}
           </nav>
-          <Box className="h-10 w-24" label="cta">Cart</Box>
+          <div className="flex items-center gap-2">
+            <Box className="h-9 sm:h-10 w-20 sm:w-24" label="cta">Cart</Box>
+            <details className="md:hidden relative">
+              <summary
+                className="list-none cursor-pointer inline-flex items-center justify-center h-11 w-11 rounded border border-dashed border-foreground/40 text-foreground"
+                aria-label="Open menu"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5" aria-hidden="true">
+                  <line x1="3" y1="6" x2="21" y2="6" />
+                  <line x1="3" y1="12" x2="21" y2="12" />
+                  <line x1="3" y1="18" x2="21" y2="18" />
+                </svg>
+              </summary>
+              <nav
+                aria-label="Mobile primary"
+                className="absolute right-0 top-full mt-2 w-56 z-50 rounded-md border border-dashed border-foreground/40 bg-background shadow-lg p-2 flex flex-col"
+              >
+                <Link to="/products" className="px-3 py-2 text-sm rounded hover:bg-muted">Products</Link>
+                {["Science", "How it Works", "FAQ", "Contact"].map((n) => (
+                  <a
+                    key={n}
+                    href={`#${n.toLowerCase().replace(/\s+/g, "-")}`}
+                    className="px-3 py-2 text-sm rounded hover:bg-muted"
+                  >
+                    {n}
+                  </a>
+                ))}
+              </nav>
+            </details>
+          </div>
         </div>
       </header>
 
       <main id="main" role="main">
         {/* 1. HERO */}
         <section
-          className="max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center"
+          className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-16 grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 items-center"
           aria-labelledby="hero-heading"
         >
           <div className="space-y-6">
             <SectionTag>Research Use Only</SectionTag>
-            <h1 id="hero-heading" className="text-4xl md:text-5xl font-semibold leading-tight">
+            <h1 id="hero-heading" className="text-3xl sm:text-4xl md:text-5xl font-semibold leading-tight">
               {TAGLINE}
             </h1>
             <p className="text-base text-muted-foreground max-w-lg">

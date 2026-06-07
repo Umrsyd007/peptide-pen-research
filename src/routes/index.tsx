@@ -166,7 +166,7 @@ function LandingWireframe() {
         >
           <p className="text-xs text-muted-foreground">
             <a href="/" className="underline">Home</a> /{" "}
-            <a href="#products" className="underline">Products</a> /{" "}
+            <Link to="/products" className="underline">Products</Link> /{" "}
             <span>Metabolic & Fat Optimization</span>
           </p>
         </nav>

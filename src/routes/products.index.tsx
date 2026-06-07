@@ -17,8 +17,27 @@ export const Route = createFileRoute("/products/")({
         content:
           "Full catalog of research peptides, longevity compounds, and wellness protocols.",
       },
+      { property: "og:url", content: "https://getpeptidepen.com/products" },
+      { property: "og:type", content: "website" },
     ],
-    links: [{ rel: "canonical", href: "/products" }],
+    links: [{ rel: "canonical", href: "https://getpeptidepen.com/products" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          name: "Research Peptides Catalog",
+          numberOfItems: PRODUCTS.length,
+          itemListElement: PRODUCTS.slice(0, 20).map((p, i) => ({
+            "@type": "ListItem",
+            position: i + 1,
+            url: `https://getpeptidepen.com/products/${p.id}`,
+            name: p.name,
+          })),
+        }),
+      },
+    ],
   }),
   component: ProductsPage,
 });

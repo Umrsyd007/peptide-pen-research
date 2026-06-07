@@ -1,0 +1,12 @@
+# Peptide Pen Research
+
+> Pre-mixed, lab-tested research peptide pens with full COA documentation, cold-chain shipping and dosing references. For in-vitro laboratory use only.
+
+Peptide Pen Research supplies research-grade peptide pens to laboratories. Every batch ships with HPLC-verified purity (≥99%), mass-spec identity confirmation, endotoxin/sterility screening, and temperature-monitored cold-chain delivery.
+
+## Pages
+- [Home](/): Brand overview, value props, science, and featured catalog
+- [All Products](/products): Full catalog of research peptides, longevity compounds, and wellness protocols
+
+## Optional
+- [Sitemap](/sitemap.xml)

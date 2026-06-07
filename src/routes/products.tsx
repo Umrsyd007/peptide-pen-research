@@ -42,7 +42,12 @@ function TagBadge({ tag }: { tag: Tag }) {
 function ProductCard({ product }: { product: Product }) {
   return (
     <article className="group relative flex flex-col rounded-lg border border-border bg-card overflow-hidden hover:shadow-lg transition-shadow">
-      <div className="relative aspect-square bg-muted flex items-center justify-center border-b border-border">
+      <Link
+        to="/products/$productId"
+        params={{ productId: product.id }}
+        aria-label={`View details for ${product.name}`}
+        className="relative aspect-square bg-muted flex items-center justify-center border-b border-border focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      >
         <TagBadge tag={product.tag} />
         <div className="flex flex-col items-center gap-2 text-muted-foreground">
           <svg
@@ -62,11 +67,17 @@ function ProductCard({ product }: { product: Product }) {
             Product image
           </span>
         </div>
-      </div>
+      </Link>
       <div className="flex flex-col flex-1 p-4 gap-3">
         <div className="flex flex-col gap-1">
           <h2 className="text-base font-semibold text-foreground leading-tight">
-            {product.name}
+            <Link
+              to="/products/$productId"
+              params={{ productId: product.id }}
+              className="hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded"
+            >
+              {product.name}
+            </Link>
           </h2>
           <p className="text-xs text-muted-foreground line-clamp-2">
             {product.categories}
@@ -76,12 +87,13 @@ function ProductCard({ product }: { product: Product }) {
           {product.price}
         </p>
         <div className="flex flex-col gap-2">
-          <button
-            type="button"
-            className="w-full text-sm font-medium px-3 py-2 rounded border border-border bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors"
+          <Link
+            to="/products/$productId"
+            params={{ productId: product.id }}
+            className="w-full text-center text-sm font-medium px-3 py-2 rounded border border-border bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors"
           >
             View Details
-          </button>
+          </Link>
           <button
             type="button"
             className="w-full text-sm font-medium px-3 py-2 rounded bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
@@ -93,6 +105,7 @@ function ProductCard({ product }: { product: Product }) {
     </article>
   );
 }
+
 
 function ProductsPage() {
   return (

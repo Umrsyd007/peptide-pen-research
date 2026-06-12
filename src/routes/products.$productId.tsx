@@ -279,8 +279,7 @@ function ProductDetailPage() {
                 {(() => {
                   const [first, ...rest] = desc.deepDive!;
                   const firstBody = Array.isArray(first.body) ? first.body : [first.body];
-                  const [firstPara, ...restParas] = firstBody;
-                  const teaserParas = restParas; // remaining paragraphs of first section, will be blurred
+                  const [firstPara, ...restFirstParas] = firstBody;
                   return (
                     <details className="group [&_summary]:list-none">
                       {/* Always-visible: first heading + first paragraph */}
@@ -289,52 +288,45 @@ function ProductDetailPage() {
                         <p className="text-sm text-foreground/85 leading-relaxed">{firstPara}</p>
                       </article>
 
-                      {/* Teaser: remaining content, progressively blurred until opened */}
-                      <div className="relative mt-6">
-                        <div className="space-y-8 max-h-[260px] overflow-hidden group-open:max-h-none [mask-image:linear-gradient(to_bottom,black_0,black_30%,transparent_100%)] group-open:[mask-image:none] transition-[max-height] duration-500">
-                          {teaserParas.length > 0 && (
-                            <article className="space-y-3">
-                              {teaserParas.map((p, i) => (
-                                <p
-                                  key={i}
-                                  className="text-sm text-foreground/85 leading-relaxed blur-[2px] group-open:blur-0 transition-[filter] duration-500"
-                                  style={{ filter: `blur(${Math.min(1 + i * 1.2, 5)}px)` }}
-                                >
-                                  {p}
-                                </p>
-                              ))}
-                            </article>
-                          )}
-                          {rest.map((s) => (
-                            <article
-                              key={s.heading}
-                              className="space-y-3 blur-[4px] group-open:blur-0 transition-[filter] duration-500"
-                            >
-                              <h3 className="text-xl font-semibold tracking-tight">{s.heading}</h3>
-                              {(Array.isArray(s.body) ? s.body : [s.body]).map((p, i) => (
-                                <p key={i} className="text-sm text-foreground/85 leading-relaxed">{p}</p>
-                              ))}
-                            </article>
-                          ))}
-                        </div>
-                        {/* Background fade — only when collapsed */}
-                        <div
-                          className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background via-background/80 to-transparent group-open:hidden"
-                          aria-hidden
-                        />
-                      </div>
-
-                      <summary className="mt-6 cursor-pointer select-none flex justify-center">
+                      {/* Inline "Continue reading" button — hidden when open */}
+                      <summary className="mt-6 cursor-pointer select-none group-open:hidden">
                         <span className="inline-flex items-center gap-2 h-11 px-6 rounded-full border border-border bg-card hover:bg-muted/50 transition text-sm font-medium">
-                          <span className="group-open:hidden">Continue reading the full research brief</span>
-                          <span className="hidden group-open:inline">Show less</span>
-                          <span className="text-muted-foreground group-open:rotate-180 transition-transform">↓</span>
+                          Continue reading the full research brief
+                          <span className="text-muted-foreground">↓</span>
                         </span>
                       </summary>
+
+                      {/* Revealed content */}
+                      <div className="mt-8 space-y-8">
+                        {restFirstParas.length > 0 && (
+                          <article className="space-y-3">
+                            {restFirstParas.map((p, i) => (
+                              <p key={i} className="text-sm text-foreground/85 leading-relaxed">{p}</p>
+                            ))}
+                          </article>
+                        )}
+                        {rest.map((s) => (
+                          <article key={s.heading} className="space-y-3">
+                            <h3 className="text-xl font-semibold tracking-tight">{s.heading}</h3>
+                            {(Array.isArray(s.body) ? s.body : [s.body]).map((p, i) => (
+                              <p key={i} className="text-sm text-foreground/85 leading-relaxed">{p}</p>
+                            ))}
+                          </article>
+                        ))}
+
+                        {/* Show less — only visible when open */}
+                        <summary className="cursor-pointer select-none flex justify-center pt-2">
+                          <span className="inline-flex items-center gap-2 h-11 px-6 rounded-full border border-border bg-card hover:bg-muted/50 transition text-sm font-medium">
+                            Show less
+                            <span className="text-muted-foreground rotate-180">↓</span>
+                          </span>
+                        </summary>
+                      </div>
                     </details>
                   );
                 })()}
               </div>
+
 
             </div>
           </section>

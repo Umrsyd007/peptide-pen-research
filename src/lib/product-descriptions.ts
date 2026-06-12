@@ -630,6 +630,13 @@ const DEFAULT: ProductDescription = {
   ],
 };
 
+import { DEEP_DIVES } from "@/lib/product-deep-dives";
+
 export function getDescription(id: string): ProductDescription {
-  return D[id] ?? DEFAULT;
+  const base = D[id] ?? DEFAULT;
+  // Prefer hand-authored deepDive (e.g. retatrutide). Otherwise fall back to scraped research library.
+  if (base.deepDive && base.deepDive.length > 0) return base;
+  const scraped = DEEP_DIVES[id];
+  if (scraped && scraped.length > 0) return { ...base, deepDive: scraped };
+  return base;
 }

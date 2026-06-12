@@ -521,7 +521,7 @@ function ProductDetailPage() {
           </p>
           <div className="flex flex-wrap justify-center gap-3 pt-2">
             <a href="#buy-box" className="inline-flex items-center h-11 px-6 rounded-full bg-primary text-primary-foreground font-medium hover:opacity-90 transition">
-              Order now — {product.price}
+              Order now — {displayPrice}
             </a>
             <Link to="/products" className="inline-flex items-center h-11 px-6 rounded-full border border-border hover:bg-muted/50 transition text-sm font-medium">
               Browse all products

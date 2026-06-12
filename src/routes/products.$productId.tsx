@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { getProduct, PRODUCTS } from "@/lib/products";
 import { getDescription } from "@/lib/product-descriptions";
+import { getVariants } from "@/lib/product-variants";
 
 export const Route = createFileRoute("/products/$productId")({
   loader: ({ params }) => {

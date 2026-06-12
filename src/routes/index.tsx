@@ -137,8 +137,8 @@ function HomePage() {
               </div>
 
               <h1 id="hero-heading" className="font-black uppercase leading-[0.92] tracking-tight text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem]">
-                Buy One Get<br />
-                One{" "}
+                Research Peptide Pens.<br />
+                Buy One Get One{" "}
                 <span className="relative inline-block bg-[image:var(--gradient-flame)] bg-clip-text text-transparent">
                   Free.
                   <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 200 12" fill="none" aria-hidden>

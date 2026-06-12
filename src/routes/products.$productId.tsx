@@ -1,5 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { getProduct, PRODUCTS } from "@/lib/products";
+import { getDescription } from "@/lib/product-descriptions";
 
 export const Route = createFileRoute("/products/$productId")({
   loader: ({ params }) => {
@@ -9,11 +10,12 @@ export const Route = createFileRoute("/products/$productId")({
   },
   head: ({ loaderData, params }) => {
     const p = loaderData?.product;
+    const desc = p ? getDescription(p.id) : null;
     const title = p
-      ? `${p.name} — Research Peptide Pen`
-      : "Product — Research Peptide Pen";
-    const description = p
-      ? `${p.name} (${p.categories}). Pre-mixed research peptide pen with batch-matched COA. For research use only.`
+      ? `${p.name} — ${desc?.tagline ? "Research Peptide Pen" : "Research Peptide Pen"}`
+      : "Product — PeptidePen";
+    const description = p && desc
+      ? `${p.name}: ${desc.tagline} Pre-mixed pen, batch-matched COA. Research use only.`
       : "Research peptide pen with batch-matched COA. For research use only.";
     const url = `https://getpeptidepen.com/products/${params.productId}`;
     return {
@@ -24,6 +26,7 @@ export const Route = createFileRoute("/products/$productId")({
         { property: "og:description", content: description },
         { property: "og:type", content: "product" },
         { property: "og:url", content: url },
+        ...(p?.image ? [{ property: "og:image", content: `https://getpeptidepen.com${p.image}` }] : []),
       ],
       links: [{ rel: "canonical", href: url }],
       scripts: p
@@ -38,6 +41,7 @@ export const Route = createFileRoute("/products/$productId")({
                 category: p.categories,
                 image: p.image ? [`https://getpeptidepen.com${p.image}`] : undefined,
                 url,
+                brand: { "@type": "Brand", name: "PeptidePen" },
                 offers: {
                   "@type": "Offer",
                   price: p.price.replace(/[^0-9.]/g, ""),
@@ -89,35 +93,14 @@ export const Route = createFileRoute("/products/$productId")({
   component: ProductDetailPage,
 });
 
-function Box({
-  children,
-  className = "",
-  label,
-}: {
-  children?: React.ReactNode;
-  className?: string;
-  label?: string;
-}) {
+function Pill({ children, tone = "default" }: { children: React.ReactNode; tone?: "default" | "accent" | "success" }) {
+  const tones = {
+    default: "border-border bg-muted/40 text-muted-foreground",
+    accent: "border-primary/40 bg-primary/10 text-primary",
+    success: "border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
+  } as const;
   return (
-    <div
-      className={`relative border-2 border-dashed border-foreground/40 bg-muted/30 rounded-md ${className}`}
-      aria-label={label}
-    >
-      {label && (
-        <span className="absolute top-1 left-2 text-[10px] uppercase tracking-wider text-muted-foreground">
-          {label}
-        </span>
-      )}
-      <div className="w-full h-full flex items-center justify-center text-center text-muted-foreground text-sm p-4">
-        {children}
-      </div>
-    </div>
-  );
-}
-
-function SectionTag({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="inline-block text-[10px] uppercase tracking-[0.2em] px-2 py-1 border border-dashed border-foreground/40 rounded text-muted-foreground">
+    <span className={`inline-flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.18em] px-2.5 py-1 border rounded-full ${tones[tone]}`}>
       {children}
     </span>
   );
@@ -125,74 +108,21 @@ function SectionTag({ children }: { children: React.ReactNode }) {
 
 function Header() {
   return (
-    <header className="border-b border-dashed border-foreground/30" role="banner">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-3">
-        <Link
-          to="/"
-          aria-label="Peptide Pen Research home"
-          className="text-base sm:text-lg font-bold tracking-tight shrink-0"
-        >
-          Peptide Pen Research
+    <header className="sticky top-0 z-40 backdrop-blur-md bg-background/80 border-b border-border" role="banner">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
+        <Link to="/" aria-label="PeptidePen home" className="flex items-center gap-2 shrink-0">
+          <span className="h-8 w-8 rounded-lg bg-primary/15 border border-primary/30 flex items-center justify-center text-primary font-bold text-sm">P</span>
+          <span className="text-base sm:text-lg font-bold tracking-tight">PeptidePen</span>
         </Link>
-        <nav className="hidden md:flex gap-6" aria-label="Primary">
-          <Link
-            to="/products"
-            className="text-sm text-foreground font-medium border-b border-dashed border-foreground/30 pb-0.5"
-          >
-            Products
-          </Link>
-          {["How it Works", "Research", "FAQ", "Contact"].map((n) => (
-            <a
-              key={n}
-              href={`/#${n.toLowerCase().replace(/\s+/g, "-")}`}
-              className="text-sm text-muted-foreground border-b border-dashed border-foreground/30 pb-0.5 hover:text-foreground transition-colors"
-            >
-              {n}
-            </a>
+        <nav className="hidden md:flex gap-7 text-sm" aria-label="Primary">
+          <Link to="/products" className="text-foreground font-medium">Products</Link>
+          {[["How it Works","how-it-works"],["Research","research"],["FAQ","faq"],["Contact","contact"]].map(([n,h]) => (
+            <a key={h} href={`/#${h}`} className="text-muted-foreground hover:text-foreground transition-colors">{n}</a>
           ))}
         </nav>
-        <div className="flex items-center gap-2">
-          <div className="h-9 sm:h-10 w-20 sm:w-24 rounded-md border-2 border-dashed border-foreground/40 bg-muted/30 flex items-center justify-center text-muted-foreground text-sm">
-            Cart
-          </div>
-          <details className="md:hidden relative">
-            <summary
-              className="list-none cursor-pointer inline-flex items-center justify-center h-11 w-11 rounded border border-dashed border-foreground/40 text-foreground"
-              aria-label="Open menu"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                className="h-5 w-5"
-                aria-hidden="true"
-              >
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <line x1="3" y1="12" x2="21" y2="12" />
-                <line x1="3" y1="18" x2="21" y2="18" />
-              </svg>
-            </summary>
-            <nav
-              aria-label="Mobile primary"
-              className="absolute right-0 top-full mt-2 w-56 z-50 rounded-md border border-dashed border-foreground/40 bg-background shadow-lg p-2 flex flex-col"
-            >
-              <Link to="/products" className="px-3 py-2 text-sm rounded hover:bg-muted">
-                Products
-              </Link>
-              {["How it Works", "Research", "FAQ", "Contact"].map((n) => (
-                <a
-                  key={n}
-                  href={`/#${n.toLowerCase().replace(/\s+/g, "-")}`}
-                  className="px-3 py-2 text-sm rounded hover:bg-muted"
-                >
-                  {n}
-                </a>
-              ))}
-            </nav>
-          </details>
-        </div>
+        <a href="#buy-box" className="inline-flex items-center justify-center h-9 px-4 rounded-full bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition">
+          Order
+        </a>
       </div>
     </header>
   );
@@ -200,13 +130,24 @@ function Header() {
 
 function ProductDetailPage() {
   const { product } = Route.useLoaderData();
+  const desc = getDescription(product.id);
   const related = PRODUCTS.filter((p) => p.id !== product.id).slice(0, 4);
 
   return (
     <div className="min-h-dvh bg-background text-foreground font-sans">
       <Header />
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-10" role="main">
+      {/* Trust bar */}
+      <div className="bg-primary/5 border-b border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-[11px] text-muted-foreground">
+          <span>✓ Third-party assayed</span>
+          <span>✓ Cold-chain shipping</span>
+          <span>✓ Batch-matched COA</span>
+          <span>✓ Research grade only</span>
+        </div>
+      </div>
+
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10" role="main">
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" className="text-xs text-muted-foreground mb-6">
           <Link to="/" className="hover:text-foreground">Home</Link>
@@ -216,232 +157,291 @@ function ProductDetailPage() {
           <span className="text-foreground">{product.name}</span>
         </nav>
 
-        {/* 1. HERO: Gallery + Buy Box */}
-        <section
-          aria-labelledby="product-heading"
-          className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12"
-        >
+        {/* HERO */}
+        <section aria-labelledby="product-heading" className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
           {/* Gallery */}
-          <div className="space-y-3">
-            <div className="aspect-square w-full rounded-lg border border-border bg-muted overflow-hidden flex items-center justify-center">
+          <div className="lg:col-span-7 space-y-4">
+            <div className="relative aspect-square w-full rounded-2xl border border-border bg-gradient-to-br from-muted/60 via-muted/30 to-background overflow-hidden flex items-center justify-center">
+              <div className="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_30%_20%,hsl(var(--primary)/0.2),transparent_60%)]" aria-hidden />
               <img
                 src={product.image}
-                alt={product.name}
-                className="w-full h-full object-contain p-6"
+                alt={`${product.name} research pen`}
+                className="relative w-full h-full object-contain p-8 sm:p-12"
               />
+              {product.tag && (
+                <div className="absolute top-4 left-4">
+                  <Pill tone="accent">{product.tag}</Pill>
+                </div>
+              )}
             </div>
             <div className="grid grid-cols-4 gap-3">
               {[1, 2, 3, 4].map((i) => (
-                <div
-                  key={i}
-                  className="aspect-square rounded-md border border-border bg-muted overflow-hidden flex items-center justify-center"
-                >
-                  <img
-                    src={product.image}
-                    alt=""
-                    aria-hidden="true"
-                    className="w-full h-full object-contain p-2 opacity-70"
-                  />
+                <div key={i} className="aspect-square rounded-xl border border-border bg-muted/40 overflow-hidden flex items-center justify-center hover:border-primary/40 transition-colors cursor-pointer">
+                  <img src={product.image} alt="" aria-hidden="true" className="w-full h-full object-contain p-2 opacity-70" />
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Buy box */}
-          <div className="space-y-5">
-            <div className="flex flex-wrap items-center gap-2">
-              {product.tag && <SectionTag>{product.tag}</SectionTag>}
-              <SectionTag>Research Use Only</SectionTag>
-            </div>
-            <p className="text-[11px] uppercase tracking-wider text-muted-foreground">
-              {product.categories}
-            </p>
-            <h1 id="product-heading" className="text-2xl sm:text-3xl md:text-4xl font-semibold leading-tight">
-              {product.name}
-            </h1>
-            <p className="text-2xl font-bold">{product.price}</p>
-            <p className="text-sm text-muted-foreground">
-              Pre-mixed research peptide pen, third-party assayed for identity
-              and purity. Ships cold-chain with a batch-matched certificate of
-              analysis. Strictly for in-vitro laboratory research.
-            </p>
-
-            {/* Variant selector */}
-            <fieldset className="space-y-2">
-              <legend className="text-xs uppercase tracking-wider text-muted-foreground">
-                Pen size
-              </legend>
-              <div className="flex flex-wrap gap-2">
-                {["Standard", "Large", "Pro"].map((v) => (
-                  <Box key={v} className="h-11 w-24" label="variant">
-                    {v}
-                  </Box>
-                ))}
+          {/* Sticky buy box */}
+          <div id="buy-box" className="lg:col-span-5">
+            <div className="lg:sticky lg:top-24 space-y-5">
+              <div className="flex flex-wrap items-center gap-2">
+                <Pill tone="success">In stock</Pill>
+                <Pill>Research use only</Pill>
               </div>
-            </fieldset>
+              <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">{product.categories}</p>
+              <h1 id="product-heading" className="text-3xl sm:text-4xl md:text-5xl font-semibold leading-[1.05] tracking-tight">
+                {product.name}
+              </h1>
+              <p className="text-base text-muted-foreground leading-relaxed">{desc.tagline}</p>
 
-            {/* Region selector */}
-            <fieldset className="space-y-2">
-              <legend className="text-xs uppercase tracking-wider text-muted-foreground">
-                Shipping region
-              </legend>
-              <Box className="h-11 w-full max-w-xs" label="region select">
-                Select region ▾
-              </Box>
-            </fieldset>
+              <div className="flex items-baseline gap-3 pt-2">
+                <span className="text-3xl font-bold">{product.price}</span>
+                <span className="text-sm text-muted-foreground line-through">${(parseFloat(product.price.replace(/[^0-9.]/g, "")) * 1.25).toFixed(2)}</span>
+                <Pill tone="accent">Save 20%</Pill>
+              </div>
 
-            {/* Qty + CTAs */}
-            <div className="flex flex-wrap gap-3 pt-2">
-              <Box className="h-12 w-28" label="qty">Qty: 1</Box>
-              <Box className="h-12 flex-1 min-w-[12rem]" label="primary cta">
-                Add to Cart
-              </Box>
-            </div>
-            <Box className="h-12 w-full" label="secondary cta">
-              Contact Us to Order
-            </Box>
+              {/* Variant selector */}
+              <fieldset className="space-y-2 pt-2">
+                <legend className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Pen size</legend>
+                <div className="grid grid-cols-3 gap-2">
+                  {["Standard", "Large", "Pro"].map((v, i) => (
+                    <label key={v} className={`cursor-pointer rounded-lg border px-3 py-2.5 text-center text-sm transition ${i===0 ? "border-primary bg-primary/5 text-foreground font-medium" : "border-border hover:border-foreground/40 text-muted-foreground"}`}>
+                      <input type="radio" name="size" defaultChecked={i===0} className="sr-only" />
+                      {v}
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
 
-            {/* Trust strip */}
-            <ul className="grid grid-cols-2 gap-2 text-xs text-muted-foreground pt-2 list-none p-0">
-              <li>✓ ≥99% purity (HPLC)</li>
-              <li>✓ Batch-matched COA</li>
-              <li>✓ Cold-chain 2–8°C</li>
-              <li>✓ Tracked delivery</li>
-            </ul>
-          </div>
-        </section>
+              {/* Qty + CTA */}
+              <div className="flex gap-3 pt-2">
+                <div className="flex items-center border border-border rounded-lg h-12 px-2">
+                  <button className="h-8 w-8 grid place-items-center text-lg text-muted-foreground hover:text-foreground" aria-label="Decrease">−</button>
+                  <span className="w-8 text-center text-sm font-medium">1</span>
+                  <button className="h-8 w-8 grid place-items-center text-lg text-muted-foreground hover:text-foreground" aria-label="Increase">+</button>
+                </div>
+                <button className="flex-1 h-12 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition shadow-sm">
+                  Add to cart — {product.price}
+                </button>
+              </div>
+              <Link to="/products" className="block w-full h-12 rounded-lg border border-border text-center leading-[3rem] text-sm font-medium hover:bg-muted/50 transition">
+                Contact us to order
+              </Link>
 
-        {/* 2. DESCRIPTION + SPECS */}
-        <section
-          aria-labelledby="overview-heading"
-          className="mt-16 grid grid-cols-1 lg:grid-cols-3 gap-8"
-        >
-          <div className="lg:col-span-2 space-y-4">
-            <SectionTag>Overview</SectionTag>
-            <h2 id="overview-heading" className="text-2xl font-semibold">
-              About {product.name}
-            </h2>
-            <p className="text-sm text-muted-foreground">
-              {product.name} is supplied as a pre-mixed research pen for use
-              in controlled laboratory settings. Each pen is filled in a
-              cleanroom environment and sealed with tamper-evident packaging.
-              Batch documentation includes identity confirmation, purity
-              analysis and concentration verification.
-            </p>
-            <p className="text-sm text-muted-foreground">
-              This product is provided strictly for in-vitro research and is
-              not intended for human or veterinary use. Always follow your
-              institution&apos;s biosafety guidelines.
-            </p>
-          </div>
-          <aside className="space-y-3">
-            <SectionTag>Specifications</SectionTag>
-            <Box className="p-4" label="spec sheet">
-              <ul className="text-left text-xs text-muted-foreground space-y-2 w-full list-none p-0">
-                <li><strong className="text-foreground">Form:</strong> Pre-mixed solution (pen)</li>
-                <li><strong className="text-foreground">Purity:</strong> ≥99% (HPLC)</li>
-                <li><strong className="text-foreground">Storage:</strong> 2–8°C, protect from light</li>
-                <li><strong className="text-foreground">Shipping:</strong> Cold-chain, tracked</li>
-                <li><strong className="text-foreground">COA:</strong> Batch-matched, downloadable</li>
+              {/* Trust strip */}
+              <ul className="grid grid-cols-2 gap-x-3 gap-y-2 text-xs text-muted-foreground pt-3 border-t border-border list-none">
+                <li className="flex items-center gap-1.5">✓ ≥99% purity (HPLC)</li>
+                <li className="flex items-center gap-1.5">✓ Batch-matched COA</li>
+                <li className="flex items-center gap-1.5">✓ Cold-chain 2–8°C</li>
+                <li className="flex items-center gap-1.5">✓ Tracked delivery</li>
+                <li className="flex items-center gap-1.5">✓ Tamper-evident</li>
+                <li className="flex items-center gap-1.5">✓ EU + US shipping</li>
               </ul>
-            </Box>
-            <Box className="h-11 w-full" label="cta">Download Sample COA</Box>
-          </aside>
+            </div>
+          </div>
         </section>
 
-        {/* 3. HOW IT WORKS */}
-        <section
-          aria-labelledby="how-heading"
-          className="mt-16 space-y-6"
-        >
-          <SectionTag>How it Works</SectionTag>
-          <h2 id="how-heading" className="text-2xl font-semibold">
-            From order to lab bench
-          </h2>
+        {/* WHAT IT IS */}
+        <section aria-labelledby="what-heading" className="mt-20 grid grid-cols-1 lg:grid-cols-3 gap-10">
+          <div className="space-y-3">
+            <Pill>Overview</Pill>
+            <h2 id="what-heading" className="text-3xl font-semibold tracking-tight">
+              What is {product.name}?
+            </h2>
+          </div>
+          <div className="lg:col-span-2 space-y-4">
+            <p className="text-base text-foreground/90 leading-relaxed">{desc.whatIs}</p>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Each PeptidePen is filled in a controlled cleanroom and sealed with tamper-evident packaging. Batch documentation includes
+              identity confirmation, HPLC purity analysis and concentration verification. Strictly for in-vitro research — not for human
+              or veterinary use.
+            </p>
+          </div>
+        </section>
+
+        {/* BENEFITS GRID */}
+        <section aria-labelledby="benefits-heading" className="mt-20">
+          <div className="flex items-end justify-between gap-4 mb-8">
+            <div className="space-y-3">
+              <Pill tone="accent">Research highlights</Pill>
+              <h2 id="benefits-heading" className="text-3xl font-semibold tracking-tight">
+                Why researchers choose {product.name}
+              </h2>
+            </div>
+          </div>
+          <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 list-none p-0">
+            {desc.benefits.map((b, i) => (
+              <li key={i} className="rounded-2xl border border-border bg-card p-5 hover:border-primary/40 hover:shadow-sm transition">
+                <div className="h-8 w-8 rounded-lg bg-primary/10 text-primary grid place-items-center text-sm font-semibold mb-3">{String(i + 1).padStart(2, "0")}</div>
+                <p className="text-sm text-foreground/90 leading-relaxed">{b}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* MECHANISM + PROTOCOL */}
+        {(desc.mechanism || desc.protocol) && (
+          <section className="mt-20 grid grid-cols-1 md:grid-cols-2 gap-6">
+            {desc.mechanism && (
+              <div className="rounded-2xl border border-border bg-card p-6 space-y-3">
+                <Pill>Mechanism</Pill>
+                <h3 className="text-xl font-semibold">How it works</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{desc.mechanism}</p>
+              </div>
+            )}
+            {desc.protocol && (
+              <div className="rounded-2xl border border-border bg-card p-6 space-y-3">
+                <Pill>Research protocol</Pill>
+                <h3 className="text-xl font-semibold">Typical dosing reference</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{desc.protocol}</p>
+                <p className="text-[11px] text-muted-foreground/80 italic">For in-vitro research design reference only.</p>
+              </div>
+            )}
+          </section>
+        )}
+
+        {/* SPECS STRIP */}
+        <section aria-labelledby="specs-heading" className="mt-20">
+          <Pill>Specifications</Pill>
+          <h2 id="specs-heading" className="sr-only">Specifications</h2>
+          <div className="mt-4 grid grid-cols-2 md:grid-cols-5 gap-px bg-border rounded-2xl overflow-hidden border border-border">
+            {[
+              ["Form", "Pre-mixed pen"],
+              ["Purity", "≥99% HPLC"],
+              ["Storage", "2–8°C"],
+              ["Shipping", "Cold-chain"],
+              ["COA", "Batch-matched"],
+            ].map(([k, v]) => (
+              <div key={k} className="bg-card p-5">
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{k}</p>
+                <p className="text-sm font-medium mt-1">{v}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* STACKS WITH */}
+        {desc.stacksWith && desc.stacksWith.length > 0 && (
+          <section className="mt-20 space-y-4">
+            <Pill tone="accent">Stacks well with</Pill>
+            <h2 className="text-3xl font-semibold tracking-tight">Researchers often pair this with</h2>
+            <div className="flex flex-wrap gap-2 pt-2">
+              {desc.stacksWith.map((s) => (
+                <span key={s} className="inline-flex items-center px-4 py-2 rounded-full border border-border bg-muted/40 text-sm">
+                  {s}
+                </span>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* SIDE EFFECTS */}
+        {desc.sideEffects && desc.sideEffects.length > 0 && (
+          <section className="mt-20 rounded-2xl border border-amber-500/30 bg-amber-500/5 p-6 space-y-3">
+            <Pill>Reported in research</Pill>
+            <h3 className="text-xl font-semibold">Known side-effect signals</h3>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-foreground/80 list-disc list-inside">
+              {desc.sideEffects.map((s) => <li key={s}>{s}</li>)}
+            </ul>
+          </section>
+        )}
+
+        {/* HOW IT WORKS / FULFILLMENT */}
+        <section aria-labelledby="fulfillment-heading" className="mt-20 space-y-6">
+          <Pill>From order to lab bench</Pill>
+          <h2 id="fulfillment-heading" className="text-3xl font-semibold tracking-tight">Built for trust at every step</h2>
           <ol className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 list-none p-0">
             {[
-              { n: "01", t: "Place your order", s: "Select pen size and region." },
-              { n: "02", t: "Verify COA", s: "Batch-matched lab report on file." },
-              { n: "03", t: "Cold-chain ships", s: "Insulated, temperature-logged." },
-              { n: "04", t: "Run protocol", s: "Dosing references available." },
+              { n: "01", t: "Place your order", s: "Select pen size and shipping region at checkout." },
+              { n: "02", t: "Verify the COA", s: "Each batch is HPLC-assayed and documented." },
+              { n: "03", t: "Cold-chain ships", s: "Insulated, temperature-logged delivery." },
+              { n: "04", t: "Run your protocol", s: "Reference dosing and references included." },
             ].map((s) => (
-              <li key={s.n} className="space-y-2">
-                <Box className="h-14" label={`step ${s.n}`}>
-                  <span className="text-lg font-semibold">{s.n}</span>
-                </Box>
-                <h3 className="text-sm font-medium">{s.t}</h3>
-                <p className="text-xs text-muted-foreground">{s.s}</p>
+              <li key={s.n} className="rounded-2xl border border-border bg-card p-5 space-y-3">
+                <div className="text-xs font-mono text-primary">{s.n}</div>
+                <h3 className="text-sm font-semibold">{s.t}</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">{s.s}</p>
               </li>
             ))}
           </ol>
         </section>
 
-        {/* 4. FAQ */}
-        <section aria-labelledby="faq-heading" className="mt-16 space-y-4">
-          <SectionTag>FAQ</SectionTag>
-          <h2 id="faq-heading" className="text-2xl font-semibold">
-            Frequently asked questions
-          </h2>
-          <div className="space-y-2">
+        {/* FAQ */}
+        <section aria-labelledby="faq-heading" className="mt-20 grid grid-cols-1 lg:grid-cols-3 gap-10">
+          <div className="space-y-3">
+            <Pill>FAQ</Pill>
+            <h2 id="faq-heading" className="text-3xl font-semibold tracking-tight">Frequently asked questions</h2>
+            <p className="text-sm text-muted-foreground">Common questions about {product.name} and PeptidePen orders.</p>
+          </div>
+          <div className="lg:col-span-2 space-y-2">
             {[
-              { q: "Is this product for human use?", a: "No. All products are strictly for in-vitro research use only." },
-              { q: "How is the COA provided?", a: "Each pen ships with a batch-matched COA; a digital copy is also available on request." },
-              { q: "What is the shipping process?", a: "Orders ship cold-chain (2–8°C) with temperature logging and tracked delivery." },
-              { q: "Can I order in bulk for my lab?", a: "Yes — contact our team for lab pricing and custom protocols." },
+              { q: `Is ${product.name} for human use?`, a: "No. All PeptidePen products are strictly for in-vitro laboratory research. Not intended for human or veterinary use." },
+              { q: "How is the COA provided?", a: "Each pen ships with a batch-matched certificate of analysis. A digital copy is also available on request via your order confirmation." },
+              { q: "How is shipping handled?", a: "Orders ship cold-chain (2–8°C) with insulated packaging, ice packs and a temperature log. Tracked delivery in the US and EU." },
+              { q: "Can I order in bulk for my lab?", a: "Yes. Contact our team for institutional pricing, custom concentrations and recurring shipments." },
+              { q: "What's your refund policy?", a: "Damaged or off-spec pens are replaced free of charge. Contact support within 7 days of delivery." },
             ].map((f) => (
-              <details
-                key={f.q}
-                className="group border border-dashed border-foreground/30 rounded-md"
-              >
-                <summary className="list-none cursor-pointer flex items-center justify-between px-4 py-3 text-sm font-medium">
+              <details key={f.q} className="group border border-border rounded-xl bg-card open:bg-muted/30 transition">
+                <summary className="list-none cursor-pointer flex items-center justify-between px-5 py-4 text-sm font-medium">
                   {f.q}
-                  <span className="text-muted-foreground group-open:rotate-45 transition-transform">+</span>
+                  <span className="text-muted-foreground text-lg group-open:rotate-45 transition-transform">+</span>
                 </summary>
-                <p className="px-4 pb-4 text-sm text-muted-foreground">{f.a}</p>
+                <p className="px-5 pb-5 text-sm text-muted-foreground leading-relaxed">{f.a}</p>
               </details>
             ))}
           </div>
         </section>
 
-        {/* 5. RELATED PRODUCTS */}
-        <section aria-labelledby="related-heading" className="mt-16 space-y-6">
-          <div className="flex items-end justify-between gap-4">
-            <div className="space-y-2">
-              <SectionTag>Related</SectionTag>
-              <h2 id="related-heading" className="text-2xl font-semibold">
-                Researchers also ordered
-              </h2>
-            </div>
-            <Link to="/products" className="text-sm underline shrink-0">
-              View all →
+        {/* CTA BANNER */}
+        <section className="mt-20 rounded-3xl border border-border bg-gradient-to-br from-primary/10 via-primary/5 to-background p-8 sm:p-12 text-center space-y-5">
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight max-w-2xl mx-auto">
+            Ready to run {product.name} in your next study?
+          </h2>
+          <p className="text-sm text-muted-foreground max-w-xl mx-auto">
+            Pre-mixed, batch-assayed, cold-chain shipped — order before 2pm for same-day dispatch.
+          </p>
+          <div className="flex flex-wrap justify-center gap-3 pt-2">
+            <a href="#buy-box" className="inline-flex items-center h-11 px-6 rounded-full bg-primary text-primary-foreground font-medium hover:opacity-90 transition">
+              Order now — {product.price}
+            </a>
+            <Link to="/products" className="inline-flex items-center h-11 px-6 rounded-full border border-border hover:bg-muted/50 transition text-sm font-medium">
+              Browse all products
             </Link>
+          </div>
+        </section>
+
+        {/* RELATED */}
+        <section aria-labelledby="related-heading" className="mt-20 space-y-6">
+          <div className="flex items-end justify-between gap-4">
+            <div className="space-y-3">
+              <Pill>Related</Pill>
+              <h2 id="related-heading" className="text-3xl font-semibold tracking-tight">Researchers also ordered</h2>
+            </div>
+            <Link to="/products" className="text-sm underline shrink-0 text-muted-foreground hover:text-foreground">View all →</Link>
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {related.map((r) => (
-              <Link
-                key={r.id}
-                to="/products/$productId"
-                params={{ productId: r.id }}
-                className="block space-y-2 group"
-              >
-                <div className="aspect-square rounded-md border border-border bg-muted overflow-hidden flex items-center justify-center">
+              <Link key={r.id} to="/products/$productId" params={{ productId: r.id }} className="block space-y-3 group rounded-2xl border border-border bg-card p-4 hover:border-primary/40 hover:shadow-sm transition">
+                <div className="aspect-square rounded-xl bg-muted/50 overflow-hidden flex items-center justify-center">
                   <img src={r.image} alt={r.name} loading="lazy" className="w-full h-full object-contain p-3 group-hover:scale-105 transition-transform" />
                 </div>
-                <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
-                  {r.categories.split("•")[0]?.trim()}
-                </p>
-                <p className="text-sm font-medium group-hover:underline">{r.name}</p>
-                <p className="text-sm font-semibold">{r.price}</p>
+                <div className="space-y-1">
+                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{r.categories.split("•")[0]?.trim()}</p>
+                  <p className="text-sm font-medium group-hover:underline">{r.name}</p>
+                  <p className="text-sm font-semibold">{r.price}</p>
+                </div>
               </Link>
             ))}
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-dashed border-foreground/30 mt-16 py-8" role="contentinfo">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 text-xs text-muted-foreground text-center">
-          © {new Date().getFullYear()} Peptide Pen Research — Research use only.
-          Not for human or veterinary consumption.
+      <footer className="border-t border-border mt-20 py-10" role="contentinfo">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 text-xs text-muted-foreground text-center space-y-2">
+          <p className="font-medium text-foreground">PeptidePen</p>
+          <p>© {new Date().getFullYear()} PeptidePen — Research use only. Not for human or veterinary consumption.</p>
         </div>
       </footer>
     </div>

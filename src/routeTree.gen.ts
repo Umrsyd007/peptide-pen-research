@@ -14,6 +14,7 @@ import { Route as ProductsRouteImport } from './routes/products'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductsIndexRouteImport } from './routes/products.index'
 import { Route as ProductsProductIdRouteImport } from './routes/products.$productId'
+import { Route as GuidesPeptideDosageCalculatorRouteImport } from './routes/guides.peptide-dosage-calculator'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -40,17 +41,25 @@ const ProductsProductIdRoute = ProductsProductIdRouteImport.update({
   path: '/$productId',
   getParentRoute: () => ProductsRoute,
 } as any)
+const GuidesPeptideDosageCalculatorRoute =
+  GuidesPeptideDosageCalculatorRouteImport.update({
+    id: '/guides/peptide-dosage-calculator',
+    path: '/guides/peptide-dosage-calculator',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/products': typeof ProductsRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/guides/peptide-dosage-calculator': typeof GuidesPeptideDosageCalculatorRoute
   '/products/$productId': typeof ProductsProductIdRoute
   '/products/': typeof ProductsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/guides/peptide-dosage-calculator': typeof GuidesPeptideDosageCalculatorRoute
   '/products/$productId': typeof ProductsProductIdRoute
   '/products': typeof ProductsIndexRoute
 }
@@ -59,6 +68,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/products': typeof ProductsRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/guides/peptide-dosage-calculator': typeof GuidesPeptideDosageCalculatorRoute
   '/products/$productId': typeof ProductsProductIdRoute
   '/products/': typeof ProductsIndexRoute
 }
@@ -68,15 +78,22 @@ export interface FileRouteTypes {
     | '/'
     | '/products'
     | '/sitemap.xml'
+    | '/guides/peptide-dosage-calculator'
     | '/products/$productId'
     | '/products/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/sitemap.xml' | '/products/$productId' | '/products'
+  to:
+    | '/'
+    | '/sitemap.xml'
+    | '/guides/peptide-dosage-calculator'
+    | '/products/$productId'
+    | '/products'
   id:
     | '__root__'
     | '/'
     | '/products'
     | '/sitemap.xml'
+    | '/guides/peptide-dosage-calculator'
     | '/products/$productId'
     | '/products/'
   fileRoutesById: FileRoutesById
@@ -85,6 +102,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ProductsRoute: typeof ProductsRouteWithChildren
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  GuidesPeptideDosageCalculatorRoute: typeof GuidesPeptideDosageCalculatorRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -124,6 +142,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsProductIdRouteImport
       parentRoute: typeof ProductsRoute
     }
+    '/guides/peptide-dosage-calculator': {
+      id: '/guides/peptide-dosage-calculator'
+      path: '/guides/peptide-dosage-calculator'
+      fullPath: '/guides/peptide-dosage-calculator'
+      preLoaderRoute: typeof GuidesPeptideDosageCalculatorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -145,6 +170,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ProductsRoute: ProductsRouteWithChildren,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  GuidesPeptideDosageCalculatorRoute: GuidesPeptideDosageCalculatorRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

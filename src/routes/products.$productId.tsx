@@ -281,51 +281,44 @@ function ProductDetailPage() {
                   const firstBody = Array.isArray(first.body) ? first.body : [first.body];
                   const [firstPara, ...restFirstParas] = firstBody;
                   return (
-                    <details className="group [&_summary]:list-none">
+                    <div className="space-y-6">
                       {/* Always-visible: first heading + first paragraph */}
                       <article className="space-y-3">
                         <h3 className="text-xl font-semibold tracking-tight">{first.heading}</h3>
                         <p className="text-sm text-foreground/85 leading-relaxed">{firstPara}</p>
                       </article>
 
-                      {/* Inline "Continue reading" button — hidden when open */}
-                      <summary className="mt-6 cursor-pointer select-none group-open:hidden">
-                        <span className="inline-flex items-center gap-2 h-11 px-6 rounded-full border border-border bg-card hover:bg-muted/50 transition text-sm font-medium">
-                          Continue reading the full research brief
-                          <span className="text-muted-foreground">↓</span>
-                        </span>
-                      </summary>
-
-                      {/* Revealed content */}
-                      <div className="mt-8 space-y-8">
-                        {restFirstParas.length > 0 && (
-                          <article className="space-y-3">
-                            {restFirstParas.map((p, i) => (
-                              <p key={i} className="text-sm text-foreground/85 leading-relaxed">{p}</p>
-                            ))}
-                          </article>
-                        )}
-                        {rest.map((s) => (
-                          <article key={s.heading} className="space-y-3">
-                            <h3 className="text-xl font-semibold tracking-tight">{s.heading}</h3>
-                            {(Array.isArray(s.body) ? s.body : [s.body]).map((p, i) => (
-                              <p key={i} className="text-sm text-foreground/85 leading-relaxed">{p}</p>
-                            ))}
-                          </article>
-                        ))}
-
-                        {/* Show less — only visible when open */}
-                        <summary className="cursor-pointer select-none flex justify-center pt-2">
-                          <span className="inline-flex items-center gap-2 h-11 px-6 rounded-full border border-border bg-card hover:bg-muted/50 transition text-sm font-medium">
-                            Show less
-                            <span className="text-muted-foreground rotate-180">↓</span>
+                      <details className="group [&_summary]:list-none">
+                        <summary className="cursor-pointer select-none">
+                          <span className="inline-flex items-center gap-2 h-11 px-6 rounded-full border border-border bg-card hover:bg-muted/50 transition text-sm font-medium group-open:hidden">
+                            Continue reading the full research brief
+                            <span className="text-muted-foreground">↓</span>
                           </span>
                         </summary>
-                      </div>
-                    </details>
+
+                        <div className="mt-6 space-y-8">
+                          {restFirstParas.length > 0 && (
+                            <article className="space-y-3">
+                              {restFirstParas.map((p, i) => (
+                                <p key={i} className="text-sm text-foreground/85 leading-relaxed">{p}</p>
+                              ))}
+                            </article>
+                          )}
+                          {rest.map((s) => (
+                            <article key={s.heading} className="space-y-3">
+                              <h3 className="text-xl font-semibold tracking-tight">{s.heading}</h3>
+                              {(Array.isArray(s.body) ? s.body : [s.body]).map((p, i) => (
+                                <p key={i} className="text-sm text-foreground/85 leading-relaxed">{p}</p>
+                              ))}
+                            </article>
+                          ))}
+                        </div>
+                      </details>
+                    </div>
                   );
                 })()}
               </div>
+
 
 
             </div>

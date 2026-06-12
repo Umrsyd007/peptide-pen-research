@@ -1,3 +1,8 @@
+export interface DeepDiveSection {
+  heading: string;
+  body: string | string[];
+}
+
 export interface ProductDescription {
   tagline: string;
   whatIs: string;
@@ -7,6 +12,7 @@ export interface ProductDescription {
   stacksWith?: string[];
   sideEffects?: string[];
   faqs?: { q: string; a: string }[];
+  deepDive?: DeepDiveSection[];
 }
 
 const D: Record<string, ProductDescription> = {

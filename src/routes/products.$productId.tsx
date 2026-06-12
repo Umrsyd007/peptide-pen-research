@@ -133,10 +133,17 @@ function Header() {
 function ProductDetailPage() {
   const { product } = Route.useLoaderData();
   const desc = getDescription(product.id);
+  const variants = getVariants(product.id);
+  const defaultIdx = Math.max(0, variants.findIndex((v) => v.isDefault));
+  const [variantIdx, setVariantIdx] = useState(defaultIdx === -1 ? 0 : defaultIdx);
+  const selected = variants[variantIdx];
+  const displayPrice = selected?.price ?? product.price;
+  const displayPriceNum = selected?.priceNum ?? parseFloat(product.price.replace(/[^0-9.]/g, ""));
   const related = PRODUCTS.filter((p) => p.id !== product.id).slice(0, 4);
 
   return (
     <div className="min-h-dvh bg-background text-foreground font-sans">
+
       <Header />
 
       {/* Trust bar */}

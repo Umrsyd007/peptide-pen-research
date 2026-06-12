@@ -248,6 +248,98 @@ const D: Record<string, ProductDescription> = {
     ],
     protocol: "Weekly subcutaneous research dosing, titrated from low microgram range.",
     sideEffects: ["Nausea (titration-dependent)", "Constipation", "Transient HR increase"],
+    deepDive: [
+      {
+        heading: "What is Retatrutide?",
+        body: [
+          "Retatrutide is a peptide that simultaneously activates three receptors: GLP-1 (glucagon-like peptide-1), GIP (glucose-dependent insulinotropic polypeptide), and glucagon receptors. This multi-receptor targeting approach offers a highly effective way to study complex metabolic conditions such as type 2 diabetes, obesity, and related cardiovascular diseases.",
+          "Unlike traditional peptide agonists that act on only one receptor, Retatrutide engages three distinct metabolic pathways, delivering enhanced efficacy and better tolerability in research models. It has a prolonged duration of action that supports convenient once-weekly dosing, making it an ideal compound for research in metabolic diseases and regenerative medicine.",
+          "Besides metabolic and obesity research, Retatrutide is also being studied for its potential in reducing inflammation, improving lipid profiles, and preventing cardiovascular complications.",
+          "Designed to significantly improve blood sugar regulation, promote fat loss, and enhance overall metabolic markers, Retatrutide's triple receptor mechanism opens up unique opportunities for medical research.",
+        ],
+      },
+      {
+        heading: "How does Retatrutide work?",
+        body: [
+          "Retatrutide works by activating three key metabolic receptors — GLP-1, GIP, and glucagon — resulting in combined effects that improve blood sugar control, suppress appetite, and promote fat loss.",
+          "• GLP-1 receptors: Stimulation boosts insulin secretion, helping reduce blood glucose levels. It also slows gastric emptying, extending feelings of fullness and lowering calorie intake, while suppressing glucagon — a hormone that raises liver glucose production.",
+          "• GIP receptors: Activation complements GLP-1 by enhancing insulin response and improving peripheral insulin sensitivity. GIP activity also reduces inflammation and supports better lipid metabolism by lowering triglycerides and LDL cholesterol.",
+          "• Glucagon receptors: Promote fat breakdown (lipolysis) and thermogenesis, aiding in fat tissue reduction. This effect is especially useful for obesity research and energy balance regulation.",
+        ],
+      },
+      {
+        heading: "Research on Retatrutide",
+        body: "Retatrutide has undergone extensive preclinical and clinical evaluation, demonstrating safety and effectiveness in metabolic disorder models. Ongoing clinical trials, including phase 2 studies, are further investigating its impact on obesity, type 2 diabetes, lipid metabolism, and inflammation.",
+      },
+      {
+        heading: "Clinical Trials and Findings",
+        body: "Clinical trials have tested Retatrutide's ability to influence metabolic disease markers. Researchers continue to explore its long-term effects on blood sugar regulation, weight reduction, and cardiovascular protection.",
+      },
+      {
+        heading: "Phase 2 Results",
+        body: "Phase 2 trials have shown notable weight reduction and improved blood sugar control. Participants experienced lasting reductions in body fat, enhanced insulin sensitivity, and better lipid metabolism — with up to ~24% body-weight reduction at 48 weeks.",
+      },
+      {
+        heading: "Retatrutide in Obesity and Type 2 Diabetes Research",
+        body: [
+          "• Type 2 Diabetes: Studies indicate Retatrutide significantly lowers HbA1c (glycated hemoglobin) levels, improving long-term glucose management. Its triple receptor action offers superior glycemic control compared to single-target GLP-1 agonists.",
+          "• Weight Loss: In obese cohorts, Retatrutide promotes substantial fat reduction by suppressing appetite, increasing thermogenesis (heat production to burn fat), and stimulating fat breakdown. These mechanisms make it a potent agent for weight management research.",
+        ],
+      },
+      {
+        heading: "Metabolic and Cardiovascular Benefits",
+        body: "Retatrutide has been shown to improve lipid profiles by lowering triglycerides and LDL cholesterol while increasing HDL (good cholesterol), thereby reducing cardiovascular risk markers. It also exhibits anti-inflammatory effects, which may benefit studies on chronic inflammation, metabolic syndrome, and autoimmune disease.",
+      },
+      {
+        heading: "Molecular and Structural Properties",
+        body: "Retatrutide is a multi-receptor peptide agonist engineered to target GLP-1, GIP, and glucagon receptors efficiently. Its stabilized helical structure enhances receptor binding and extends its biological half-life, reducing the frequency of administration. This unique structure supports its metabolic effects — increased lipolysis, appetite regulation, and glucose balance — making it valuable for obesity and metabolic disorder research.",
+      },
+      {
+        heading: "Development Background",
+        body: "Developed as part of a new wave of multi-target peptide therapies, Retatrutide aims to surpass the limitations of single-receptor agonists by combining triple receptor activation. Clinical and preclinical studies have demonstrated its superior efficacy and prolonged action, with ongoing research exploring broader therapeutic applications in metabolic and cardiovascular conditions.",
+      },
+      {
+        heading: "Benefits and Applications",
+        body: [
+          "• Blood Sugar Control: Enhances insulin secretion, sensitivity, and reduces glucagon — driving excellent glucose regulation in type 2 diabetes research.",
+          "• Weight Loss: Suppresses appetite and promotes fat breakdown, making it effective in obesity studies.",
+          "• Cardiovascular Protection: Improves lipid profiles and reduces inflammation, lowering cardiovascular risk markers.",
+          "• Metabolic Research: A useful tool for investigating energy balance, lipid metabolism, and metabolic syndrome mechanisms.",
+          "• Chronic Disease Potential: May offer benefits in chronic inflammatory and neurodegenerative disease models.",
+          "• Quality of Life Markers: Supports increased energy, less fatigue, and overall improvement through metabolic control.",
+        ],
+      },
+      {
+        heading: "Possible Side Effects",
+        body: [
+          "Retatrutide is generally well tolerated in studies, but some mild to moderate side effects may occur — often early in titration — including:",
+          "• Gastrointestinal symptoms (nausea, vomiting, diarrhea, constipation)",
+          "• Headaches",
+          "• Mild heart rate increase",
+          "• Application site reactions (redness, itching, swelling)",
+          "• Fatigue or weakness",
+          "These effects are usually temporary. Severe or persistent symptoms should be addressed with a healthcare professional.",
+        ],
+      },
+      {
+        heading: "Retatrutide vs. Tirzepatide",
+        body: "Both peptides are advanced metabolic compounds, but Retatrutide activates three receptors (GLP-1, GIP, glucagon) while Tirzepatide targets only two (GLP-1, GIP). This triple receptor action may provide enhanced fat metabolism, thermogenesis, and energy regulation, positioning Retatrutide as a promising option for obesity and metabolic research. Studies continue to clarify the distinct benefits of each peptide in glucose control and cardiovascular health.",
+      },
+      {
+        heading: "Pre-Mixed Pen Dosage Reference",
+        body: [
+          "Retatrutide 6 mg pen — Contains 120 units; each unit equals 50 micrograms (mcg).",
+          "  1 unit = 50 mcg · 10 units = 0.5 mg · 20 units = 1 mg · 30 units = 1.5 mg · 40 units = 2 mg",
+          "Retatrutide 12 mg pen — Contains 120 units; each unit equals 100 micrograms (mcg).",
+          "  1 unit = 100 mcg · 10 units = 1 mg · 20 units = 2 mg · 25 units = 2.5 mg · 40 units = 4 mg · 60 units = 6 mg",
+          "This dosing flexibility supports precise research applications.",
+        ],
+      },
+      {
+        heading: "Disclaimer: Research Use Only",
+        body: "This compound is intended strictly for in-vitro observation and research-related purposes. The information presented is based on a range of scientific studies and analyses but is not intended to diagnose, treat, or prevent any medical conditions.",
+      },
+    ],
   },
   "46f6d800": {
     tagline: "Melanotan II — α-MSH analog for melanogenesis and libido research.",

@@ -206,23 +206,47 @@ function ProductDetailPage() {
               <p className="text-base text-muted-foreground leading-relaxed">{desc.tagline}</p>
 
               <div className="flex items-baseline gap-3 pt-2">
-                <span className="text-3xl font-bold">{product.price}</span>
-                <span className="text-sm text-muted-foreground line-through">${(parseFloat(product.price.replace(/[^0-9.]/g, "")) * 1.25).toFixed(2)}</span>
+                <span className="text-3xl font-bold">{displayPrice}</span>
+                {selected?.oldPrice ? (
+                  <span className="text-sm text-muted-foreground line-through">{selected.oldPrice}</span>
+                ) : (
+                  <span className="text-sm text-muted-foreground line-through">${(displayPriceNum * 1.25).toFixed(2)}</span>
+                )}
                 <Pill tone="accent">Save 20%</Pill>
               </div>
 
               {/* Variant selector */}
-              <fieldset className="space-y-2 pt-2">
-                <legend className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Pen size</legend>
-                <div className="grid grid-cols-3 gap-2">
-                  {["Standard", "Large", "Pro"].map((v, i) => (
-                    <label key={v} className={`cursor-pointer rounded-lg border px-3 py-2.5 text-center text-sm transition ${i===0 ? "border-primary bg-primary/5 text-foreground font-medium" : "border-border hover:border-foreground/40 text-muted-foreground"}`}>
-                      <input type="radio" name="size" defaultChecked={i===0} className="sr-only" />
-                      {v}
-                    </label>
-                  ))}
-                </div>
-              </fieldset>
+              {variants.length > 0 && (
+                <fieldset className="space-y-2 pt-2">
+                  <legend className="text-xs uppercase tracking-wider text-muted-foreground mb-2">
+                    {variants.length > 1 ? "Pen size" : "Size"}
+                  </legend>
+                  <div className={`grid gap-2 ${variants.length >= 3 ? "grid-cols-3" : variants.length === 2 ? "grid-cols-2" : "grid-cols-1"}`}>
+                    {variants.map((v, i) => {
+                      const active = i === variantIdx;
+                      return (
+                        <label
+                          key={v.sku || v.name}
+                          className={`cursor-pointer rounded-lg border px-3 py-2.5 text-center text-sm transition ${active ? "border-primary bg-primary/5 text-foreground font-medium" : "border-border hover:border-foreground/40 text-muted-foreground"}`}
+                        >
+                          <input
+                            type="radio"
+                            name="variant"
+                            checked={active}
+                            onChange={() => setVariantIdx(i)}
+                            className="sr-only"
+                          />
+                          <span className="block">{v.name}</span>
+                          <span className={`block text-[11px] mt-0.5 ${active ? "text-primary" : "text-muted-foreground/80"}`}>{v.price}</span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                  {selected?.pensRequired && (
+                    <p className="text-[11px] text-muted-foreground pt-1">{selected.pensRequired}{selected.penLastsDays ? ` · 1 pen lasts ~${selected.penLastsDays} days` : ""}</p>
+                  )}
+                </fieldset>
+              )}
 
               {/* Qty + CTA */}
               <div className="flex gap-3 pt-2">
@@ -232,12 +256,31 @@ function ProductDetailPage() {
                   <button className="h-8 w-8 grid place-items-center text-lg text-muted-foreground hover:text-foreground" aria-label="Increase">+</button>
                 </div>
                 <button className="flex-1 h-12 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition shadow-sm">
-                  Add to cart — {product.price}
+                  Add to cart — {displayPrice}
                 </button>
               </div>
               <Link to="/products" className="block w-full h-12 rounded-lg border border-border text-center leading-[3rem] text-sm font-medium hover:bg-muted/50 transition">
                 Contact us to order
               </Link>
+
+              {/* Dosage details */}
+              {(selected?.dailyDosage || selected?.courseDetails) && (
+                <dl className="space-y-2 text-xs pt-3 border-t border-border">
+                  {selected.dailyDosage && (
+                    <div>
+                      <dt className="uppercase tracking-wider text-muted-foreground mb-0.5">Suggested research dosage</dt>
+                      <dd className="text-foreground/80 leading-relaxed">{selected.dailyDosage}</dd>
+                    </div>
+                  )}
+                  {selected.courseDetails && (
+                    <div>
+                      <dt className="uppercase tracking-wider text-muted-foreground mb-0.5">Course</dt>
+                      <dd className="text-foreground/80 leading-relaxed">{selected.courseDetails}</dd>
+                    </div>
+                  )}
+                </dl>
+              )}
+
 
               {/* Trust strip */}
               <ul className="grid grid-cols-2 gap-x-3 gap-y-2 text-xs text-muted-foreground pt-3 border-t border-border list-none">

@@ -145,7 +145,10 @@ function ProductDetailPage() {
   const [variantIdx, setVariantIdx] = useState(defaultIdx === -1 ? 0 : defaultIdx);
   const [qty, setQty] = useState(1);
   const selected = variants[variantIdx];
-  const related = PRODUCTS.filter((p) => p.id !== product.id).slice(0, 4);
+  const availableIds = useAvailableProductIds();
+  const related = PRODUCTS
+    .filter((p) => p.id !== product.id && (availableIds === null || availableIds.has(p.id)))
+    .slice(0, 4);
 
   // Live Shopify data, mapped by SKU
   const catalog = useShopifyCatalog();

@@ -496,7 +496,7 @@ function HomePage() {
               <li><a href="/" className="text-sm text-background/70 hover:text-background">Home</a></li>
               <li><a href="#science" className="text-sm text-background/70 hover:text-background">Science</a></li>
               <li><a href="#how-it-works" className="text-sm text-background/70 hover:text-background">How it Works</a></li>
-              <li><a href="mailto:hello@getpeptidepen.com" className="text-sm text-background/70 hover:text-background">Contact</a></li>
+              <li><Link to="/contact" className="text-sm text-background/70 hover:text-background">Contact</Link></li>
             </ul>
           </div>
           <div className="space-y-2">

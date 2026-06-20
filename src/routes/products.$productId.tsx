@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { getProduct, PRODUCTS } from "@/lib/products";
 import { getDescription } from "@/lib/product-descriptions";
 import { getVariants } from "@/lib/product-variants";
-import { useShopifyCatalog, formatMoney, useShopifyImageForProduct } from "@/lib/shopify/catalog";
+import { useShopifyCatalog, formatMoney, useShopifyImageForProduct, useAvailableProductIds } from "@/lib/shopify/catalog";
 import { useCartStore } from "@/stores/cart";
 import { CartDrawer } from "@/components/cart-drawer";
 
@@ -145,7 +145,10 @@ function ProductDetailPage() {
   const [variantIdx, setVariantIdx] = useState(defaultIdx === -1 ? 0 : defaultIdx);
   const [qty, setQty] = useState(1);
   const selected = variants[variantIdx];
-  const related = PRODUCTS.filter((p) => p.id !== product.id).slice(0, 4);
+  const availableIds = useAvailableProductIds();
+  const related = PRODUCTS
+    .filter((p) => p.id !== product.id && (availableIds === null || availableIds.has(p.id)))
+    .slice(0, 4);
 
   // Live Shopify data, mapped by SKU
   const catalog = useShopifyCatalog();

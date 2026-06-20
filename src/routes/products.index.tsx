@@ -4,6 +4,7 @@ import { PRODUCTS, type Product, type Tag } from "@/lib/products";
 import { getDefaultVariant } from "@/lib/product-variants";
 import { useShopifyCatalog, formatMoney, useAvailableProductIds, useShopifyImageForProduct } from "@/lib/shopify/catalog";
 import { CartDrawer } from "@/components/cart-drawer";
+import logoMark from "@/assets/logo-mark.png";
 
 const BRAND = "Peptide Pen Research";
 const PAGE_TITLE = "All Peptide Pens & Protocols | Peptide Pen Research";
@@ -208,11 +209,9 @@ function ProductsPage() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
           <Link to="/" aria-label={`${BRAND} home`} className="flex items-center gap-2 shrink-0">
-            <span className="grid h-8 w-8 place-items-center rounded-md bg-primary text-primary-foreground font-black text-sm">
-              P
-            </span>
+            <img src={logoMark} alt="" width={32} height={32} className="h-8 w-8 object-contain" />
             <span className="text-base sm:text-lg font-black tracking-tight uppercase">
-              PeptidePen
+              Peptide Pen Research
             </span>
           </Link>
           <nav

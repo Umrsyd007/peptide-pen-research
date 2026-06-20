@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import logoMark from "@/assets/logo-mark.png";
 
 const BRAND = "Peptide Pen Research";
 const PAGE_TITLE = `Refund Policy | ${BRAND}`;
@@ -33,8 +34,8 @@ function RefundPolicyPage() {
       <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur" role="banner">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
           <Link to="/" aria-label={`${BRAND} home`} className="flex items-center gap-2 shrink-0">
-            <span className="grid h-8 w-8 place-items-center rounded-md bg-primary text-primary-foreground font-black text-sm">P</span>
-            <span className="text-base sm:text-lg font-black tracking-tight uppercase">PeptidePen</span>
+            <img src={logoMark} alt="" width={32} height={32} className="h-8 w-8 object-contain" />
+            <span className="text-base sm:text-lg font-black tracking-tight uppercase">Peptide Pen Research</span>
           </Link>
           <nav className="hidden md:flex gap-1 items-center rounded-full border border-border bg-card px-2 py-1" aria-label="Primary">
             <Link to="/products" className="px-4 py-2 text-sm font-medium rounded-full hover:bg-muted transition-colors">

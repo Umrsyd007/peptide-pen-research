@@ -7,6 +7,7 @@ import { getVariants } from "@/lib/product-variants";
 import { useShopifyCatalog, formatMoney, useShopifyImageForProduct, useAvailableProductIds } from "@/lib/shopify/catalog";
 import { useCartStore } from "@/stores/cart";
 import { CartDrawer } from "@/components/cart-drawer";
+import logoMark from "@/assets/logo-mark.png";
 
 export const Route = createFileRoute("/products/$productId")({
   loader: ({ params }) => {
@@ -116,9 +117,9 @@ function Header() {
   return (
     <header className="sticky top-0 z-40 backdrop-blur-md bg-background/80 border-b border-border" role="banner">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
-        <Link to="/" aria-label="PeptidePen home" className="flex items-center gap-2 shrink-0">
-          <span className="h-8 w-8 rounded-lg bg-primary/15 border border-primary/30 flex items-center justify-center text-primary font-bold text-sm">P</span>
-          <span className="text-base sm:text-lg font-bold tracking-tight">PeptidePen</span>
+        <Link to="/" aria-label="Peptide Pen Research home" className="flex items-center gap-2 shrink-0">
+          <img src={logoMark} alt="" width={32} height={32} className="h-8 w-8 object-contain" />
+          <span className="text-base sm:text-lg font-bold tracking-tight">Peptide Pen Research</span>
         </Link>
         <nav className="hidden md:flex gap-7 text-sm" aria-label="Primary">
           <Link to="/products" className="text-foreground font-medium">Products</Link>

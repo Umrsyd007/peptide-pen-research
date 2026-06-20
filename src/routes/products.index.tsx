@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { PRODUCTS, type Product, type Tag } from "@/lib/products";
 import { getDefaultVariant } from "@/lib/product-variants";
-import { useShopifyCatalog, formatMoney } from "@/lib/shopify/catalog";
+import { useShopifyCatalog, formatMoney, useAvailableProductIds } from "@/lib/shopify/catalog";
 import { CartDrawer } from "@/components/cart-drawer";
 
 const BRAND = "Peptide Pen Research";

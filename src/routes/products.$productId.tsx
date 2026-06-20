@@ -249,7 +249,11 @@ function ProductDetailPage() {
           <div id="buy-box" className="lg:col-span-5">
             <div className="lg:sticky lg:top-24 space-y-5">
               <div className="flex flex-wrap items-center gap-2">
-                <Pill tone="success">In stock</Pill>
+                {inStock ? (
+                  <Pill tone="success">In stock</Pill>
+                ) : (
+                  <Pill>Out of stock</Pill>
+                )}
                 <Pill>Research use only</Pill>
               </div>
               <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">{product.categories}</p>
@@ -260,8 +264,8 @@ function ProductDetailPage() {
 
               <div className="flex items-baseline gap-3 pt-2">
                 <span className="text-3xl font-bold">{displayPrice}</span>
-                {selected?.oldPrice ? (
-                  <span className="text-sm text-muted-foreground line-through">{selected.oldPrice}</span>
+                {compareAt ? (
+                  <span className="text-sm text-muted-foreground line-through">{compareAt}</span>
                 ) : (
                   <span className="text-sm text-muted-foreground line-through">${(displayPriceNum * 1.25).toFixed(2)}</span>
                 )}
@@ -277,6 +281,10 @@ function ProductDetailPage() {
                   <div className={`grid gap-2 ${variants.length >= 3 ? "grid-cols-3" : variants.length === 2 ? "grid-cols-2" : "grid-cols-1"}`}>
                     {variants.map((v, i) => {
                       const active = i === variantIdx;
+                      const liveV = v.sku ? catalog.data?.get(v.sku.trim()) : undefined;
+                      const livePrice = liveV
+                        ? formatMoney(liveV.price.amount, liveV.price.currencyCode)
+                        : v.price;
                       return (
                         <label
                           key={v.sku || v.name}
@@ -290,7 +298,7 @@ function ProductDetailPage() {
                             className="sr-only"
                           />
                           <span className="block">{v.name}</span>
-                          <span className={`block text-[11px] mt-0.5 ${active ? "text-primary" : "text-muted-foreground/80"}`}>{v.price}</span>
+                          <span className={`block text-[11px] mt-0.5 ${active ? "text-primary" : "text-muted-foreground/80"}`}>{livePrice}</span>
                         </label>
                       );
                     })}
@@ -304,17 +312,42 @@ function ProductDetailPage() {
               {/* Qty + CTA */}
               <div className="flex gap-3 pt-2">
                 <div className="flex items-center border border-border rounded-lg h-12 px-2">
-                  <button className="h-8 w-8 grid place-items-center text-lg text-muted-foreground hover:text-foreground" aria-label="Decrease">−</button>
-                  <span className="w-8 text-center text-sm font-medium">1</span>
-                  <button className="h-8 w-8 grid place-items-center text-lg text-muted-foreground hover:text-foreground" aria-label="Increase">+</button>
+                  <button
+                    type="button"
+                    className="h-8 w-8 grid place-items-center text-lg text-muted-foreground hover:text-foreground"
+                    aria-label="Decrease quantity"
+                    onClick={() => setQty((q) => Math.max(1, q - 1))}
+                  >
+                    −
+                  </button>
+                  <span className="w-8 text-center text-sm font-medium">{qty}</span>
+                  <button
+                    type="button"
+                    className="h-8 w-8 grid place-items-center text-lg text-muted-foreground hover:text-foreground"
+                    aria-label="Increase quantity"
+                    onClick={() => setQty((q) => Math.min(99, q + 1))}
+                  >
+                    +
+                  </button>
                 </div>
-                <button className="flex-1 h-12 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition shadow-sm">
-                  Add to cart — {displayPrice}
+                <button
+                  type="button"
+                  onClick={handleAddToCart}
+                  disabled={cartLoading || (!catalog.isLoading && !shopifyVariant) || !inStock}
+                  className="flex-1 h-12 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {cartLoading
+                    ? "Adding…"
+                    : !inStock
+                      ? "Out of stock"
+                      : `Add to cart — ${displayPrice}`}
                 </button>
               </div>
-              <Link to="/products" className="block w-full h-12 rounded-lg border border-border text-center leading-[3rem] text-sm font-medium hover:bg-muted/50 transition">
-                Contact us to order
-              </Link>
+              {!catalog.isLoading && !shopifyVariant && (
+                <p className="text-[11px] text-amber-600 dark:text-amber-400">
+                  This variant isn't available for purchase right now. Please <a href="mailto:hello@getpeptidepen.com" className="underline">contact us</a> to order.
+                </p>
+              )}
 
               {/* Dosage details */}
               {(selected?.dailyDosage || selected?.courseDetails) && (

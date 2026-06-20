@@ -647,8 +647,13 @@ function ProductDetailPage() {
       </main>
 
       <footer className="border-t border-border mt-20 py-10" role="contentinfo">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 text-xs text-muted-foreground text-center space-y-2">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 text-xs text-muted-foreground text-center space-y-3">
           <p className="font-medium text-foreground">PeptidePen</p>
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
+            <Link to="/refund-policy" className="hover:text-foreground transition-colors">Refund Policy</Link>
+            <span className="opacity-30">|</span>
+            <Link to="/terms-of-service" className="hover:text-foreground transition-colors">Terms of Service</Link>
+          </div>
           <p>© {new Date().getFullYear()} PeptidePen — Research use only. Not for human or veterinary consumption.</p>
         </div>
       </footer>

@@ -9,7 +9,9 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TermsOfServiceRouteImport } from './routes/terms-of-service'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductsIndexRouteImport } from './routes/products.index'
@@ -22,9 +24,19 @@ import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lova
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 
+const TermsOfServiceRoute = TermsOfServiceRouteImport.update({
+  id: '/terms-of-service',
+  path: '/terms-of-service',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RefundPolicyRoute = RefundPolicyRouteImport.update({
+  id: '/refund-policy',
+  path: '/refund-policy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProductsRoute = ProductsRouteImport.update({
@@ -91,7 +103,9 @@ const LovableEmailQueueProcessRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/products': typeof ProductsRouteWithChildren
+  '/refund-policy': typeof RefundPolicyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms-of-service': typeof TermsOfServiceRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/guides/peptide-dosage-calculator': typeof GuidesPeptideDosageCalculatorRoute
   '/guides/retatrutide-dosage-guide': typeof GuidesRetatrutideDosageGuideRoute
@@ -104,7 +118,9 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/refund-policy': typeof RefundPolicyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms-of-service': typeof TermsOfServiceRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/guides/peptide-dosage-calculator': typeof GuidesPeptideDosageCalculatorRoute
   '/guides/retatrutide-dosage-guide': typeof GuidesRetatrutideDosageGuideRoute
@@ -119,7 +135,9 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/products': typeof ProductsRouteWithChildren
+  '/refund-policy': typeof RefundPolicyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms-of-service': typeof TermsOfServiceRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/guides/peptide-dosage-calculator': typeof GuidesPeptideDosageCalculatorRoute
   '/guides/retatrutide-dosage-guide': typeof GuidesRetatrutideDosageGuideRoute
@@ -135,7 +153,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/products'
+    | '/refund-policy'
     | '/sitemap.xml'
+    | '/terms-of-service'
     | '/email/unsubscribe'
     | '/guides/peptide-dosage-calculator'
     | '/guides/retatrutide-dosage-guide'
@@ -148,7 +168,9 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/refund-policy'
     | '/sitemap.xml'
+    | '/terms-of-service'
     | '/email/unsubscribe'
     | '/guides/peptide-dosage-calculator'
     | '/guides/retatrutide-dosage-guide'
@@ -162,7 +184,9 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/products'
+    | '/refund-policy'
     | '/sitemap.xml'
+    | '/terms-of-service'
     | '/email/unsubscribe'
     | '/guides/peptide-dosage-calculator'
     | '/guides/retatrutide-dosage-guide'
@@ -177,7 +201,9 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ProductsRoute: typeof ProductsRouteWithChildren
+  RefundPolicyRoute: typeof RefundPolicyRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TermsOfServiceRoute: typeof TermsOfServiceRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   GuidesPeptideDosageCalculatorRoute: typeof GuidesPeptideDosageCalculatorRoute
   GuidesRetatrutideDosageGuideRoute: typeof GuidesRetatrutideDosageGuideRoute
@@ -189,11 +215,25 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/terms-of-service': {
+      id: '/terms-of-service'
+      path: '/terms-of-service'
+      fullPath: '/terms-of-service'
+      preLoaderRoute: typeof TermsOfServiceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/refund-policy': {
+      id: '/refund-policy'
+      path: '/refund-policy'
+      fullPath: '/refund-policy'
+      preLoaderRoute: typeof RefundPolicyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/products': {
@@ -293,7 +333,9 @@ const ProductsRouteWithChildren = ProductsRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ProductsRoute: ProductsRouteWithChildren,
+  RefundPolicyRoute: RefundPolicyRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TermsOfServiceRoute: TermsOfServiceRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   GuidesPeptideDosageCalculatorRoute: GuidesPeptideDosageCalculatorRoute,
   GuidesRetatrutideDosageGuideRoute: GuidesRetatrutideDosageGuideRoute,

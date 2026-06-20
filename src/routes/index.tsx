@@ -492,16 +492,17 @@ function HomePage() {
           <div className="space-y-2">
             <p className="text-[11px] uppercase tracking-widest font-black text-primary">Company</p>
             <ul className="space-y-1.5 list-none p-0">
+              <li><a href="/" className="text-sm text-background/70 hover:text-background">Home</a></li>
               <li><a href="#science" className="text-sm text-background/70 hover:text-background">Science</a></li>
               <li><a href="#how-it-works" className="text-sm text-background/70 hover:text-background">How it Works</a></li>
-              <li><a href="#contact" className="text-sm text-background/70 hover:text-background">Contact</a></li>
+              <li><a href="mailto:hello@getpeptidepen.com" className="text-sm text-background/70 hover:text-background">Contact</a></li>
             </ul>
           </div>
           <div className="space-y-2">
-            <p className="text-[11px] uppercase tracking-widest font-black text-primary">Support</p>
+            <p className="text-[11px] uppercase tracking-widest font-black text-primary">Legal</p>
             <ul className="space-y-1.5 list-none p-0">
-              <li><a href="#faq" className="text-sm text-background/70 hover:text-background">FAQ</a></li>
-              <li><a href="mailto:hello@getpeptidepen.com" className="text-sm text-background/70 hover:text-background">Email Support</a></li>
+              <li><Link to="/refund-policy" className="text-sm text-background/70 hover:text-background">Refund Policy</Link></li>
+              <li><Link to="/terms-of-service" className="text-sm text-background/70 hover:text-background">Terms of Service</Link></li>
             </ul>
           </div>
         </div>

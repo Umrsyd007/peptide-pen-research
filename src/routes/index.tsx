@@ -51,8 +51,10 @@ const NAV_LINKS = [
 ];
 
 function HomePage() {
-  const featured = PRODUCTS.filter((p) => p.tag === "BESTSELLER").slice(0, 3);
-  const newDrops = PRODUCTS.filter((p) => p.tag === "NEW").slice(0, 4);
+  const availableIds = useAvailableProductIds();
+  const inStock = (p: { id: string }) => !availableIds || availableIds.has(p.id);
+  const featured = PRODUCTS.filter((p) => p.tag === "BESTSELLER" && inStock(p)).slice(0, 3);
+  const newDrops = PRODUCTS.filter((p) => p.tag === "NEW" && inStock(p)).slice(0, 4);
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans antialiased">

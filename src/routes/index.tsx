@@ -87,7 +87,7 @@ function HomePage() {
           </nav>
           <div className="flex items-center gap-2">
             <span className="hidden lg:inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-primary">
-              <span className="h-1.5 w-1.5 rounded-full bg-primary" /> BOGO + 25%
+              <span className="h-1.5 w-1.5 rounded-full bg-primary" /> Lab-Grade
             </span>
             <Link
               to="/products"

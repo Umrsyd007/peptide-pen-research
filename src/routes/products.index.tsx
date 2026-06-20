@@ -6,8 +6,8 @@ import { useShopifyCatalog, formatMoney, useAvailableProductIds, useShopifyImage
 import { CartDrawer } from "@/components/cart-drawer";
 import logoMark from "@/assets/logo-badge.png";
 
-const BRAND = "Peptide Pen Research";
-const PAGE_TITLE = "All Peptide Pens & Protocols | Peptide Pen Research";
+const BRAND = "PeptidePen Research";
+const PAGE_TITLE = "All Peptide Pens & Protocols | PeptidePen Research";
 const PAGE_DESCRIPTION =
   "Browse the full catalog of lab-tested research peptide pens, longevity stacks, and wellness protocols. Batch-matched COAs, cold-chain shipping, dosing references. For in-vitro research use only.";
 
@@ -211,7 +211,7 @@ function ProductsPage() {
           <Link to="/" aria-label={`${BRAND} home`} className="flex items-center gap-2 shrink-0">
             <img src={logoMark} alt="" width={32} height={32} className="h-9 w-9 rounded-xl object-cover" />
             <span className="text-base sm:text-lg font-black tracking-tight uppercase">
-              Peptide Pen Research
+              PeptidePen Research
             </span>
           </Link>
           <nav

@@ -2,10 +2,10 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Mail, MapPin, Phone, Clock, Send } from "lucide-react";
 import logoMark from "@/assets/logo-badge.png";
 
-const BRAND = "Peptide Pen Research";
+const BRAND = "PeptidePen Research";
 const PAGE_TITLE = `Contact Us | ${BRAND}`;
 const PAGE_DESCRIPTION =
-  "Get in touch with Peptide Pen Research. Email, business address, and support hours for research-grade peptide inquiries.";
+  "Get in touch with PeptidePen Research. Email, business address, and support hours for research-grade peptide inquiries.";
 
 export const Route = createFileRoute("/contact")({
   component: ContactPage,
@@ -156,7 +156,7 @@ function ContactPage() {
               </div>
             </div>
             <p className="text-sm text-foreground/80 leading-relaxed">
-              Peptide Pen Research<br />
+              PeptidePen Research<br />
               {/* TODO: Replace with actual business address */}
               <span className="text-xs text-muted-foreground">Business address available upon request via email.</span>
             </p>

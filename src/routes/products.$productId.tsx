@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { getProduct, PRODUCTS } from "@/lib/products";
 import { getDescription } from "@/lib/product-descriptions";
 import { getVariants } from "@/lib/product-variants";
-import { useShopifyCatalog, formatMoney, useShopifyImageForProduct } from "@/lib/shopify/catalog";
+import { useShopifyCatalog, formatMoney, useShopifyImageForProduct, useAvailableProductIds } from "@/lib/shopify/catalog";
 import { useCartStore } from "@/stores/cart";
 import { CartDrawer } from "@/components/cart-drawer";
 

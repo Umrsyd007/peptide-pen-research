@@ -1,8 +1,11 @@
 // Fetches the full Shopify catalog and exposes a SKU -> variant map so
 // the locally-curated product files (products.ts, product-variants.ts) can
 // be enriched with live price, availability and checkout-ready variantId.
+import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { storefrontApiRequest } from "./client";
+import { PRODUCT_VARIANTS } from "@/lib/product-variants";
+
 
 export interface ShopifyVariant {
   id: string; // gid://shopify/ProductVariant/...
@@ -86,6 +89,27 @@ export function useShopifyCatalog() {
     gcTime: 1000 * 60 * 30,
     retry: 1,
   });
+}
+
+/**
+ * Returns the set of local product IDs that still have at least one variant
+ * (matched by SKU) live in Shopify. While the catalog is loading we return
+ * `null` so callers can avoid flashing an empty grid. If the request errored
+ * we also return `null` and fall back to showing everything — better to show
+ * stale entries than a broken store.
+ */
+export function useAvailableProductIds(): Set<string> | null {
+  const { data, isLoading, isError } = useShopifyCatalog();
+  return useMemo(() => {
+    if (isLoading || isError || !data) return null;
+    const ids = new Set<string>();
+    for (const [productId, variants] of Object.entries(PRODUCT_VARIANTS)) {
+      if (variants.some((v) => v.sku && data.has(v.sku.trim()))) {
+        ids.add(productId);
+      }
+    }
+    return ids;
+  }, [data, isLoading, isError]);
 }
 
 export function formatMoney(amount: string | number, currencyCode = "USD") {

@@ -176,6 +176,19 @@ function ProductDetailPage() {
   const addItem = useCartStore((s) => s.addItem);
   const cartLoading = useCartStore((s) => s.isLoading);
 
+  // GA4 view_item
+  useEffect(() => {
+    trackViewItem({
+      item_id: product.id,
+      item_name: product.name,
+      item_category: product.categories,
+      item_variant: selected?.name,
+      price: displayPriceNum,
+      currency: shopifyVariant?.price.currencyCode ?? "USD",
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product.id, variantIdx]);
+
   const handleAddToCart = async () => {
     if (!shopifyVariant) {
       toast.error("This product is loading from our store. Please try again in a moment.");
@@ -194,6 +207,15 @@ function ProductDetailPage() {
       image: shopifyVariant.productImage ?? product.image,
       price: shopifyVariant.price,
       quantity: qty,
+    });
+    trackAddToCart({
+      item_id: product.id,
+      item_name: product.name,
+      item_category: product.categories,
+      item_variant: selected?.name ?? shopifyVariant.title,
+      price: parseFloat(shopifyVariant.price.amount),
+      quantity: qty,
+      currency: shopifyVariant.price.currencyCode,
     });
     toast.success(`Added to cart — ${product.name}`, {
       description: selected?.name && selected.name !== "Default" ? selected.name : undefined,

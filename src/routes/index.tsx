@@ -44,7 +44,6 @@ function Pill({ children, dot = true }: { children: React.ReactNode; dot?: boole
 }
 
 const NAV_LINKS = [
-  { label: "Offers", href: "#offers" },
   { label: "How it Works", href: "#how-it-works" },
   { label: "Science", href: "#science" },
   { label: "FAQ", href: "#faq" },

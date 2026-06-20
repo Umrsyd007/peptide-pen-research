@@ -4,10 +4,9 @@ import { PRODUCTS, type Product, type Tag } from "@/lib/products";
 import { getDefaultVariant } from "@/lib/product-variants";
 import { useShopifyCatalog, formatMoney, useAvailableProductIds, useShopifyImageForProduct } from "@/lib/shopify/catalog";
 import { CartDrawer } from "@/components/cart-drawer";
-import logoMark from "@/assets/logo-badge.png";
 
-const BRAND = "PeptidePen Research";
-const PAGE_TITLE = "All Peptide Pens & Protocols | PeptidePen Research";
+const BRAND = "PeptidePen";
+const PAGE_TITLE = "All Peptide Pens & Protocols | PeptidePen";
 const PAGE_DESCRIPTION =
   "Browse the full catalog of lab-tested research peptide pens, longevity stacks, and wellness protocols. Batch-matched COAs, cold-chain shipping, dosing references. For in-vitro research use only.";
 
@@ -209,9 +208,9 @@ function ProductsPage() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
           <Link to="/" aria-label={`${BRAND} home`} className="flex items-center gap-2 shrink-0">
-            <img src={logoMark} alt="" width={32} height={32} className="h-9 w-9 rounded-xl object-cover" />
+            <span className="inline-flex items-center justify-center h-8 w-8 rounded-xl bg-[#EF2A2A] text-white font-bold text-lg shrink-0">P</span>
             <span className="text-base sm:text-lg font-black tracking-tight uppercase">
-              PeptidePen Research
+              {BRAND}
             </span>
           </Link>
           <nav

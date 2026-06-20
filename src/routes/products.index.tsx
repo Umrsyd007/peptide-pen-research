@@ -149,8 +149,13 @@ function ProductsPage() {
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<SortKey>("featured");
 
+  const availableIds = useAvailableProductIds();
+
   const filtered = useMemo(() => {
     let list = PRODUCTS.slice();
+    if (availableIds) {
+      list = list.filter((p) => availableIds.has(p.id));
+    }
     if (category !== "All") {
       list = list.filter((p) =>
         p.categories.toLowerCase().includes(category.toLowerCase()),

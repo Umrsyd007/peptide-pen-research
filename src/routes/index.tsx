@@ -44,7 +44,6 @@ function Pill({ children, dot = true }: { children: React.ReactNode; dot?: boole
 }
 
 const NAV_LINKS = [
-  { label: "Offers", href: "#offers" },
   { label: "How it Works", href: "#how-it-works" },
   { label: "Science", href: "#science" },
   { label: "FAQ", href: "#faq" },
@@ -64,9 +63,10 @@ function HomePage() {
       <div className="bg-foreground text-background text-[11px] font-medium tracking-wider uppercase">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex items-center justify-center gap-2 text-center">
           <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-          BOGO + 25% OFF Sitewide · Code <span className="text-primary font-bold">MEM25</span> · Same-day shipping
+          Lab-Grade Peptides · Batch-Matched COAs · Cold-Chain Shipping
         </div>
       </div>
+
 
       {/* Nav */}
       <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur" role="banner">
@@ -87,7 +87,7 @@ function HomePage() {
           </nav>
           <div className="flex items-center gap-2">
             <span className="hidden lg:inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-primary">
-              <span className="h-1.5 w-1.5 rounded-full bg-primary" /> BOGO + 25%
+              <span className="h-1.5 w-1.5 rounded-full bg-primary" /> Lab-Grade
             </span>
             <Link
               to="/products"
@@ -119,30 +119,34 @@ function HomePage() {
         <section className="relative overflow-hidden border-b border-border" aria-labelledby="hero-heading">
           {/* Background watermark */}
           <div aria-hidden className="pointer-events-none absolute inset-0 flex items-center justify-center">
-            <span className="text-[28vw] font-black text-foreground/[0.03] leading-none tracking-tighter select-none">BOGO</span>
+            <span className="text-[24vw] font-black text-foreground/[0.03] leading-none tracking-tighter select-none">PENS</span>
           </div>
 
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-12 lg:py-20 grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-10 items-center">
             <div className="space-y-7">
               <div className="flex flex-wrap items-center gap-2">
-                <Pill>BOGO + 25% OFF</Pill>
+                <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider">
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+                  Research Use Only
+                </span>
                 <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 text-[11px] font-semibold">
                   <span className="text-primary">★★★★★</span>
                   <span className="font-bold">4.9</span>
                   <span className="text-muted-foreground">/ 2,400+ reviews</span>
                 </span>
                 <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[11px] font-semibold text-emerald-700">
-                  ✓ COA VERIFIED
+                  ✓ COA Verified
                 </span>
               </div>
 
-              <h1 id="hero-heading" className="font-black uppercase leading-[0.92] tracking-tight text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem]">
-                Research Peptide Pens.<br />
-                Buy One Get One{" "}
+              <h1 id="hero-heading" className="font-black uppercase leading-[0.95] tracking-tight text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem]">
+                Lab-Grade Peptide<br />
+                Pens, Engineered<br />
+                for{" "}
                 <span className="relative inline-block bg-[image:var(--gradient-flame)] bg-clip-text text-transparent">
-                  Free.
-                  <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 200 12" fill="none" aria-hidden>
-                    <path d="M2 8 Q 100 -2, 198 8" stroke="url(#g)" strokeWidth="3" strokeLinecap="round" />
+                  Serious Research.
+                  <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 280 12" fill="none" aria-hidden>
+                    <path d="M2 8 Q 140 -2, 278 8" stroke="url(#g)" strokeWidth="3" strokeLinecap="round" />
                     <defs>
                       <linearGradient id="g" x1="0" x2="1">
                         <stop offset="0" stopColor="oklch(0.62 0.24 25)" />
@@ -154,7 +158,7 @@ function HomePage() {
               </h1>
 
               <p className="text-base sm:text-lg text-muted-foreground max-w-xl">
-                Buy one get one free on select research peptides. Everything else is 25% off with code <strong className="text-foreground">MEM25</strong>. Third-party tested, COA-verified, cold-chain shipped.
+                Peptide Pen Research supplies pre-mixed peptide pens with batch-level COAs, cold-chain shipping and transparent dosing references — built for laboratories that can't afford guesswork.
               </p>
 
               <div className="flex flex-wrap gap-3">
@@ -162,95 +166,69 @@ function HomePage() {
                   to="/products"
                   className="group inline-flex h-14 px-7 items-center justify-center gap-2 rounded-full bg-foreground text-background font-bold uppercase tracking-wider text-sm shadow-[var(--shadow-glow)] hover:bg-primary transition-all"
                 >
-                  Shop Now <span aria-hidden className="transition-transform group-hover:translate-x-1">↗</span>
+                  Shop Peptide Pens <span aria-hidden className="transition-transform group-hover:translate-x-1">↗</span>
                 </Link>
                 <a
-                  href="#how-it-works"
+                  href="#science"
                   className="inline-flex h-14 px-7 items-center justify-center gap-2 rounded-full border-2 border-foreground bg-background text-foreground font-bold uppercase tracking-wider text-sm hover:bg-muted transition-colors"
                 >
-                  How It Works <span aria-hidden>↓</span>
+                  View the Science <span aria-hidden>↓</span>
                 </a>
               </div>
 
-              <div className="grid grid-cols-3 gap-4 pt-6 border-t border-border">
-                <div>
-                  <p className="text-2xl sm:text-3xl font-black">99.8%</p>
-                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground mt-1">Avg. Purity</p>
-                </div>
-                <div>
-                  <p className="text-2xl sm:text-3xl font-black">72.5K+</p>
-                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground mt-1">Researchers</p>
-                </div>
-                <div>
-                  <p className="text-2xl sm:text-3xl font-black uppercase">Same Day</p>
-                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground mt-1">Ship Time</p>
-                </div>
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-4">
+                {[
+                  { label: "≥99% purity (HPLC)" },
+                  { label: "Third-party tested" },
+                  { label: "Tracked cold-chain delivery" },
+                ].map((badge) => (
+                  <span key={badge.label} className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
+                    <svg className="h-4 w-4 text-primary shrink-0" viewBox="0 0 16 16" fill="none" aria-hidden>
+                      <path d="M3 8L6.5 11.5L13 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    {badge.label}
+                  </span>
+                ))}
               </div>
             </div>
 
-            {/* Promo card */}
-            <aside id="offers" className="rounded-3xl border border-border bg-card shadow-[var(--shadow-glow)] overflow-hidden">
-              <div className="flex items-center justify-between px-5 py-3 border-b border-border bg-background/60">
-                <span className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider">
-                  <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-                  Limited Time Promo
-                </span>
-                <span className="text-[10px] uppercase tracking-wider text-muted-foreground">⏱ Limited Time</span>
-              </div>
-              <div className="relative bg-foreground text-background p-8 sm:p-10 text-center overflow-hidden">
-                <div aria-hidden className="absolute inset-0 opacity-30 bg-[radial-gradient(ellipse_at_top_right,_oklch(0.62_0.24_25/_0.6),_transparent_60%)]" />
-                <div aria-hidden className="absolute inset-0 opacity-[0.08] [background-image:linear-gradient(to_right,_white_1px,_transparent_1px),linear-gradient(to_bottom,_white_1px,_transparent_1px)] [background-size:32px_32px]" />
-                <p className="relative text-[11px] font-bold uppercase tracking-[0.3em] text-primary">Select Products</p>
-                <p className="relative text-3xl sm:text-5xl font-black uppercase mt-2">
-                  Buy 1 Get 1 <span className="bg-[image:var(--gradient-flame)] bg-clip-text text-transparent">Free</span>
-                </p>
-                <p className="relative text-xs sm:text-sm uppercase tracking-wider mt-3 text-background/80">+ 25% off everything else with code</p>
-              </div>
-              <div className="p-5 sm:p-6 space-y-5">
-                <div className="flex items-start gap-4">
-                  <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-primary text-primary-foreground text-xl">🎁</div>
-                  <div className="min-w-0">
-                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold">Sitewide Discount Code</p>
-                    <p className="text-2xl font-black">
-                      <span className="text-primary">25% OFF</span> EVERYTHING
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-1">Use code at checkout for 25% off your entire order (non-BOGO items).</p>
-                  </div>
+            {/* Product Visual */}
+            <aside className="relative">
+              <div className="relative rounded-3xl border border-border bg-muted/40 overflow-hidden aspect-[4/5] sm:aspect-square lg:aspect-[4/5]">
+                {/* Subtle orange gradient glow */}
+                <div aria-hidden className="absolute top-0 right-0 w-3/4 h-3/4 bg-[radial-gradient(ellipse_at_top_right,_oklch(0.62_0.24_25/_0.15),_transparent_70%)]" />
+                <div aria-hidden className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-[radial-gradient(ellipse_at_bottom_left,_oklch(0.74_0.2_60/_0.1),_transparent_70%)]" />
+                
+                {/* Product image */}
+                <div className="relative h-full w-full flex items-center justify-center p-8 sm:p-12">
+                  <img
+                    src={PRODUCTS.find(p => p.name === "BPC-157")?.image || PRODUCTS[0].image}
+                    alt="Research-grade peptide pen"
+                    className="h-full w-full object-contain drop-shadow-2xl"
+                    loading="eager"
+                  />
                 </div>
-                <div className="flex items-center justify-between rounded-xl border border-dashed border-border bg-muted/40 px-4 py-3">
-                  <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold">Code</span>
-                  <span className="font-mono text-lg font-black tracking-widest">MEM25</span>
-                  <button
-                    type="button"
-                    onClick={(e) => { navigator.clipboard?.writeText("MEM25"); (e.currentTarget as HTMLButtonElement).textContent = "Copied"; }}
-                    className="text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full bg-foreground text-background hover:bg-primary transition-colors"
-                  >
-                    Copy
-                  </button>
-                </div>
-                <div className="grid grid-cols-3 gap-3 text-center pt-2">
+              </div>
+
+              {/* Floating trust card */}
+              <div className="absolute -bottom-4 left-4 right-4 sm:left-6 sm:right-6 rounded-2xl border border-border bg-card shadow-[var(--shadow-glow)] p-4">
+                <div className="grid grid-cols-3 gap-3 text-center">
                   {[
-                    { i: "🎁", t: "BOGO on select" },
-                    { i: "🛡", t: "3rd-party tested" },
-                    { i: "🚚", t: "Same-day ship" },
-                  ].map((b) => (
-                    <div key={b.t} className="space-y-1">
-                      <div className="text-primary text-base">{b.i}</div>
-                      <p className="text-[11px] font-medium">{b.t}</p>
+                    { value: "99.8%", label: "Avg. Purity" },
+                    { value: "72.5K+", label: "Researchers" },
+                    { value: "Same Day", label: "Ship Time" },
+                  ].map((stat) => (
+                    <div key={stat.label} className="space-y-1">
+                      <p className="text-lg sm:text-xl font-black">{stat.value}</p>
+                      <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{stat.label}</p>
                     </div>
                   ))}
                 </div>
-                <Link
-                  to="/products"
-                  className="flex h-14 items-center justify-center gap-2 rounded-full bg-foreground text-background font-bold uppercase tracking-wider text-sm hover:bg-primary transition-colors"
-                >
-                  ✦ Shop Now ↗
-                </Link>
-                <p className="text-[11px] text-center text-muted-foreground">Secure checkout · Discreet shipping · Same-day (before 1PM EST)</p>
               </div>
             </aside>
           </div>
         </section>
+
 
         {/* TRUST MARQUEE */}
         <section className="border-b border-border bg-foreground text-background overflow-hidden" aria-label="Trust signals">

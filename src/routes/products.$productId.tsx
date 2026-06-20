@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { getProduct, PRODUCTS } from "@/lib/products";
 import { getDescription } from "@/lib/product-descriptions";
 import { getVariants } from "@/lib/product-variants";
+import { useShopifyCatalog, formatMoney } from "@/lib/shopify/catalog";
+import { useCartStore } from "@/stores/cart";
+import { CartDrawer } from "@/components/cart-drawer";
 
 export const Route = createFileRoute("/products/$productId")({
   loader: ({ params }) => {

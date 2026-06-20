@@ -166,6 +166,8 @@ function ProductDetailPage() {
       )
     : selected?.oldPrice;
   const inStock = shopifyVariant ? shopifyVariant.availableForSale : true;
+  const liveImage = useShopifyImageForProduct(product.id);
+  const heroImage = shopifyVariant?.productImage ?? liveImage ?? product.image;
 
   const addItem = useCartStore((s) => s.addItem);
   const cartLoading = useCartStore((s) => s.isLoading);
@@ -226,7 +228,7 @@ function ProductDetailPage() {
             <div className="relative aspect-square w-full rounded-2xl border border-border bg-gradient-to-br from-muted/60 via-muted/30 to-background overflow-hidden flex items-center justify-center">
               <div className="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_30%_20%,hsl(var(--primary)/0.2),transparent_60%)]" aria-hidden />
               <img
-                src={product.image}
+                src={heroImage}
                 alt={`${product.name} research pen`}
                 className="relative w-full h-full object-contain p-8 sm:p-12"
               />
@@ -239,7 +241,7 @@ function ProductDetailPage() {
             <div className="grid grid-cols-4 gap-3">
               {[1, 2, 3, 4].map((i) => (
                 <div key={i} className="aspect-square rounded-xl border border-border bg-muted/40 overflow-hidden flex items-center justify-center hover:border-primary/40 transition-colors cursor-pointer">
-                  <img src={product.image} alt="" aria-hidden="true" className="w-full h-full object-contain p-2 opacity-70" />
+                  <img src={heroImage} alt="" aria-hidden="true" className="w-full h-full object-contain p-2 opacity-70" />
                 </div>
               ))}
             </div>

@@ -235,6 +235,7 @@ function ProductsPage() {
             >
               Contact ↗
             </a>
+            <CartDrawer />
             <details className="md:hidden relative">
               <summary
                 className="list-none cursor-pointer inline-flex items-center justify-center h-11 w-11 rounded-full border border-border bg-card"

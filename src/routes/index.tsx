@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PRODUCTS } from "@/lib/products";
+import { useAvailableProductIds } from "@/lib/shopify/catalog";
 
 const BRAND = "Peptide Pen Research";
 const TAGLINE = "Lab-grade peptide pens, engineered for serious research.";

@@ -13,6 +13,12 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 import { useCartSync } from "@/hooks/use-cart-sync";
+import { trackPageView } from "@/lib/analytics";
+
+// Google Tag IDs (GTM containers + GA4)
+const GTM_ID = "GT-NC6LQ58D";
+const GA4_ID = "G-1LLX7CCVZL";
+const EXTRA_TAG_IDS = ["GT-MBG99QWN", "GT-WPF72555"];
 
 function NotFoundComponent() {
   return (
@@ -95,6 +101,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "stylesheet", href: appCss },
     ],
     scripts: [
+      // Google Tag Manager bootstrap (loads container which fans out to GA4, Ads, etc.)
+      {
+        children: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${GTM_ID}');`,
+      },
+      // gtag.js for GA4 + additional Google Tag IDs (configured via gtag('config', id))
+      {
+        src: `https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`,
+        async: true,
+      },
+      {
+        children: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA4_ID}');${EXTRA_TAG_IDS.map((id) => `gtag('config','${id}');`).join("")}`,
+      },
       {
         type: "application/ld+json",
         children: JSON.stringify({
@@ -130,6 +148,15 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
+        {/* GTM noscript fallback (required by Google Tag Manager) */}
+        <noscript>
+          <iframe
+            src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          />
+        </noscript>
         {children}
         <Scripts />
       </body>
@@ -139,7 +166,16 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
   useCartSync();
+
+  // Fire page_view on every SPA navigation
+  useEffect(() => {
+    const unsub = router.subscribe("onResolved", ({ toLocation }) => {
+      trackPageView({ path: toLocation.pathname + toLocation.searchStr });
+    });
+    return unsub;
+  }, [router]);
 
   return (
     <QueryClientProvider client={queryClient}>

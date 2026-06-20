@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCartStore } from "@/stores/cart";
 import { formatMoney } from "@/lib/shopify/catalog";
+import { trackBeginCheckout } from "@/lib/analytics";
 
 interface CartDrawerProps {
   /** Optional visual variant for the trigger button */
@@ -46,6 +47,18 @@ export function CartDrawer({
   const handleCheckout = () => {
     const url = getCheckoutUrl();
     if (!url) return;
+    trackBeginCheckout({
+      items: items.map((i) => ({
+        item_id: i.productId,
+        item_name: i.title,
+        item_variant: i.variantTitle,
+        price: parseFloat(i.price.amount),
+        quantity: i.quantity,
+        currency: i.price.currencyCode,
+      })),
+      value: totalPrice,
+      currency,
+    });
     window.open(url, "_blank");
     setOpen(false);
   };

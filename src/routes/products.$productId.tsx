@@ -7,7 +7,6 @@ import { getVariants } from "@/lib/product-variants";
 import { useShopifyCatalog, formatMoney, useShopifyImageForProduct, useAvailableProductIds } from "@/lib/shopify/catalog";
 import { useCartStore } from "@/stores/cart";
 import { CartDrawer } from "@/components/cart-drawer";
-import logoMark from "@/assets/logo-badge.png";
 
 export const Route = createFileRoute("/products/$productId")({
   loader: ({ params }) => {

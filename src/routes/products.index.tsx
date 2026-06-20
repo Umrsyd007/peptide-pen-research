@@ -91,6 +91,8 @@ function ProductCard({ product }: { product: Product }) {
   const livePrice = liveVariant
     ? formatMoney(liveVariant.price.amount, liveVariant.price.currencyCode)
     : product.price;
+  const liveImage = useShopifyImageForProduct(product.id);
+  const imageSrc = liveImage ?? product.image;
 
   return (
     <article className="group relative flex flex-col rounded-2xl border border-border bg-card overflow-hidden hover:border-foreground/40 hover:shadow-[var(--shadow-glow)] transition-all">
@@ -102,7 +104,7 @@ function ProductCard({ product }: { product: Product }) {
       >
         <TagBadge tag={product.tag} />
         <img
-          src={product.image}
+          src={imageSrc}
           alt={product.name}
           loading="lazy"
           className="w-full h-full object-contain p-6 group-hover:scale-105 transition-transform duration-500"

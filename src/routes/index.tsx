@@ -64,9 +64,10 @@ function HomePage() {
       <div className="bg-foreground text-background text-[11px] font-medium tracking-wider uppercase">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex items-center justify-center gap-2 text-center">
           <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-          BOGO + 25% OFF Sitewide · Code <span className="text-primary font-bold">MEM25</span> · Same-day shipping
+          Lab-Grade Peptides · Batch-Matched COAs · Cold-Chain Shipping
         </div>
       </div>
+
 
       {/* Nav */}
       <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur" role="banner">

@@ -112,6 +112,26 @@ export function useAvailableProductIds(): Set<string> | null {
   }, [data, isLoading, isError]);
 }
 
+/**
+ * Returns the live Shopify featured image URL for a local product, by looking
+ * up any of its SKUs in the catalog. Returns `null` while loading or when no
+ * match is found, so callers can fall back to the locally bundled image.
+ */
+export function useShopifyImageForProduct(productId: string): string | null {
+  const { data } = useShopifyCatalog();
+  return useMemo(() => {
+    if (!data) return null;
+    const variants = PRODUCT_VARIANTS[productId];
+    if (!variants) return null;
+    for (const v of variants) {
+      if (!v.sku) continue;
+      const hit = data.get(v.sku.trim());
+      if (hit?.productImage) return hit.productImage;
+    }
+    return null;
+  }, [data, productId]);
+}
+
 export function formatMoney(amount: string | number, currencyCode = "USD") {
   const n = typeof amount === "string" ? parseFloat(amount) : amount;
   if (!Number.isFinite(n)) return "";

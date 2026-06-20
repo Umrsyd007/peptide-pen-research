@@ -2,6 +2,7 @@
 declare global {
   interface Window {
     dataLayer?: Array<Record<string, unknown>>;
+    gtag?: (...args: unknown[]) => void;
   }
 }
 
@@ -9,6 +10,13 @@ function push(payload: Record<string, unknown>) {
   if (typeof window === "undefined") return;
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push(payload);
+}
+
+// Direct GA4 send (in addition to the dataLayer push) so events reach GA4
+// even when the GTM container has no matching custom-event trigger.
+function gtagEvent(name: string, params: Record<string, unknown>) {
+  if (typeof window === "undefined" || typeof window.gtag !== "function") return;
+  window.gtag("event", name, params);
 }
 
 export interface AnalyticsItem {

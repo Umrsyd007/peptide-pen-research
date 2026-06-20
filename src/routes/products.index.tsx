@@ -463,6 +463,11 @@ function ProductsPage() {
             </span>
             <span className="text-base font-black tracking-tight uppercase">PeptidePen</span>
           </div>
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[11px] text-background/60">
+            <Link to="/refund-policy" className="hover:text-background transition-colors">Refund Policy</Link>
+            <span className="hidden sm:inline opacity-30">|</span>
+            <Link to="/terms-of-service" className="hover:text-background transition-colors">Terms of Service</Link>
+          </div>
           <p className="text-[11px] text-background/60 text-center max-w-xl">
             <strong className="text-background">Research Use Only.</strong> Products are
             supplied strictly for in-vitro laboratory research and are not for human or veterinary use.

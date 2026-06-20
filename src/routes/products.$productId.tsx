@@ -143,10 +143,56 @@ function ProductDetailPage() {
   const variants = getVariants(product.id);
   const defaultIdx = Math.max(0, variants.findIndex((v) => v.isDefault));
   const [variantIdx, setVariantIdx] = useState(defaultIdx === -1 ? 0 : defaultIdx);
+  const [qty, setQty] = useState(1);
   const selected = variants[variantIdx];
-  const displayPrice = selected?.price ?? product.price;
-  const displayPriceNum = selected?.priceNum ?? parseFloat(product.price.replace(/[^0-9.]/g, ""));
   const related = PRODUCTS.filter((p) => p.id !== product.id).slice(0, 4);
+
+  // Live Shopify data, mapped by SKU
+  const catalog = useShopifyCatalog();
+  const shopifyVariant = selected?.sku
+    ? catalog.data?.get(selected.sku.trim())
+    : undefined;
+
+  const displayPrice = shopifyVariant
+    ? formatMoney(shopifyVariant.price.amount, shopifyVariant.price.currencyCode)
+    : (selected?.price ?? product.price);
+  const displayPriceNum = shopifyVariant
+    ? parseFloat(shopifyVariant.price.amount)
+    : (selected?.priceNum ?? parseFloat(product.price.replace(/[^0-9.]/g, "")));
+  const compareAt = shopifyVariant?.compareAtPrice
+    ? formatMoney(
+        shopifyVariant.compareAtPrice.amount,
+        shopifyVariant.compareAtPrice.currencyCode,
+      )
+    : selected?.oldPrice;
+  const inStock = shopifyVariant ? shopifyVariant.availableForSale : true;
+
+  const addItem = useCartStore((s) => s.addItem);
+  const cartLoading = useCartStore((s) => s.isLoading);
+
+  const handleAddToCart = async () => {
+    if (!shopifyVariant) {
+      toast.error("This product is loading from our store. Please try again in a moment.");
+      return;
+    }
+    if (!inStock) {
+      toast.error("This variant is currently out of stock.");
+      return;
+    }
+    await addItem({
+      variantId: shopifyVariant.id,
+      productId: product.id,
+      productHandle: shopifyVariant.productHandle,
+      title: product.name,
+      variantTitle: selected?.name ?? shopifyVariant.title,
+      image: shopifyVariant.productImage ?? product.image,
+      price: shopifyVariant.price,
+      quantity: qty,
+    });
+    toast.success(`Added to cart — ${product.name}`, {
+      description: selected?.name && selected.name !== "Default" ? selected.name : undefined,
+    });
+  };
 
   return (
     <div className="min-h-dvh bg-background text-foreground font-sans">

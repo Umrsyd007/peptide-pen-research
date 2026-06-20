@@ -186,7 +186,7 @@ function ProductsPage() {
       }
     }
     return list;
-  }, [category, query, sort]);
+  }, [category, query, sort, availableIds]);
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans antialiased">

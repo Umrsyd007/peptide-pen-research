@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { getProduct, PRODUCTS } from "@/lib/products";
@@ -7,6 +7,7 @@ import { getVariants } from "@/lib/product-variants";
 import { useShopifyCatalog, formatMoney, useShopifyImageForProduct, useAvailableProductIds } from "@/lib/shopify/catalog";
 import { useCartStore } from "@/stores/cart";
 import { CartDrawer } from "@/components/cart-drawer";
+import { trackAddToCart, trackViewItem } from "@/lib/analytics";
 
 export const Route = createFileRoute("/products/$productId")({
   loader: ({ params }) => {

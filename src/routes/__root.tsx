@@ -13,6 +13,12 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 import { useCartSync } from "@/hooks/use-cart-sync";
+import { trackPageView } from "@/lib/analytics";
+
+// Google Tag IDs (GTM containers + GA4)
+const GTM_ID = "GT-NC6LQ58D";
+const GA4_ID = "G-1LLX7CCVZL";
+const EXTRA_TAG_IDS = ["GT-MBG99QWN", "GT-WPF72555"];
 
 function NotFoundComponent() {
   return (

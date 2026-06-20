@@ -1,6 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { PRODUCTS, type Product, type Tag } from "@/lib/products";
+import { getDefaultVariant } from "@/lib/product-variants";
+import { useShopifyCatalog, formatMoney } from "@/lib/shopify/catalog";
+import { CartDrawer } from "@/components/cart-drawer";
 
 const BRAND = "Peptide Pen Research";
 const PAGE_TITLE = "All Peptide Pens & Protocols | Peptide Pen Research";
@@ -80,6 +83,15 @@ function TagBadge({ tag }: { tag: Tag }) {
 }
 
 function ProductCard({ product }: { product: Product }) {
+  const catalog = useShopifyCatalog();
+  const defaultVariant = getDefaultVariant(product.id);
+  const liveVariant = defaultVariant?.sku
+    ? catalog.data?.get(defaultVariant.sku.trim())
+    : undefined;
+  const livePrice = liveVariant
+    ? formatMoney(liveVariant.price.amount, liveVariant.price.currencyCode)
+    : product.price;
+
   return (
     <article className="group relative flex flex-col rounded-2xl border border-border bg-card overflow-hidden hover:border-foreground/40 hover:shadow-[var(--shadow-glow)] transition-all">
       <Link
@@ -117,7 +129,7 @@ function ProductCard({ product }: { product: Product }) {
             <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
               From
             </p>
-            <p className="text-xl font-black text-foreground">{product.price}</p>
+            <p className="text-xl font-black text-foreground">{livePrice}</p>
           </div>
           <Link
             to="/products/$productId"
@@ -223,6 +235,7 @@ function ProductsPage() {
             >
               Contact ↗
             </a>
+            <CartDrawer />
             <details className="md:hidden relative">
               <summary
                 className="list-none cursor-pointer inline-flex items-center justify-center h-11 w-11 rounded-full border border-border bg-card"

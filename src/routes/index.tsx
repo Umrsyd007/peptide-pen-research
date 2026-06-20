@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PRODUCTS } from "@/lib/products";
+import { useAvailableProductIds } from "@/lib/shopify/catalog";
 
 const BRAND = "Peptide Pen Research";
 const TAGLINE = "Lab-grade peptide pens, engineered for serious research.";
@@ -50,8 +51,10 @@ const NAV_LINKS = [
 ];
 
 function HomePage() {
-  const featured = PRODUCTS.filter((p) => p.tag === "BESTSELLER").slice(0, 3);
-  const newDrops = PRODUCTS.filter((p) => p.tag === "NEW").slice(0, 4);
+  const availableIds = useAvailableProductIds();
+  const inStock = (p: { id: string }) => !availableIds || availableIds.has(p.id);
+  const featured = PRODUCTS.filter((p) => p.tag === "BESTSELLER" && inStock(p)).slice(0, 3);
+  const newDrops = PRODUCTS.filter((p) => p.tag === "NEW" && inStock(p)).slice(0, 4);
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans antialiased">

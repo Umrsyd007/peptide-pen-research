@@ -2,6 +2,7 @@
 declare global {
   interface Window {
     dataLayer?: Array<Record<string, unknown>>;
+    gtag?: (...args: unknown[]) => void;
   }
 }
 
@@ -9,6 +10,13 @@ function push(payload: Record<string, unknown>) {
   if (typeof window === "undefined") return;
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push(payload);
+}
+
+// Direct GA4 send (in addition to the dataLayer push) so events reach GA4
+// even when the GTM container has no matching custom-event trigger.
+function gtagEvent(name: string, params: Record<string, unknown>) {
+  if (typeof window === "undefined" || typeof window.gtag !== "function") return;
+  window.gtag("event", name, params);
 }
 
 export interface AnalyticsItem {
@@ -32,27 +40,21 @@ export function trackPageView(args: { path: string; title?: string }) {
 }
 
 export function trackViewItem(item: AnalyticsItem) {
+  const items = [{ ...item, quantity: item.quantity ?? 1 }];
+  const value = (item.price ?? 0) * (item.quantity ?? 1);
+  const currency = item.currency ?? "USD";
   push({ ecommerce: null });
-  push({
-    event: "view_item",
-    ecommerce: {
-      currency: item.currency ?? "USD",
-      value: (item.price ?? 0) * (item.quantity ?? 1),
-      items: [{ ...item, quantity: item.quantity ?? 1 }],
-    },
-  });
+  push({ event: "view_item", ecommerce: { currency, value, items } });
+  gtagEvent("view_item", { currency, value, items });
 }
 
 export function trackAddToCart(item: AnalyticsItem) {
+  const items = [{ ...item, quantity: item.quantity ?? 1 }];
+  const value = (item.price ?? 0) * (item.quantity ?? 1);
+  const currency = item.currency ?? "USD";
   push({ ecommerce: null });
-  push({
-    event: "add_to_cart",
-    ecommerce: {
-      currency: item.currency ?? "USD",
-      value: (item.price ?? 0) * (item.quantity ?? 1),
-      items: [{ ...item, quantity: item.quantity ?? 1 }],
-    },
-  });
+  push({ event: "add_to_cart", ecommerce: { currency, value, items } });
+  gtagEvent("add_to_cart", { currency, value, items });
 }
 
 export function trackBeginCheckout(args: {
@@ -60,15 +62,13 @@ export function trackBeginCheckout(args: {
   value: number;
   currency?: string;
 }) {
+  const currency = args.currency ?? "USD";
   push({ ecommerce: null });
   push({
     event: "begin_checkout",
-    ecommerce: {
-      currency: args.currency ?? "USD",
-      value: args.value,
-      items: args.items,
-    },
+    ecommerce: { currency, value: args.value, items: args.items },
   });
+  gtagEvent("begin_checkout", { currency, value: args.value, items: args.items });
 }
 
 export function trackPurchase(args: {
@@ -77,14 +77,21 @@ export function trackPurchase(args: {
   value: number;
   currency?: string;
 }) {
+  const currency = args.currency ?? "USD";
   push({ ecommerce: null });
   push({
     event: "purchase",
     ecommerce: {
       transaction_id: args.transaction_id,
-      currency: args.currency ?? "USD",
+      currency,
       value: args.value,
       items: args.items,
     },
+  });
+  gtagEvent("purchase", {
+    transaction_id: args.transaction_id,
+    currency,
+    value: args.value,
+    items: args.items,
   });
 }

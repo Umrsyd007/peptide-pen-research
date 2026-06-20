@@ -199,7 +199,7 @@ function ContactPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 grid grid-cols-2 md:grid-cols-4 gap-8">
           <div className="col-span-2 md:col-span-1 space-y-3">
             <div className="flex items-center gap-2">
-              <img src={logoMark} alt="" width={32} height={32} className="h-8 w-8 object-contain rounded-md" />
+              <span className="inline-flex items-center justify-center h-8 w-8 rounded-xl bg-[#EF2A2A] text-white font-bold text-lg shrink-0">P</span>
               <span className="text-base font-black tracking-tight uppercase">PeptidePen</span>
             </div>
             <p className="text-xs text-background/60 max-w-xs">Research-grade peptide pens. Batch-matched COAs. Cold-chain delivery. For in-vitro laboratory research only.</p>

@@ -208,9 +208,9 @@ function ProductsPage() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
           <Link to="/" aria-label={`${BRAND} home`} className="flex items-center gap-2 shrink-0">
-            <img src={logoMark} alt="" width={32} height={32} className="h-9 w-9 rounded-xl object-cover" />
+            <span className="inline-flex items-center justify-center h-8 w-8 rounded-xl bg-[#EF2A2A] text-white font-bold text-lg shrink-0">P</span>
             <span className="text-base sm:text-lg font-black tracking-tight uppercase">
-              PeptidePen Research
+              {BRAND}
             </span>
           </Link>
           <nav

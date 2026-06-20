@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCartStore } from "@/stores/cart";
 import { formatMoney } from "@/lib/shopify/catalog";
+import { trackBeginCheckout } from "@/lib/analytics";
 
 interface CartDrawerProps {
   /** Optional visual variant for the trigger button */

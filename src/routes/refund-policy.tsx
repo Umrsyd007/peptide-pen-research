@@ -141,7 +141,7 @@ function RefundPolicyPage() {
             <p className="text-[11px] uppercase tracking-widest font-black text-primary">Company</p>
             <ul className="space-y-1.5 list-none p-0">
               <li><a href="/" className="text-sm text-background/70 hover:text-background">Home</a></li>
-              <li><a href="mailto:hello@getpeptidepen.com" className="text-sm text-background/70 hover:text-background">Contact</a></li>
+              <li><Link to="/contact" className="text-sm text-background/70 hover:text-background">Contact</Link></li>
             </ul>
           </div>
           <div className="space-y-2">

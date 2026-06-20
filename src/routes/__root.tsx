@@ -16,7 +16,7 @@ import { useCartSync } from "@/hooks/use-cart-sync";
 import { trackPageView } from "@/lib/analytics";
 
 // Google Tag Manager container (loads GA4 G-1LLX7CCVZL + Google Ads via GTM)
-const GTM_ID = "GT-NC6LQ58D";
+const GTM_ID = "GTM-MG44ST68";
 
 function NotFoundComponent() {
   return (

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { getProduct, PRODUCTS } from "@/lib/products";
@@ -372,13 +372,9 @@ function ProductDetailPage() {
                 </button>
               </div>
               {!catalog.isLoading && !shopifyVariant && (
-                <div className="space-y-3">
-                  <p className="text-[11px] text-amber-600 dark:text-amber-400">
-                    This product is restricted and unavailable for purchase directly on this site. Please <a href="mailto:hello@getpeptidepen.com" className="underline">contact us</a> to order.
-                  </p>
-                  <AskUsAQuestion productName={product.name} productId={product.id} />
-                </div>
+                <RestrictedContact productName={product.name} productId={product.id} />
               )}
+
 
               {/* Dosage details */}
               {(selected?.dailyDosage || selected?.courseDetails) && (
@@ -689,8 +685,57 @@ function ProductDetailPage() {
   );
 }
 
-function AskUsAQuestion({ productName, productId }: { productName: string; productId: string }) {
+function RestrictedContact({ productName, productId }: { productName: string; productId: string }) {
   const [open, setOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const nameInputRef = useRef<HTMLInputElement | null>(null);
+
+  const openAndFocus = () => {
+    setOpen(true);
+    // Wait for the panel to mount, then scroll into view and focus the Name input.
+    setTimeout(() => {
+      containerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      nameInputRef.current?.focus();
+    }, 50);
+  };
+
+  return (
+    <div ref={containerRef} className="space-y-3">
+      <p className="text-[11px] text-amber-600 dark:text-amber-400">
+        This product is restricted and unavailable for purchase directly on this site. Please{" "}
+        <button
+          type="button"
+          onClick={openAndFocus}
+          className="underline hover:opacity-80 transition-opacity"
+        >
+          contact us
+        </button>{" "}
+        to order.
+      </p>
+      <AskUsAQuestion
+        productName={productName}
+        productId={productId}
+        open={open}
+        setOpen={setOpen}
+        nameInputRef={nameInputRef}
+      />
+    </div>
+  );
+}
+
+function AskUsAQuestion({
+  productName,
+  productId,
+  open,
+  setOpen,
+  nameInputRef,
+}: {
+  productName: string;
+  productId: string;
+  open: boolean;
+  setOpen: (updater: boolean | ((v: boolean) => boolean)) => void;
+  nameInputRef: React.RefObject<HTMLInputElement | null>;
+}) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -756,21 +801,21 @@ function AskUsAQuestion({ productName, productId }: { productName: string; produ
         className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold uppercase tracking-wider hover:bg-muted transition-colors"
         aria-expanded={open}
       >
-        <span>Ask Us A Question</span>
+        <span>Contact To Order</span>
         <span className={`transition-transform ${open ? "rotate-180" : ""}`} aria-hidden>▾</span>
       </button>
       {open && (
         <div className="px-4 pb-4 pt-1">
           {status === "sent" ? (
             <div className="rounded-md border border-border bg-muted/40 p-4 text-sm space-y-2">
-              <p className="font-semibold">Thanks — your question was sent.</p>
+              <p className="font-semibold">Thanks — your message was sent.</p>
               <p className="text-muted-foreground text-xs">We'll get back to you within 24 hours at the email you provided.</p>
               <button
                 type="button"
                 onClick={() => setStatus("idle")}
                 className="text-xs underline text-muted-foreground hover:text-foreground"
               >
-                Ask another question
+                Send another message
               </button>
             </div>
           ) : (
@@ -779,6 +824,7 @@ function AskUsAQuestion({ productName, productId }: { productName: string; produ
                 <div>
                   <label className="block text-[11px] uppercase tracking-wider text-muted-foreground mb-1">Name</label>
                   <input
+                    ref={nameInputRef}
                     type="text"
                     required
                     maxLength={100}
@@ -830,5 +876,6 @@ function AskUsAQuestion({ productName, productId }: { productName: string; produ
     </div>
   );
 }
+
 
 

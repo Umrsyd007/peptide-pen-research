@@ -332,7 +332,15 @@ function ProductDetailPage() {
                     })}
                   </div>
                   {selected?.pensRequired && (
-                    <p className="text-[11px] text-muted-foreground pt-1">{selected.pensRequired}{selected.penLastsDays ? ` · 1 pen lasts ~${selected.penLastsDays} days` : ""}</p>
+                    <p className="text-[11px] text-muted-foreground pt-1">
+                      {selected.pensRequired}
+                      {selected.penLastsDays ? (
+                        <>
+                          {" · 1 pen lasts ~"}{selected.penLastsDays}{" days"}
+                          {product.id === "08f6ee52" && selected.name === "20mg" && " or 8 weeks at 2.5mg/week"}
+                        </>
+                      ) : ""}
+                    </p>
                   )}
                 </fieldset>
               )}

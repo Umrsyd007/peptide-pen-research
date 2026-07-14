@@ -1,36 +1,25 @@
-## Goal
+## Changes to `src/routes/products.$productId.tsx`
 
-Stop the storefront from syncing product visibility against Shopify's live catalog. Freeze the visible list at the 25 products currently live on the storefront **plus** the 9 you specified — 34 in total. PDP behavior stays untouched.
+### 1. Update the unavailable-variant message (line ~376)
 
-## Final product set (34)
+Replace:
+> "This variant isn't available for purchase right now. Please contact us to order."
 
-**25 currently live (kept):** BPC-157, AC-Selank-nH2, KPV Peptide (Nasal Spray), Kisspeptin, CJC 1295 no Dac + Ipamorelin, Thymosin Alpha-1, Thymalin, SLU-PP-332, Ipamorelin, Melanotan II, Skin Glow (GHK-Cu), TB 500, BPC-157 + TB-500, Epitalon, Spermidine, MOTS-c, Glutathione NAD+ & Resveratrol, Vitality Complex, Delta-Sleep-Inducing Peptide, HGH Fragment, CJC 1295 (no dac), NAD+ (Nicotinamide), IGF-1LR3, NMN, Curcumin.
+With:
+> "This product is restricted and unavailable for purchase directly on this site. Please contact us to order."
 
-**9 added back:** HCG Choriomon (Standard Pen), Sermorelin, PT 141 (Bremelanotide), Tirzepatide (Standard Pen), Semaglutide (Standard Pen), Somatropin HGH, Retatrutide (Standard Pen), Tesamorelin, SS-31 (Elamipretide).
+The `contact us` link stays as a `mailto:hello@getpeptidepen.com` link. Since only the 9 restored products lack a Shopify SKU match, this branch renders exclusively for them — no per-product gating needed.
 
-The 8 remaining entries currently in `src/lib/products.ts` (Glutathione + Methylene Blue, Microbiome Test, Melanotan 2 Nasal Spray, Nootropic P21 Nasal Spray, Specialized Wellness Consultation, Personalized Gut Optimization Protocol, DNA Test, 5-Amino-1MQ) are dropped.
+### 2. Add an "Ask Us A Question" collapsible directly below that message
 
-## Changes
+A native `<details>/<summary>` block styled to match the existing PDP (rounded border, card background, uppercase label, chevron that rotates on open). Inside, a small form with:
+- Name (text input, required)
+- Email (email input, required)
+- Message (textarea, required)
+- "Send" button
 
-1. **`src/lib/products.ts`** — Replace the 42-item `PRODUCTS` array with the 34 entries above. Each entry is copied verbatim from the current file (same `name`, `categories`, `price`, `tag`, `image`), just reordered so it's clear which set each came from. `getProduct()` continues to read from this array with no code change.
+**Submission approach:** on submit, build a `mailto:hello@getpeptidepen.com` link with the product name in the subject and the name/email/message in the body, then `window.location.href = ...` to open the user's mail client. This keeps it fully client-side — no backend, no new deps, no spam surface. (If you'd rather store submissions in Lovable Cloud or send via an edge function instead, say so and I'll wire that up.)
 
-2. **`src/routes/products.index.tsx`** — Remove the Shopify availability filter so the grid always shows the curated set, no matter what the Shopify catalog reports:
-   - Drop the `useAvailableProductIds` import and call.
-   - Remove the `if (availableIds) list = list.filter(...)` branch in the `filtered` memo.
-   - Simplify the counter to `{filtered.length} of {PRODUCTS.length}`.
+Placement: inside the same wrapper that currently holds the unavailable-message paragraph, so it only appears when the variant is unavailable (i.e., for the 9 restricted products).
 
-3. **Leave in place (no changes):**
-   - `src/lib/shopify/catalog.ts` — `useShopifyCatalog` / `useShopifyImageForProduct` still run on cards + PDPs to enrich price/image when a SKU matches; they no longer gate visibility.
-   - `src/lib/product-variants.ts`, `product-descriptions.ts`, `product-deep-dives.ts` — untouched. Unreferenced entries are harmless.
-   - `src/routes/products.$productId.tsx` and all other PDP code — untouched per your instruction.
-
-## Manual-sync workflow going forward
-
-No auto-pull from Shopify. When you want to add/remove/reorder products, tell me which ones and I'll edit `src/lib/products.ts` by hand — nothing else in the app derives the catalog list from Shopify.
-
-## Result
-
-- `/products` renders exactly these 34 cards; filters/search operate on that set only.
-- Homepage sections that read `PRODUCTS` also show only these 34.
-- Cards still enrich price/image from Shopify when a SKU matches, otherwise fall back to the local price and bundled image.
-- All PDPs unchanged.
+No other files change.

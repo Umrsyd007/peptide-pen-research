@@ -107,7 +107,7 @@ function ProductCard({ product }: { product: Product }) {
           src={imageSrc}
           alt={product.name}
           loading="lazy"
-          className="w-full h-full object-contain p-6 group-hover:scale-105 transition-transform duration-500"
+          className="w-full h-full object-contain p-6 mix-blend-multiply group-hover:scale-105 transition-transform duration-500"
         />
         <span className="absolute bottom-3 right-3 inline-flex items-center gap-1 rounded-full bg-background/90 backdrop-blur px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-foreground border border-border opacity-0 group-hover:opacity-100 transition-opacity">
           View ↗

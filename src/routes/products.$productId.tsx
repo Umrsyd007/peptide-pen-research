@@ -256,7 +256,7 @@ function ProductDetailPage() {
               <img
                 src={heroImage}
                 alt={`${product.name} research pen`}
-                className="relative w-full h-full object-contain p-8 sm:p-12"
+                className="relative w-full h-full object-contain p-8 sm:p-12 mix-blend-multiply"
               />
               {product.tag && (
                 <div className="absolute top-4 left-4">
@@ -267,7 +267,7 @@ function ProductDetailPage() {
             <div className="grid grid-cols-4 gap-3">
               {[1, 2, 3, 4].map((i) => (
                 <div key={i} className="aspect-square rounded-xl border border-border bg-muted/40 overflow-hidden flex items-center justify-center hover:border-primary/40 transition-colors cursor-pointer">
-                  <img src={heroImage} alt="" aria-hidden="true" className="w-full h-full object-contain p-2 opacity-70" />
+                  <img src={heroImage} alt="" aria-hidden="true" className="w-full h-full object-contain p-2 opacity-70 mix-blend-multiply" />
                 </div>
               ))}
             </div>
@@ -655,7 +655,7 @@ function ProductDetailPage() {
             {related.map((r) => (
               <Link key={r.id} to="/products/$productId" params={{ productId: r.id }} className="block space-y-3 group rounded-2xl border border-border bg-card p-4 hover:border-primary/40 hover:shadow-sm transition">
                 <div className="aspect-square rounded-xl bg-muted/50 overflow-hidden flex items-center justify-center">
-                  <img src={r.image} alt={r.name} loading="lazy" className="w-full h-full object-contain p-3 group-hover:scale-105 transition-transform" />
+                  <img src={r.image} alt={r.name} loading="lazy" className="w-full h-full object-contain p-3 mix-blend-multiply group-hover:scale-105 transition-transform" />
                 </div>
                 <div className="space-y-1">
                   <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{r.categories.split("•")[0]?.trim()}</p>

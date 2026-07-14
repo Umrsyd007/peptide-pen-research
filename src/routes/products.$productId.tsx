@@ -688,3 +688,74 @@ function ProductDetailPage() {
     </div>
   );
 }
+
+function AskUsAQuestion({ productName }: { productName: string }) {
+  const [open, setOpen] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const subject = `Inquiry about ${productName}`;
+    const body = `Name: ${name}\nEmail: ${email}\n\n${message}`;
+    window.location.href = `mailto:hello@getpeptidepen.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
+
+  return (
+    <div className="rounded-lg border border-border bg-card overflow-hidden">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold uppercase tracking-wider hover:bg-muted transition-colors"
+        aria-expanded={open}
+      >
+        <span>Ask Us A Question</span>
+        <span className={`transition-transform ${open ? "rotate-180" : ""}`} aria-hidden>▾</span>
+      </button>
+      {open && (
+        <form onSubmit={handleSubmit} className="px-4 pb-4 pt-1 space-y-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label className="block text-[11px] uppercase tracking-wider text-muted-foreground mb-1">Name</label>
+              <input
+                type="text"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full h-9 px-3 rounded-md border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+              />
+            </div>
+            <div>
+              <label className="block text-[11px] uppercase tracking-wider text-muted-foreground mb-1">Email</label>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full h-9 px-3 rounded-md border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+              />
+            </div>
+          </div>
+          <div>
+            <label className="block text-[11px] uppercase tracking-wider text-muted-foreground mb-1">Message</label>
+            <textarea
+              required
+              rows={4}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              className="w-full px-3 py-2 rounded-md border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 resize-y"
+            />
+          </div>
+          <button
+            type="submit"
+            className="h-10 px-5 rounded-md bg-primary text-primary-foreground text-sm font-semibold hover:opacity-90 transition"
+          >
+            Send
+          </button>
+        </form>
+      )}
+    </div>
+  );
+}
+

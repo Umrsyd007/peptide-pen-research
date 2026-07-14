@@ -207,7 +207,7 @@ function HomePage() {
                   <img
                     src={PRODUCTS.find(p => p.name === "BPC-157")?.image || PRODUCTS[0].image}
                     alt="Research-grade peptide pen"
-                    className="h-full w-full object-contain drop-shadow-2xl"
+                    className="h-full w-full object-contain drop-shadow-2xl mix-blend-multiply"
                     loading="eager"
                   />
                 </div>

@@ -372,9 +372,12 @@ function ProductDetailPage() {
                 </button>
               </div>
               {!catalog.isLoading && !shopifyVariant && (
-                <p className="text-[11px] text-amber-600 dark:text-amber-400">
-                  This variant isn't available for purchase right now. Please <a href="mailto:hello@getpeptidepen.com" className="underline">contact us</a> to order.
-                </p>
+                <div className="space-y-3">
+                  <p className="text-[11px] text-amber-600 dark:text-amber-400">
+                    This product is restricted and unavailable for purchase directly on this site. Please <a href="mailto:hello@getpeptidepen.com" className="underline">contact us</a> to order.
+                  </p>
+                  <AskUsAQuestion productName={product.name} />
+                </div>
               )}
 
               {/* Dosage details */}

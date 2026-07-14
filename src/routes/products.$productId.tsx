@@ -267,7 +267,7 @@ function ProductDetailPage() {
             <div className="grid grid-cols-4 gap-3">
               {[1, 2, 3, 4].map((i) => (
                 <div key={i} className="aspect-square rounded-xl border border-border bg-muted/40 overflow-hidden flex items-center justify-center hover:border-primary/40 transition-colors cursor-pointer">
-                  <img src={heroImage} alt="" aria-hidden="true" className="w-full h-full object-contain p-2 opacity-70" />
+                  <img src={heroImage} alt="" aria-hidden="true" className="w-full h-full object-contain p-2 opacity-70 mix-blend-multiply" />
                 </div>
               ))}
             </div>

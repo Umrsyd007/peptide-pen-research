@@ -338,6 +338,7 @@ function ProductDetailPage() {
                         <>
                           {" · 1 pen lasts ~"}{selected.penLastsDays}{" days"}
                           {product.id === "08f6ee52" && selected.name === "20mg" && " or 8 weeks at 2.5mg/week"}
+                          {product.id === "08f6ee52" && selected.name === "60mg" && " or 6 months"}
                         </>
                       ) : ""}
                     </p>

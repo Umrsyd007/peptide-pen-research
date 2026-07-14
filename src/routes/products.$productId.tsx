@@ -256,7 +256,7 @@ function ProductDetailPage() {
               <img
                 src={heroImage}
                 alt={`${product.name} research pen`}
-                className="relative w-full h-full object-contain p-8 sm:p-12"
+                className="relative w-full h-full object-contain p-8 sm:p-12 mix-blend-multiply"
               />
               {product.tag && (
                 <div className="absolute top-4 left-4">

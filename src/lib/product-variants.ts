@@ -22,7 +22,7 @@ export const PRODUCT_VARIANTS: Record<string, ProductVariant[]> = {
     {"name": "1200mg", "price": "$470.96", "priceNum": 470.96, "sku": "nad-1200mg", "isDefault": false, "dailyDosage": "Dose: 2 \u00d7 40 mg every other day. Units: 2 \u00d7 10 units every other day.", "courseDetails": "Every other day. Duration is 30 days followed by 15-20 days rest.", "pensRequired": "1 pen for a complete 30-day course", "penLastsDays": 30},
   ],
   "08f6ee52": [
-    {"name": "20mg", "price": "$307.40", "priceNum": 307.4, "sku": "retatrutide-6mg", "isDefault": true, "dailyDosage": "Dose: 2 mg/week, which may be increased to 6mg or 8mg/week. Units: 40 units/week.", "courseDetails": "Once per week. From 6 months to as long as needed.", "pensRequired": "8 pens for complete course", "penLastsDays": 21},
+    {"name": "20mg", "price": "$165", "priceNum": 165.0, "sku": "retatrutide-6mg", "isDefault": true, "dailyDosage": "Dose: 2.5 mg/week, which may be increased to 6mg or 8mg/week. Units: 40 units/week.", "courseDetails": "Once per week. From 6 months to as long as needed.", "pensRequired": "3 pens for complete course", "penLastsDays": 60},
     {"name": "60mg", "price": "$606.68", "priceNum": 606.68, "sku": "retatrutide-12", "isDefault": false, "dailyDosage": "Dose: 2 mg/week, which may be increased to 6 mg or 8 mg/week. Units: 20 units/week.", "courseDetails": "Once per week. From 6 months to as long as needed.", "pensRequired": "4 pens for complete course", "penLastsDays": 42},
   ],
   "1691332d": [

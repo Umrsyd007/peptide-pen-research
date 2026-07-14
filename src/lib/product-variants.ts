@@ -23,7 +23,7 @@ export const PRODUCT_VARIANTS: Record<string, ProductVariant[]> = {
   ],
   "08f6ee52": [
     {"name": "20mg", "price": "$165", "priceNum": 165.0, "sku": "retatrutide-6mg", "isDefault": true, "dailyDosage": "Dose: 2.5 mg/week, which may be increased to 6mg or 8mg/week. Units: 40 units/week.", "courseDetails": "Once per week. From 6 months to as long as needed.", "pensRequired": "3 pens for complete course", "penLastsDays": 60},
-    {"name": "60mg", "price": "$606.68", "priceNum": 606.68, "sku": "retatrutide-12", "isDefault": false, "dailyDosage": "Dose: 2 mg/week, which may be increased to 6 mg or 8 mg/week. Units: 20 units/week.", "courseDetails": "Once per week. From 6 months to as long as needed.", "pensRequired": "4 pens for complete course", "penLastsDays": 42},
+    {"name": "60mg", "price": "$347.63", "priceNum": 347.63, "sku": "retatrutide-12", "isDefault": false, "dailyDosage": "Dose: 2 mg/week, which may be increased to 6 mg or 8 mg/week. Units: 20 units/week.", "courseDetails": "Once per week. From 6 months to as long as needed.", "pensRequired": "1 pens for complete course", "penLastsDays": 180},
   ],
   "1691332d": [
     {"name": "20mg", "price": "$99.76", "priceNum": 99.76, "sku": "epitalon-20mg", "isDefault": true, "dailyDosage": "Dose: 3 mg/day may be increased to 5mg or 10mg/day. Units: 30 units/day, may be increased to 50units or 100units/day.", "courseDetails": "15-20 days followed by 15 days rest. Repeat 2-3 times per year (every 4-6 months).", "pensRequired": "6 pens for complete course", "penLastsDays": 6},

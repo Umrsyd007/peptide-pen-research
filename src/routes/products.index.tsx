@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { PRODUCTS, type Product, type Tag } from "@/lib/products";
 import { getDefaultVariant } from "@/lib/product-variants";
-import { useShopifyCatalog, formatMoney, useAvailableProductIds, useShopifyImageForProduct } from "@/lib/shopify/catalog";
+import { useShopifyCatalog, formatMoney, useShopifyImageForProduct } from "@/lib/shopify/catalog";
 import { CartDrawer } from "@/components/cart-drawer";
 
 const BRAND = "PeptidePen";
@@ -151,13 +151,8 @@ function ProductsPage() {
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<SortKey>("featured");
 
-  const availableIds = useAvailableProductIds();
-
   const filtered = useMemo(() => {
     let list = PRODUCTS.slice();
-    if (availableIds) {
-      list = list.filter((p) => availableIds.has(p.id));
-    }
     if (category !== "All") {
       list = list.filter((p) =>
         p.categories.toLowerCase().includes(category.toLowerCase()),
@@ -188,7 +183,7 @@ function ProductsPage() {
       }
     }
     return list;
-  }, [category, query, sort, availableIds]);
+  }, [category, query, sort]);
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans antialiased">
@@ -360,7 +355,7 @@ function ProductsPage() {
                 </select>
               </label>
               <p className="ml-auto text-xs text-muted-foreground font-medium">
-                {filtered.length} of {availableIds ? availableIds.size : PRODUCTS.length}
+                {filtered.length} of {PRODUCTS.length}
               </p>
             </div>
             <div className="flex gap-2 overflow-x-auto -mx-1 px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">

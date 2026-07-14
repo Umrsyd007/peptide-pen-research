@@ -21,6 +21,7 @@ import { Route as GuidesRetatrutideDosageGuideRouteImport } from './routes/guide
 import { Route as GuidesPeptideDosageCalculatorRouteImport } from './routes/guides.peptide-dosage-calculator'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
+import { Route as ApiPublicProductQuestionRouteImport } from './routes/api/public/product-question'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
@@ -87,6 +88,12 @@ const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   path: '/lovable/email/suppression',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicProductQuestionRoute =
+  ApiPublicProductQuestionRouteImport.update({
+    id: '/api/public/product-question',
+    path: '/api/public/product-question',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const LovableEmailTransactionalSendRoute =
   LovableEmailTransactionalSendRouteImport.update({
     id: '/lovable/email/transactional/send',
@@ -118,6 +125,7 @@ export interface FileRoutesByFullPath {
   '/guides/retatrutide-dosage-guide': typeof GuidesRetatrutideDosageGuideRoute
   '/products/$productId': typeof ProductsProductIdRoute
   '/products/': typeof ProductsIndexRoute
+  '/api/public/product-question': typeof ApiPublicProductQuestionRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -134,6 +142,7 @@ export interface FileRoutesByTo {
   '/guides/retatrutide-dosage-guide': typeof GuidesRetatrutideDosageGuideRoute
   '/products/$productId': typeof ProductsProductIdRoute
   '/products': typeof ProductsIndexRoute
+  '/api/public/product-question': typeof ApiPublicProductQuestionRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -152,6 +161,7 @@ export interface FileRoutesById {
   '/guides/retatrutide-dosage-guide': typeof GuidesRetatrutideDosageGuideRoute
   '/products/$productId': typeof ProductsProductIdRoute
   '/products/': typeof ProductsIndexRoute
+  '/api/public/product-question': typeof ApiPublicProductQuestionRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -171,6 +181,7 @@ export interface FileRouteTypes {
     | '/guides/retatrutide-dosage-guide'
     | '/products/$productId'
     | '/products/'
+    | '/api/public/product-question'
     | '/lovable/email/suppression'
     | '/lovable/email/queue/process'
     | '/lovable/email/transactional/preview'
@@ -187,6 +198,7 @@ export interface FileRouteTypes {
     | '/guides/retatrutide-dosage-guide'
     | '/products/$productId'
     | '/products'
+    | '/api/public/product-question'
     | '/lovable/email/suppression'
     | '/lovable/email/queue/process'
     | '/lovable/email/transactional/preview'
@@ -204,6 +216,7 @@ export interface FileRouteTypes {
     | '/guides/retatrutide-dosage-guide'
     | '/products/$productId'
     | '/products/'
+    | '/api/public/product-question'
     | '/lovable/email/suppression'
     | '/lovable/email/queue/process'
     | '/lovable/email/transactional/preview'
@@ -220,6 +233,7 @@ export interface RootRouteChildren {
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   GuidesPeptideDosageCalculatorRoute: typeof GuidesPeptideDosageCalculatorRoute
   GuidesRetatrutideDosageGuideRoute: typeof GuidesRetatrutideDosageGuideRoute
+  ApiPublicProductQuestionRoute: typeof ApiPublicProductQuestionRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
@@ -312,6 +326,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailSuppressionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/product-question': {
+      id: '/api/public/product-question'
+      path: '/api/public/product-question'
+      fullPath: '/api/public/product-question'
+      preLoaderRoute: typeof ApiPublicProductQuestionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/transactional/send': {
       id: '/lovable/email/transactional/send'
       path: '/lovable/email/transactional/send'
@@ -360,6 +381,7 @@ const rootRouteChildren: RootRouteChildren = {
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   GuidesPeptideDosageCalculatorRoute: GuidesPeptideDosageCalculatorRoute,
   GuidesRetatrutideDosageGuideRoute: GuidesRetatrutideDosageGuideRoute,
+  ApiPublicProductQuestionRoute: ApiPublicProductQuestionRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,

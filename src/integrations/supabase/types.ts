@@ -101,6 +101,39 @@ export type Database = {
         }
         Relationships: []
       }
+      product_questions: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          message: string
+          name: string
+          product_id: string | null
+          product_name: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          message: string
+          name: string
+          product_id?: string | null
+          product_name?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          product_id?: string | null
+          product_name?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
       suppressed_emails: {
         Row: {
           created_at: string

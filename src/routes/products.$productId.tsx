@@ -376,7 +376,7 @@ function ProductDetailPage() {
                   <p className="text-[11px] text-amber-600 dark:text-amber-400">
                     This product is restricted and unavailable for purchase directly on this site. Please <a href="mailto:hello@getpeptidepen.com" className="underline">contact us</a> to order.
                   </p>
-                  <AskUsAQuestion productName={product.name} />
+                  <AskUsAQuestion productName={product.name} productId={product.id} />
                 </div>
               )}
 
@@ -689,17 +689,63 @@ function ProductDetailPage() {
   );
 }
 
-function AskUsAQuestion({ productName }: { productName: string }) {
+function AskUsAQuestion({ productName, productId }: { productName: string; productId: string }) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const subject = `Inquiry about ${productName}`;
-    const body = `Name: ${name}\nEmail: ${email}\n\n${message}`;
-    window.location.href = `mailto:hello@getpeptidepen.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    if (status === "sending") return;
+
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim();
+    const trimmedMessage = message.trim();
+    if (!trimmedName || !trimmedEmail || !trimmedMessage) {
+      setStatus("error");
+      setErrorMsg("Please fill in all fields.");
+      return;
+    }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(trimmedEmail)) {
+      setStatus("error");
+      setErrorMsg("Please enter a valid email address.");
+      return;
+    }
+    if (trimmedName.length > 100 || trimmedEmail.length > 255 || trimmedMessage.length > 2000) {
+      setStatus("error");
+      setErrorMsg("One of the fields is too long.");
+      return;
+    }
+
+    setStatus("sending");
+    setErrorMsg(null);
+    try {
+      const res = await fetch("/api/public/product-question", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          productId,
+          productName,
+          name: trimmedName,
+          email: trimmedEmail,
+          message: trimmedMessage,
+        }),
+      });
+      const json = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+      if (!res.ok || !json.ok) {
+        throw new Error(json.error || `Request failed (${res.status})`);
+      }
+      setStatus("sent");
+      setName("");
+      setEmail("");
+      setMessage("");
+    } catch (err) {
+      setStatus("error");
+      setErrorMsg(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    }
   };
 
   return (
@@ -714,48 +760,75 @@ function AskUsAQuestion({ productName }: { productName: string }) {
         <span className={`transition-transform ${open ? "rotate-180" : ""}`} aria-hidden>▾</span>
       </button>
       {open && (
-        <form onSubmit={handleSubmit} className="px-4 pb-4 pt-1 space-y-3">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label className="block text-[11px] uppercase tracking-wider text-muted-foreground mb-1">Name</label>
-              <input
-                type="text"
-                required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full h-9 px-3 rounded-md border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-              />
+        <div className="px-4 pb-4 pt-1">
+          {status === "sent" ? (
+            <div className="rounded-md border border-border bg-muted/40 p-4 text-sm space-y-2">
+              <p className="font-semibold">Thanks — your question was sent.</p>
+              <p className="text-muted-foreground text-xs">We'll get back to you within 24 hours at the email you provided.</p>
+              <button
+                type="button"
+                onClick={() => setStatus("idle")}
+                className="text-xs underline text-muted-foreground hover:text-foreground"
+              >
+                Ask another question
+              </button>
             </div>
-            <div>
-              <label className="block text-[11px] uppercase tracking-wider text-muted-foreground mb-1">Email</label>
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full h-9 px-3 rounded-md border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-              />
-            </div>
-          </div>
-          <div>
-            <label className="block text-[11px] uppercase tracking-wider text-muted-foreground mb-1">Message</label>
-            <textarea
-              required
-              rows={4}
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              className="w-full px-3 py-2 rounded-md border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 resize-y"
-            />
-          </div>
-          <button
-            type="submit"
-            className="h-10 px-5 rounded-md bg-primary text-primary-foreground text-sm font-semibold hover:opacity-90 transition"
-          >
-            Send
-          </button>
-        </form>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[11px] uppercase tracking-wider text-muted-foreground mb-1">Name</label>
+                  <input
+                    type="text"
+                    required
+                    maxLength={100}
+                    disabled={status === "sending"}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-full h-9 px-3 rounded-md border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-60"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] uppercase tracking-wider text-muted-foreground mb-1">Email</label>
+                  <input
+                    type="email"
+                    required
+                    maxLength={255}
+                    disabled={status === "sending"}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full h-9 px-3 rounded-md border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-60"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-[11px] uppercase tracking-wider text-muted-foreground mb-1">Message</label>
+                <textarea
+                  required
+                  rows={4}
+                  maxLength={2000}
+                  disabled={status === "sending"}
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  className="w-full px-3 py-2 rounded-md border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 resize-y disabled:opacity-60"
+                />
+              </div>
+              {status === "error" && errorMsg && (
+                <p className="text-xs text-destructive">{errorMsg}</p>
+              )}
+              <button
+                type="submit"
+                disabled={status === "sending"}
+                className="h-10 px-5 rounded-md bg-primary text-primary-foreground text-sm font-semibold hover:opacity-90 transition disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {status === "sending" ? "Sending..." : "Send"}
+              </button>
+            </form>
+          )}
+        </div>
       )}
     </div>
   );
 }
+
 

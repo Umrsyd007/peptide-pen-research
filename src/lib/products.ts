@@ -10,6 +10,7 @@ export interface Product {
 }
 
 export const PRODUCTS: Product[] = [
+  { id: "08f6ee52", name: "Retatrutide (Standard Pen)", categories: "Metabolic & Fat Optimization", price: "$307.40", tag: "BESTSELLER" , image: "/__l5e/assets-v1/7c637d58-c76e-4ddd-b830-9f83ca801425/08f6ee52.png" },
   { id: "72d3cbf2", name: "AC-Selank-nH2", categories: "Cognitive & Neuro • Cellular Longevity", price: "$126.44", tag: "NEW" , image: "/__l5e/assets-v1/434b906a-7615-4b61-a745-b343bcf8deb5/72d3cbf2.png" },
   { id: "d2a5603b", name: "KPV Peptide (Nasal Spray)", categories: "Cellular Longevity • Immune & Inflammation", price: "$97.44", tag: "NEW" , image: "/__l5e/assets-v1/b815d774-9df8-4296-9363-f568c59bc388/d2a5603b.png" },
   { id: "68831782", name: "SS-31 (Elamipretide)", categories: "Cellular Longevity +2", price: "$223.88", tag: "NEW" , image: "/__l5e/assets-v1/5975af56-caae-4b16-907e-3c7fc4adda1c/68831782.png" },
@@ -21,7 +22,7 @@ export const PRODUCTS: Product[] = [
   { id: "a973f518", name: "SLU-PP-332", categories: "Cognitive & Neuro", price: "$145.00", tag: "NEW" , image: "/__l5e/assets-v1/ed485362-4f95-44fc-925b-ce0149f4acc7/a973f518.png" },
   { id: "aff029b8", name: "Ipamorelin", categories: "Muscle & Recovery • Metabolic & Fat Optimization", price: "$74.24", tag: "BESTSELLER" , image: "/__l5e/assets-v1/6c4f537d-5f51-4cd7-a88b-77401c6bb96c/aff029b8.png" },
   { id: "e794817e", name: "BPC-157", categories: "Muscle & Recovery", price: "$96.28", tag: "BESTSELLER" , image: "/__l5e/assets-v1/0b941693-5b49-4141-a42c-b3151269c7fe/e794817e.png" },
-  { id: "08f6ee52", name: "Retatrutide (Standard Pen)", categories: "Metabolic & Fat Optimization", price: "$307.40", tag: "BESTSELLER" , image: "/__l5e/assets-v1/7c637d58-c76e-4ddd-b830-9f83ca801425/08f6ee52.png" },
+
   { id: "46f6d800", name: "Melanotan II", categories: "Aesthetics & Regenerative • Hormonal & Reproductive", price: "$88.16", tag: "BESTSELLER" , image: "/__l5e/assets-v1/df75f675-22f7-44b1-8ea6-ddca7203073e/46f6d800.png" },
   { id: "3afd37de", name: "Skin Glow (GHK-Cu) (Standard Pen)", categories: "Aesthetics & Regenerative", price: "$107.88", tag: "BESTSELLER" , image: "/__l5e/assets-v1/2ff6d675-8bf4-442c-9e11-02e65244c3f0/3afd37de.png" },
   { id: "cd1d9cc4", name: "Somatropin HGH", categories: "Muscle & Recovery", price: "$133.40", tag: "BESTSELLER" , image: "/__l5e/assets-v1/df13ab50-e67e-404c-88dd-c398c10c682f/cd1d9cc4.png" },

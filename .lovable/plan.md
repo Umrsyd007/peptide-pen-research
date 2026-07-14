@@ -1,20 +1,11 @@
-## Changes to `src/routes/products.$productId.tsx`
+Move the Retatrutide product to the first position in the product catalog.
 
-### 1. "Contact us" now opens the dropdown (no mail client)
+**What we will change:**
+- In `src/lib/products.ts`, the `Retatrutide (Standard Pen)` entry is currently at line 24 (after 11 other products). We will move it to the top of the `PRODUCTS` array so it appears first in the catalog.
 
-Replace the `<a href="mailto:...">contact us</a>` in the restricted-message paragraph with a `<button type="button">` styled the same (underline, inherits color). Clicking it calls a handler that:
-- Opens the `AskUsAQuestion` dropdown (sets `open = true`)
-- Scrolls it into view and focuses the Name input
+**How we will do it:**
+1. Reorder the `PRODUCTS` array entries so that the Retatrutide product object is first.
+2. Keep all other product entries and their order unchanged.
+3. Verify the build compiles and the homepage/product catalog shows Retatrutide first.
 
-Since the paragraph and the dropdown are siblings, lift the `open` state up to the parent (or expose an imperative open via a ref) so the paragraph's button can trigger it. Simplest approach: move `open`/`setOpen` and a `nameInputRef` into the parent and pass them into `AskUsAQuestion` as props.
-
-### 2. Rename the dropdown label
-
-Change the `<summary>`/button label from **"Ask Us A Question"** to **"Contact To Order"**. Keep the same styling (uppercase, chevron, hover). Also rename the success message's "Ask another question" link to "Send another message" for consistency.
-
-### 3. Keep everything else the same
-
-- The form fields, POST to `/api/public/product-question`, DB insert, and email notification stay identical.
-- Component filename and function name (`AskUsAQuestion`) can stay — internal only, no need to rename.
-
-No other files change.
+**No other files will be modified.**

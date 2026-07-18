@@ -1,0 +1,137 @@
+{
+  "version": 1,
+  "sdk_version": "0.23.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://caxskmuobsvvybkducdd.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "peptide-pen-research-mcp",
+      "version": "0.1.0",
+      "title": "Peptide Pen Research"
+    },
+    "tools": [
+      {
+        "name": "list_products",
+        "title": "List products",
+        "description": "Return every product in the Peptide Pen Research catalog with id, name, categories, price, and tag. Use this to give the user an overview of what's available.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "search_products",
+        "title": "Search products",
+        "description": "Search the Peptide Pen Research catalog by keyword. Matches against product name and categories. Optionally filter to only bestsellers or new arrivals.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Search term matched against name and categories"
+            },
+            "tag": {
+              "description": "Optional tag filter",
+              "type": "string",
+              "enum": [
+                "NEW",
+                "BESTSELLER"
+              ]
+            },
+            "limit": {
+              "description": "Max results (default 20)",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          },
+          "required": [
+            "query"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_product",
+        "title": "Get product details",
+        "description": "Return full details for a single product from the Peptide Pen Research catalog. Accepts either the product id (preferred, from list_products) or a case-insensitive product name.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "id": {
+              "description": "Product id, e.g. '08f6ee52'",
+              "type": "string"
+            },
+            "name": {
+              "description": "Product name (case-insensitive exact or partial match)",
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "submit_product_question",
+        "title": "Submit product question",
+        "description": "Send a product inquiry to the Peptide Pen Research team on behalf of the signed-in user. The store will follow up by email.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "productId": {
+              "description": "Product id from list_products/get_product",
+              "type": "string"
+            },
+            "message": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000,
+              "description": "The question or inquiry to send to the store team"
+            },
+            "name": {
+              "description": "Sender display name; falls back to the signed-in user's email",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            }
+          },
+          "required": [
+            "message"
+          ]
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}

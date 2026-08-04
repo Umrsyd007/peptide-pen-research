@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "@tanstack/react-router";
 import { ExternalLink, Loader2, Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 import {
   Sheet,
@@ -12,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCartStore } from "@/stores/cart";
 import { formatMoney } from "@/lib/shopify/catalog";
-import { trackBeginCheckout } from "@/lib/analytics";
+
 
 interface CartDrawerProps {
   /** Optional visual variant for the trigger button */
@@ -24,14 +25,15 @@ export function CartDrawer({
   triggerVariant = "outline",
   triggerClassName,
 }: CartDrawerProps) {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const items = useCartStore((s) => s.items);
   const isLoading = useCartStore((s) => s.isLoading);
   const isSyncing = useCartStore((s) => s.isSyncing);
   const updateQuantity = useCartStore((s) => s.updateQuantity);
   const removeItem = useCartStore((s) => s.removeItem);
-  const getCheckoutUrl = useCartStore((s) => s.getCheckoutUrl);
   const syncCart = useCartStore((s) => s.syncCart);
+
 
   const totalItems = items.reduce((s, i) => s + i.quantity, 0);
   const currency = items[0]?.price.currencyCode ?? "USD";
@@ -45,23 +47,10 @@ export function CartDrawer({
   }, [open, syncCart]);
 
   const handleCheckout = () => {
-    const url = getCheckoutUrl();
-    if (!url) return;
-    trackBeginCheckout({
-      items: items.map((i) => ({
-        item_id: i.productId,
-        item_name: i.title,
-        item_variant: i.variantTitle,
-        price: parseFloat(i.price.amount),
-        quantity: i.quantity,
-        currency: i.price.currencyCode,
-      })),
-      value: totalPrice,
-      currency,
-    });
-    window.open(url, "_blank");
     setOpen(false);
+    navigate({ to: "/checkout" });
   };
+
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>

@@ -101,6 +101,107 @@ export type Database = {
         }
         Relationships: []
       }
+      order_items: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          order_id: string
+          price: number
+          product_id: string
+          qty: number
+          variant: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          order_id: string
+          price: number
+          product_id: string
+          qty: number
+          variant?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          order_id?: string
+          price?: number
+          product_id?: string
+          qty?: number
+          variant?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          created_at: string
+          currency: string
+          email: string
+          id: string
+          order_number: string
+          ship_address1: string | null
+          ship_address2: string | null
+          ship_city: string | null
+          ship_country: string | null
+          ship_name: string | null
+          ship_postal: string | null
+          ship_region: string | null
+          shipping: number
+          status: string
+          subtotal: number
+          total: number
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          email: string
+          id?: string
+          order_number?: string
+          ship_address1?: string | null
+          ship_address2?: string | null
+          ship_city?: string | null
+          ship_country?: string | null
+          ship_name?: string | null
+          ship_postal?: string | null
+          ship_region?: string | null
+          shipping?: number
+          status?: string
+          subtotal?: number
+          total?: number
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          email?: string
+          id?: string
+          order_number?: string
+          ship_address1?: string | null
+          ship_address2?: string | null
+          ship_city?: string | null
+          ship_country?: string | null
+          ship_name?: string | null
+          ship_postal?: string | null
+          ship_region?: string | null
+          shipping?: number
+          status?: string
+          subtotal?: number
+          total?: number
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       product_questions: {
         Row: {
           created_at: string
@@ -172,6 +273,7 @@ export type Database = {
         Args: { payload: Json; queue_name: string }
         Returns: number
       }
+      gen_order_number: { Args: never; Returns: string }
       move_to_dlq: {
         Args: {
           dlq_name: string

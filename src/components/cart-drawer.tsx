@@ -25,14 +25,15 @@ export function CartDrawer({
   triggerVariant = "outline",
   triggerClassName,
 }: CartDrawerProps) {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const items = useCartStore((s) => s.items);
   const isLoading = useCartStore((s) => s.isLoading);
   const isSyncing = useCartStore((s) => s.isSyncing);
   const updateQuantity = useCartStore((s) => s.updateQuantity);
   const removeItem = useCartStore((s) => s.removeItem);
-  const getCheckoutUrl = useCartStore((s) => s.getCheckoutUrl);
   const syncCart = useCartStore((s) => s.syncCart);
+
 
   const totalItems = items.reduce((s, i) => s + i.quantity, 0);
   const currency = items[0]?.price.currencyCode ?? "USD";

@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { getProduct, PRODUCTS } from "@/lib/products";
 import { getDescription } from "@/lib/product-descriptions";
 import { getVariants } from "@/lib/product-variants";
-import { useShopifyCatalog, formatMoney, useShopifyImageForProduct, useAvailableProductIds } from "@/lib/shopify/catalog";
+import { isRestricted } from "@/lib/products";
 import { useCartStore } from "@/stores/cart";
 import { CartDrawer } from "@/components/cart-drawer";
 import { trackAddToCart, trackViewItem } from "@/lib/analytics";
@@ -146,32 +146,16 @@ function ProductDetailPage() {
   const [variantIdx, setVariantIdx] = useState(defaultIdx === -1 ? 0 : defaultIdx);
   const [qty, setQty] = useState(1);
   const selected = variants[variantIdx];
-  const availableIds = useAvailableProductIds();
+  const restricted = isRestricted(product.id);
   const related = PRODUCTS
-    .filter((p) => p.id !== product.id && (availableIds === null || availableIds.has(p.id)))
+    .filter((p) => p.id !== product.id && !isRestricted(p.id))
     .slice(0, 4);
 
-  // Live Shopify data, mapped by SKU
-  const catalog = useShopifyCatalog();
-  const shopifyVariant = selected?.sku
-    ? catalog.data?.get(selected.sku.trim())
-    : undefined;
-
-  const displayPrice = shopifyVariant
-    ? formatMoney(shopifyVariant.price.amount, shopifyVariant.price.currencyCode)
-    : (selected?.price ?? product.price);
-  const displayPriceNum = shopifyVariant
-    ? parseFloat(shopifyVariant.price.amount)
-    : (selected?.priceNum ?? parseFloat(product.price.replace(/[^0-9.]/g, "")));
-  const compareAt = shopifyVariant?.compareAtPrice
-    ? formatMoney(
-        shopifyVariant.compareAtPrice.amount,
-        shopifyVariant.compareAtPrice.currencyCode,
-      )
-    : selected?.oldPrice;
-  const inStock = shopifyVariant ? shopifyVariant.availableForSale : true;
-  const liveImage = useShopifyImageForProduct(product.id);
-  const heroImage = shopifyVariant?.productImage ?? liveImage ?? product.image;
+  const displayPrice = selected?.price ?? product.price;
+  const displayPriceNum = selected?.priceNum ?? parseFloat(product.price.replace(/[^0-9.]/g, ""));
+  const compareAt = selected?.oldPrice;
+  const inStock = true;
+  const heroImage = product.image;
 
   const addItem = useCartStore((s) => s.addItem);
   const cartLoading = useCartStore((s) => s.isLoading);
@@ -184,38 +168,30 @@ function ProductDetailPage() {
       item_category: product.categories,
       item_variant: selected?.name,
       price: displayPriceNum,
-      currency: shopifyVariant?.price.currencyCode ?? "USD",
+      currency: "USD",
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product.id, variantIdx]);
 
   const handleAddToCart = async () => {
-    if (!shopifyVariant) {
-      toast.error("This product is loading from our store. Please try again in a moment.");
-      return;
-    }
-    if (!inStock) {
-      toast.error("This variant is currently out of stock.");
-      return;
-    }
+    if (restricted || !selected) return;
     await addItem({
-      variantId: shopifyVariant.id,
+      variantId: `${product.id}:${selected.sku}`,
       productId: product.id,
-      productHandle: shopifyVariant.productHandle,
       title: product.name,
-      variantTitle: selected?.name ?? shopifyVariant.title,
-      image: shopifyVariant.productImage ?? product.image,
-      price: shopifyVariant.price,
+      variantTitle: selected.name,
+      image: product.image,
+      price: { amount: selected.priceNum.toFixed(2), currencyCode: "USD" },
       quantity: qty,
     });
     trackAddToCart({
       item_id: product.id,
       item_name: product.name,
       item_category: product.categories,
-      item_variant: selected?.name ?? shopifyVariant.title,
-      price: parseFloat(shopifyVariant.price.amount),
+      item_variant: selected.name,
+      price: selected.priceNum,
       quantity: qty,
-      currency: shopifyVariant.price.currencyCode,
+      currency: "USD",
     });
     toast.success(`Added to cart — ${product.name}`, {
       description: selected?.name && selected.name !== "Default" ? selected.name : undefined,
@@ -370,7 +346,7 @@ function ProductDetailPage() {
                 <button
                   type="button"
                   onClick={handleAddToCart}
-                  disabled={cartLoading || (!catalog.isLoading && !shopifyVariant) || !inStock}
+                  disabled={cartLoading || restricted || !inStock}
                   className="flex-1 h-12 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {cartLoading
@@ -380,7 +356,7 @@ function ProductDetailPage() {
                       : `Add to cart — ${displayPrice}`}
                 </button>
               </div>
-              {!catalog.isLoading && !shopifyVariant && (
+              {restricted && (
                 <RestrictedContact productName={product.name} productId={product.id} />
               )}
 

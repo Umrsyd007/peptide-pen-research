@@ -1,3 +1,4 @@
+import { Price } from "@/components/price";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PRODUCTS } from "@/lib/products";
 import { isRestricted } from "@/lib/products";
@@ -281,7 +282,7 @@ function HomePage() {
                     <Link to="/products/$productId" params={{ productId: p.id }} className="hover:text-primary transition-colors">{p.name}</Link>
                   </h3>
                   <div className="flex items-center justify-between pt-2 mt-auto">
-                    <p className="text-xl font-black">{p.price}</p>
+                    <p className="text-xl font-black"><Price usd={p.price} /></p>
                     <Link to="/products/$productId" params={{ productId: p.id }} className="inline-flex h-10 px-4 items-center gap-1 rounded-full bg-foreground text-background text-xs font-bold uppercase tracking-wider hover:bg-primary transition-colors">
                       View ↗
                     </Link>
@@ -323,7 +324,7 @@ function HomePage() {
                   <div className="p-4 space-y-1">
                     <span className="inline-block text-[9px] uppercase tracking-widest font-bold text-primary">New</span>
                     <h3 className="text-sm font-black uppercase line-clamp-2">{p.name}</h3>
-                    <p className="text-sm font-bold">{p.price}</p>
+                    <p className="text-sm font-bold"><Price usd={p.price} /></p>
                   </div>
                 </Link>
               ))}

@@ -1,3 +1,4 @@
+import { useLocalPrice } from "@/lib/currency";
 import { useMemo, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
@@ -341,7 +342,8 @@ function CheckoutPage() {
             k="Subtotal"
             v={formatMoney(displaySubtotal, summary?.currency ?? currency)}
           />
-          <Row k="Shipping" v="Calculated at fulfilment" />
+          <Row k="Shipping" v="Free worldwide" />
+          <CurrencyNotice />
           <div className="h-px bg-border" />
           <Row
             k="Total"
@@ -362,5 +364,15 @@ function Row({ k, v, big }: { k: string; v: string; big?: boolean }) {
       <span className={big ? "" : "text-muted-foreground"}>{k}</span>
       <span className="font-mono">{v}</span>
     </div>
+  );
+}
+
+function CurrencyNotice() {
+  const { converted, currency, format } = useLocalPrice();
+  if (!converted) return null;
+  return (
+    <p className="text-xs text-muted-foreground">
+      Your order is charged in USD. Your bank converts it to {currency} at the latest exchange rate, so the final amount may differ slightly (approx. {format(1)} per $1).
+    </p>
   );
 }

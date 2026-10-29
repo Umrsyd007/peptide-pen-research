@@ -1,3 +1,4 @@
+import { Price } from "@/components/price";
 import { useEffect, useRef, useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { toast } from "sonner";
@@ -208,7 +209,7 @@ function ProductDetailPage() {
       <div className="bg-primary/5 border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-[11px] text-muted-foreground">
           <span>✓ Third-party assayed</span>
-          <span>✓ Cold-chain shipping</span>
+          <span>✓ Free worldwide shipping</span>
           <span>✓ Batch-matched COA</span>
           <span>✓ Research grade only</span>
         </div>
@@ -268,11 +269,11 @@ function ProductDetailPage() {
               <p className="text-base text-muted-foreground leading-relaxed">{desc.tagline}</p>
 
               <div className="flex items-baseline gap-3 pt-2">
-                <span className="text-3xl font-bold">{displayPrice}</span>
+                <Price usd={displayPriceNum} className="text-3xl font-bold" />
                 {compareAt ? (
-                  <span className="text-sm text-muted-foreground line-through">{compareAt}</span>
+                  <span className="text-sm text-muted-foreground line-through"><Price usd={compareAt} /></span>
                 ) : (
-                  <span className="text-sm text-muted-foreground line-through">${(displayPriceNum * 1.25).toFixed(2)}</span>
+                  <span className="text-sm text-muted-foreground line-through"><Price usd={displayPriceNum * 1.25} /></span>
                 )}
                 <Pill tone="accent">Save 20%</Pill>
               </div>
@@ -300,7 +301,7 @@ function ProductDetailPage() {
                             className="sr-only"
                           />
                           <span className="block">{v.name}</span>
-                          <span className={`block text-[11px] mt-0.5 ${active ? "text-primary" : "text-muted-foreground/80"}`}>{livePrice}</span>
+                          <span className={`block text-[11px] mt-0.5 ${active ? "text-primary" : "text-muted-foreground/80"}`}><Price usd={livePrice} /></span>
                         </label>
                       );
                     })}
@@ -351,7 +352,7 @@ function ProductDetailPage() {
                     ? "Adding…"
                     : !inStock
                       ? "Out of stock"
-                      : `Add to cart — ${displayPrice}`}
+                      : <>Add to cart — <Price usd={displayPriceNum} /></>}
                 </button>
               </div>
               {restricted && (
@@ -385,7 +386,7 @@ function ProductDetailPage() {
                 <li className="flex items-center gap-1.5">✓ Cold-chain 2–8°C</li>
                 <li className="flex items-center gap-1.5">✓ Tracked delivery</li>
                 <li className="flex items-center gap-1.5">✓ Tamper-evident</li>
-                <li className="flex items-center gap-1.5">✓ EU + US shipping</li>
+                <li className="flex items-center gap-1.5">✓ Free worldwide shipping</li>
               </ul>
             </div>
           </div>
@@ -592,7 +593,7 @@ function ProductDetailPage() {
             {[
               { q: `Is ${product.name} for human use?`, a: "No. All PeptidePen products are strictly for in-vitro laboratory research. Not intended for human or veterinary use." },
               { q: "How is the COA provided?", a: "Each pen ships with a batch-matched certificate of analysis. A digital copy is also available on request via your order confirmation." },
-              { q: "How is shipping handled?", a: "Orders ship cold-chain (2–8°C) with insulated packaging, ice packs and a temperature log. Tracked delivery in the US and EU." },
+              { q: "How is shipping handled?", a: "Orders ship cold-chain (2–8°C) with insulated packaging, ice packs and a temperature log. Free tracked delivery worldwide." },
               { q: "Can I order in bulk for my lab?", a: "Yes. Contact our team for institutional pricing, custom concentrations and recurring shipments." },
               { q: "What's your refund policy?", a: "Damaged or off-spec pens are replaced free of charge. Contact support within 7 days of delivery." },
             ].map((f) => (
@@ -617,7 +618,7 @@ function ProductDetailPage() {
           </p>
           <div className="flex flex-wrap justify-center gap-3 pt-2">
             <a href="#buy-box" className="inline-flex items-center h-11 px-6 rounded-full bg-primary text-primary-foreground font-medium hover:opacity-90 transition">
-              Order now — {displayPrice}
+              Order now — <Price usd={displayPriceNum} />
             </a>
             <Link to="/products" className="inline-flex items-center h-11 px-6 rounded-full border border-border hover:bg-muted/50 transition text-sm font-medium">
               Browse all products
@@ -643,7 +644,7 @@ function ProductDetailPage() {
                 <div className="space-y-1">
                   <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{r.categories.split("•")[0]?.trim()}</p>
                   <p className="text-sm font-medium group-hover:underline">{r.name}</p>
-                  <p className="text-sm font-semibold">{r.price}</p>
+                  <p className="text-sm font-semibold"><Price usd={r.price} /></p>
                 </div>
               </Link>
             ))}

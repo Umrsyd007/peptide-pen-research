@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCartStore } from "@/stores/cart";
-import { formatMoney } from "@/lib/money";
+import { Price } from "@/components/price";
 
 
 interface CartDrawerProps {
@@ -113,7 +113,7 @@ export function CartDrawer({
                             </p>
                           )}
                         <p className="text-sm font-semibold mt-1">
-                          {formatMoney(item.price.amount, item.price.currencyCode)}
+                          <Price usd={item.price.amount} />
                         </p>
                       </div>
                       <div className="flex flex-col items-end gap-2 flex-shrink-0">
@@ -162,11 +162,11 @@ export function CartDrawer({
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-muted-foreground">Subtotal</span>
                   <span className="text-xl font-bold">
-                    {formatMoney(totalPrice, currency)}
+                    <Price usd={totalPrice} />
                   </span>
                 </div>
                 <p className="text-[11px] text-muted-foreground">
-                  Shipping &amp; taxes calculated at checkout.
+                  Free worldwide shipping. Prices shown in your local currency are estimates; you are charged in USD at checkout.
                 </p>
                 <Button
                   onClick={handleCheckout}

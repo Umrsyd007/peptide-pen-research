@@ -19,6 +19,7 @@ export const Route = createFileRoute("/products/")({
       { property: "og:description", content: PAGE_DESCRIPTION },
       { property: "og:url", content: "https://getpeptidepen.com/products" },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: "https://getpeptidepen.com/products" }],
     scripts: [

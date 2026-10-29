@@ -8,6 +8,11 @@ export const Route = createFileRoute("/_authenticated/account")({
   head: () => ({
     meta: [
       { title: "My Account | Peptide Pen Research" },
+      { name: "description", content: "Manage your Peptide Pen Research account and assistant connections." },
+      { property: "og:title", content: "My Account | Peptide Pen Research" },
+      { property: "og:description", content: "Manage your Peptide Pen Research account and assistant connections." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),

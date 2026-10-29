@@ -16,6 +16,7 @@ export const Route = createFileRoute("/guides/peptide-dosage-calculator")({
       { property: "og:description", content: DESCRIPTION },
       { property: "og:url", content: URL },
       { property: "og:type", content: "article" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: URL }],
     scripts: [

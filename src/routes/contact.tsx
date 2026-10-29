@@ -16,6 +16,7 @@ export const Route = createFileRoute("/contact")({
       { property: "og:description", content: PAGE_DESCRIPTION },
       { property: "og:url", content: "https://getpeptidepen.com/contact" },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
     links: [{ rel: "canonical", href: "https://getpeptidepen.com/contact" }],
     scripts: [

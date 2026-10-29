@@ -13,7 +13,6 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
-import { useCartSync } from "@/hooks/use-cart-sync";
 import { trackPageView } from "@/lib/analytics";
 
 // Google Tag Manager container (loads GA4 G-1LLX7CCVZL + Google Ads via GTM)
@@ -164,7 +163,6 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
-  useCartSync();
 
   // Fire page_view on every SPA navigation
   useEffect(() => {

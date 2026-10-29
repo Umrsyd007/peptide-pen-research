@@ -1,0 +1,1 @@
+- Catalog, prices, restricted list and cart are local (src/lib/products.ts, product-variants.ts, stores/cart.ts); no Shopify. Why: user wants manual control and checkout runs on our own orders + Stripe.

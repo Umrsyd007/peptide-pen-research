@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCartStore } from "@/stores/cart";
-import { formatMoney } from "@/lib/shopify/catalog";
+import { formatMoney } from "@/lib/money";
 
 
 interface CartDrawerProps {
@@ -29,10 +29,9 @@ export function CartDrawer({
   const [open, setOpen] = useState(false);
   const items = useCartStore((s) => s.items);
   const isLoading = useCartStore((s) => s.isLoading);
-  const isSyncing = useCartStore((s) => s.isSyncing);
+  const isSyncing = false;
   const updateQuantity = useCartStore((s) => s.updateQuantity);
   const removeItem = useCartStore((s) => s.removeItem);
-  const syncCart = useCartStore((s) => s.syncCart);
 
 
   const totalItems = items.reduce((s, i) => s + i.quantity, 0);
@@ -42,9 +41,6 @@ export function CartDrawer({
     0,
   );
 
-  useEffect(() => {
-    if (open) syncCart();
-  }, [open, syncCart]);
 
   const handleCheckout = () => {
     setOpen(false);

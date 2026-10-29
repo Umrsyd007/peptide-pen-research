@@ -50,3 +50,20 @@ export const PRODUCTS: Product[] = [
 export function getProduct(id: string): Product | undefined {
   return PRODUCTS.find((p) => p.id === id);
 }
+
+// Products that can't be bought on the site — shown with "Contact To Order".
+export const RESTRICTED_PRODUCT_IDS = new Set<string>([
+  "4a666b8b", // HCG Choriomon
+  "6aa9fd75", // Sermorelin
+  "357579fd", // PT 141
+  "1b0959b6", // Tirzepatide
+  "322e88af", // Semaglutide
+  "cd1d9cc4", // Somatropin HGH
+  "08f6ee52", // Retatrutide
+  "f5aa4333", // Tesamorelin
+  "68831782", // SS-31
+]);
+
+export function isRestricted(id: string): boolean {
+  return RESTRICTED_PRODUCT_IDS.has(id);
+}

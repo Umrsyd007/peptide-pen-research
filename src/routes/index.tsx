@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PRODUCTS } from "@/lib/products";
-import { useAvailableProductIds } from "@/lib/shopify/catalog";
+import { isRestricted } from "@/lib/products";
 
 const BRAND = "PeptidePen";
 const TAGLINE = "Lab-grade peptide pens, engineered for serious research.";
@@ -51,8 +51,8 @@ const NAV_LINKS = [
 ];
 
 function HomePage() {
-  const availableIds = useAvailableProductIds();
-  const inStock = (p: { id: string }) => !availableIds || availableIds.has(p.id);
+
+  const inStock = (p: { id: string }) => !isRestricted(p.id);
   const featured = PRODUCTS.filter((p) => p.tag === "BESTSELLER" && inStock(p)).slice(0, 3);
   const newDrops = PRODUCTS.filter((p) => p.tag === "NEW" && inStock(p)).slice(0, 4);
 

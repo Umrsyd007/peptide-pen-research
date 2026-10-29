@@ -14,9 +14,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 import { trackPageView } from "@/lib/analytics";
-
-// Google Tag Manager container (loads GA4 G-1LLX7CCVZL + Google Ads via GTM)
-const GTM_ID = "GTM-MG44ST68";
+import { TrackingConsent } from "@/components/tracking-consent";
 
 function NotFoundComponent() {
   return (
@@ -100,15 +98,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "icon", type: "image/png", href: "/favicon.png" },
     ],
     scripts: [
-      // Google Tag Manager bootstrap (loads container which fans out to GA4, Ads, etc.)
-      {
-        children: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${GTM_ID}');`,
-      },
-      // Google tag (gtag.js) — GA4 + Google Ads direct config
-      { src: "https://www.googletagmanager.com/gtag/js?id=G-1LLX7CCVZL", async: true },
-      {
-        children: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-1LLX7CCVZL');gtag('config','GT-NC6LQ58D');gtag('config','GT-MBG99QWN');gtag('config','GT-WPF72555');`,
-      },
       {
         type: "application/ld+json",
         children: JSON.stringify({
@@ -144,15 +133,6 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {/* GTM noscript fallback (required by Google Tag Manager) */}
-        <noscript>
-          <iframe
-            src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
-            height="0"
-            width="0"
-            style={{ display: "none", visibility: "hidden" }}
-          />
-        </noscript>
         {children}
         <Scripts />
       </body>
@@ -176,6 +156,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
+      <TrackingConsent />
       <Toaster position="top-center" richColors />
     </QueryClientProvider>
   );

@@ -1,1 +1,3 @@
 - Catalog, prices, restricted list and cart are local (src/lib/products.ts, product-variants.ts, stores/cart.ts); no Shopify. Why: user wants manual control and checkout runs on our own orders + Stripe.
+- Google measurement is initialized only by google-tracking behind shared regional consent; do not add parallel GTM bootstraps. Why: prevent duplicate reporting and bypassed choices.
+- Purchase measurement uses Stripe-confirmed paid amounts and opaque references, with confirmation-time and current advertising choices. Why: unpaid sessions and later consent must not create purchases.

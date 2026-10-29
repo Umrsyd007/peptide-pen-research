@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestHost, getRequestHeader } from "@tanstack/react-start/server";
 import { z } from "zod";
+import { paidPurchase } from "./paid-purchase";
 
 export const getStripePublishableKey = createServerFn({
   method: "GET",
@@ -81,20 +82,22 @@ export const verifyCheckoutSession = createServerFn({ method: "GET" })
     const stripe = new Stripe(secret);
 
     const session = await stripe.checkout.sessions.retrieve(data.sessionId);
-    if (session.payment_status !== "paid" && session.status !== "complete") {
-      return { paid: false, orderNumber: null as string | null };
+    const purchase = paidPurchase(session);
+    if (!purchase) {
+      return { paid: false, orderNumber: null as string | null, purchase: null };
     }
 
-    const ref = session.metadata?.["ref"] || session.client_reference_id;
+    const ref = purchase.transaction_id;
     if (ref) {
       const { supabaseAdmin } = await import(
         "@/integrations/supabase/client.server"
       );
-      await supabaseAdmin
+      const { error } = await supabaseAdmin
         .from("orders")
         .update({ status: "paid" })
         .eq("order_number", ref);
+      if (error) throw new Error(error.message);
     }
 
-    return { paid: true, orderNumber: ref ?? null };
+    return { paid: true, orderNumber: ref, purchase };
   });

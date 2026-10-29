@@ -33,7 +33,8 @@ export const Route = createFileRoute("/products/$productId")({
         { property: "og:description", content: description },
         { property: "og:type", content: "product" },
         { property: "og:url", content: url },
-        ...(p?.image ? [{ property: "og:image", content: `https://getpeptidepen.com${p.image}` }] : []),
+        { name: "twitter:card", content: "summary_large_image" },
+        ...(p?.image?.startsWith("https://") ? [{ property: "og:image", content: p.image }, { name: "twitter:image", content: p.image }] : []),
       ],
       links: [{ rel: "canonical", href: url }],
       scripts: p
@@ -46,7 +47,7 @@ export const Route = createFileRoute("/products/$productId")({
                 name: p.name,
                 description,
                 category: p.categories,
-                image: p.image ? [`https://getpeptidepen.com${p.image}`] : undefined,
+                image: p.image?.startsWith("https://") ? [p.image] : undefined,
                 url,
                 brand: { "@type": "Brand", name: "PeptidePen" },
                 offers: {

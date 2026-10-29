@@ -13,6 +13,7 @@ export const Route = createFileRoute("/refund-policy")({
       { property: "og:description", content: "Refund and return policy for Peptide Pen Research products." },
       { property: "og:url", content: "https://getpeptidepen.com/refund-policy" },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
     links: [{ rel: "canonical", href: "https://getpeptidepen.com/refund-policy" }],
   }),

@@ -1,4 +1,6 @@
-// GA4 / GTM dataLayer helpers. Safe to call from anywhere; no-op on SSR.
+import { permission } from "./tracking-consent";
+import { sendAnalytics } from "./google-tracking";
+// Analytics helpers. Safe to call from anywhere; no-op without permission.
 declare global {
   interface Window {
     dataLayer?: Array<Record<string, unknown>>;
@@ -7,7 +9,7 @@ declare global {
 }
 
 function push(payload: Record<string, unknown>) {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || !permission("analytics")) return;
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push(payload);
 }
@@ -15,8 +17,7 @@ function push(payload: Record<string, unknown>) {
 // Direct GA4 send (in addition to the dataLayer push) so events reach GA4
 // even when the GTM container has no matching custom-event trigger.
 function gtagEvent(name: string, params: Record<string, unknown>) {
-  if (typeof window === "undefined" || typeof window.gtag !== "function") return;
-  window.gtag("event", name, params);
+  sendAnalytics(name, params);
 }
 
 export interface AnalyticsItem {
@@ -37,6 +38,7 @@ export function trackPageView(args: { path: string; title?: string }) {
     page_location: typeof window !== "undefined" ? window.location.href : args.path,
     page_title: args.title ?? (typeof document !== "undefined" ? document.title : ""),
   });
+  gtagEvent("page_view", { page_path: args.path.split("?")[0], page_location: typeof window !== "undefined" ? window.location.origin + window.location.pathname : args.path, page_title: args.title ?? (typeof document !== "undefined" ? document.title : "") });
 }
 
 export function trackViewItem(item: AnalyticsItem) {

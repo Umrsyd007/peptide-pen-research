@@ -5,6 +5,8 @@ import { CheckCircle2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { verifyCheckoutSession } from "@/lib/checkout.functions";
 import { trackPurchase } from "@/lib/analytics";
+import { consentContext, resolveRegion } from "@/lib/tracking-consent";
+import { sendPaidPurchase, syncGoogleTracking } from "@/lib/google-tracking";
 
 export const Route = createFileRoute("/checkout/success/$orderNumber")({
   validateSearch: (search: Record<string, unknown>) => ({
@@ -44,16 +46,26 @@ function SuccessPage() {
   useEffect(() => {
     if (!sessionId) return;
     let active = true;
-    verify({ data: { sessionId } })
+    resolveRegion().then(() => {
+      const key = `purchase-consent:${sessionId}`;
+      const saved = localStorage.getItem(key);
+      const checkoutChoice = localStorage.getItem(`checkout-consent:${orderNumber}`);
+      const context = saved ? JSON.parse(saved) as ReturnType<typeof consentContext> : checkoutChoice ? JSON.parse(checkoutChoice) as ReturnType<typeof consentContext> : { ...consentContext(), advertising: false };
+      if (!saved) localStorage.setItem(key, JSON.stringify(context));
+      syncGoogleTracking();
+      return verify({ data: { sessionId } }).then(res => ({ ...res, permittedAtPayment: context.advertising }));
+    })
       .then((res) => {
         if (!active) return;
-        setState(res.paid ? "paid" : "pending");
-        if (res.paid) {
-          trackPurchase({
-            transaction_id: orderNumber,
-            items: [],
-            value: 0,
-          });
+        const confirmed = res.paid && res.orderNumber === orderNumber && res.purchase;
+        setState(confirmed ? "paid" : "pending");
+        if (confirmed && res.purchase) {
+          sendPaidPurchase({ ...res.purchase, permittedAtPayment: res.permittedAtPayment });
+          const key = `analytics-purchase:${orderNumber}`;
+          if (!localStorage.getItem(key)) {
+            trackPurchase({ ...res.purchase, items: [] });
+            localStorage.setItem(key, "attempted");
+          }
         }
       })
       .catch(() => active && setState("pending"));

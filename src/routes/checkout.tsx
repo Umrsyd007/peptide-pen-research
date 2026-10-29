@@ -18,6 +18,7 @@ import {
   getStripePublishableKey,
 } from "@/lib/checkout.functions";
 import { trackBeginCheckout } from "@/lib/analytics";
+import { consentContext, resolveRegion } from "@/lib/tracking-consent";
 
 export const Route = createFileRoute("/checkout")({
   head: () => ({
@@ -116,6 +117,8 @@ function CheckoutPage() {
         data: { orderId: order.id },
       });
       const { key } = await fetchPublishableKey();
+      await resolveRegion();
+      localStorage.setItem(`checkout-consent:${order.orderNumber}`, JSON.stringify(consentContext()));
 
       trackBeginCheckout({
         items: items.map((i) => ({

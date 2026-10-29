@@ -13,6 +13,7 @@ export const Route = createFileRoute("/terms-of-service")({
       { property: "og:description", content: "Terms of service for Peptide Pen Research." },
       { property: "og:url", content: "https://getpeptidepen.com/terms-of-service" },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
     links: [{ rel: "canonical", href: "https://getpeptidepen.com/terms-of-service" }],
   }),

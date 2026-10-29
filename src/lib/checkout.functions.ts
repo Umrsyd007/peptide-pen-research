@@ -83,7 +83,7 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       ui_mode:
-        "embedded" as import("stripe").Stripe.Checkout.SessionCreateParams.UiMode,
+        "embedded_page" as import("stripe").Stripe.Checkout.SessionCreateParams.UiMode,
       line_items: lineItems,
       customer_email: order.email,
       client_reference_id: order.order_number,

@@ -10,7 +10,7 @@ export interface Product {
 }
 
 export const PRODUCTS: Product[] = [
-  { id: "08f6ee52", name: "Retatrutide (Standard Pen)", categories: "Metabolic & Fat Optimization", price: "$307.40", tag: "BESTSELLER" , image: "/__l5e/assets-v1/7c637d58-c76e-4ddd-b830-9f83ca801425/08f6ee52.png" },
+  { id: "08f6ee52", name: "(Ret) - GLP3R (Standard Pen)", categories: "Metabolic & Fat Optimization", price: "$307.40", tag: "BESTSELLER" , image: "/__l5e/assets-v1/7c637d58-c76e-4ddd-b830-9f83ca801425/08f6ee52.png" },
   { id: "72d3cbf2", name: "AC-Selank-nH2", categories: "Cognitive & Neuro • Cellular Longevity", price: "$126.44", tag: "NEW" , image: "/__l5e/assets-v1/434b906a-7615-4b61-a745-b343bcf8deb5/72d3cbf2.png" },
   { id: "d2a5603b", name: "KPV Peptide (Nasal Spray)", categories: "Cellular Longevity • Immune & Inflammation", price: "$97.44", tag: "NEW" , image: "/__l5e/assets-v1/b815d774-9df8-4296-9363-f568c59bc388/d2a5603b.png" },
   { id: "68831782", name: "SS-31 (Elamipretide)", categories: "Cellular Longevity +2", price: "$223.88", tag: "NEW" , image: "/__l5e/assets-v1/5975af56-caae-4b16-907e-3c7fc4adda1c/68831782.png" },

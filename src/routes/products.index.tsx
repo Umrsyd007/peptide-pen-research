@@ -1,3 +1,4 @@
+import { Price } from "@/components/price";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { PRODUCTS, type Product, type Tag } from "@/lib/products";
@@ -123,7 +124,7 @@ function ProductCard({ product }: { product: Product }) {
             <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
               From
             </p>
-            <p className="text-xl font-black text-foreground">{livePrice}</p>
+            <p className="text-xl font-black text-foreground"><Price usd={livePrice} /></p>
           </div>
           <Link
             to="/products/$productId"
@@ -184,7 +185,7 @@ function ProductsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex items-center justify-center gap-2 text-center">
           <span className="h-1.5 w-1.5 rounded-full bg-primary" />
           BOGO + 25% OFF Sitewide · Code{" "}
-          <span className="text-primary font-bold">MEM25</span> · Same-day shipping
+          <span className="text-primary font-bold">MEM25</span> · Free worldwide shipping
         </div>
       </div>
 

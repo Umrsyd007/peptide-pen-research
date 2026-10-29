@@ -285,10 +285,7 @@ function ProductDetailPage() {
                   <div className={`grid gap-2 ${variants.length >= 3 ? "grid-cols-3" : variants.length === 2 ? "grid-cols-2" : "grid-cols-1"}`}>
                     {variants.map((v, i) => {
                       const active = i === variantIdx;
-                      const liveV = v.sku ? catalog.data?.get(v.sku.trim()) : undefined;
-                      const livePrice = liveV
-                        ? formatMoney(liveV.price.amount, liveV.price.currencyCode)
-                        : v.price;
+                      const livePrice = v.price;
                       return (
                         <label
                           key={v.sku || v.name}

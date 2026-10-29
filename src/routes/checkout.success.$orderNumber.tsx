@@ -49,7 +49,8 @@ function SuccessPage() {
     resolveRegion().then(() => {
       const key = `purchase-consent:${sessionId}`;
       const saved = localStorage.getItem(key);
-      const context = saved ? JSON.parse(saved) as ReturnType<typeof consentContext> : consentContext();
+      const checkoutChoice = localStorage.getItem(`checkout-consent:${orderNumber}`);
+      const context = saved ? JSON.parse(saved) as ReturnType<typeof consentContext> : checkoutChoice ? JSON.parse(checkoutChoice) as ReturnType<typeof consentContext> : { ...consentContext(), advertising: false };
       if (!saved) localStorage.setItem(key, JSON.stringify(context));
       syncGoogleTracking();
       return verify({ data: { sessionId } }).then(res => ({ ...res, permittedAtPayment: context.advertising }));

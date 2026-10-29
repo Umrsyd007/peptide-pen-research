@@ -57,52 +57,12 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
       }
     }
 
-    // Data minimization: Stripe only ever sees an opaque order reference —
-    // no product names, doses, or catalog metadata. Every line collapses
-    // into a single one-time charge.
-    const currency = (order.currency || "USD").toLowerCase();
-    const shippingAmount = Math.round(Number(order.shipping) * 100);
-    const totalCents = items.reduce(
-      (s, it) => s + Math.round(Number(it.price) * 100) * it.qty,
-      0,
-    );
-
-    type LineItem =
-      import("stripe").Stripe.Checkout.SessionCreateParams.LineItem;
-    const lineItems: LineItem[] = [
-      {
-        quantity: 1,
-        price_data: {
-          currency,
-          unit_amount: totalCents,
-          product_data: { name: `Order #${order.order_number}` },
-        },
-      },
-    ];
-
+    const { buildStripePayload } = await import("@/lib/stripe-payload");
+    const payload = buildStripePayload(order, items, origin);
     const session = await stripe.checkout.sessions.create({
-      mode: "payment",
+      ...payload,
       ui_mode:
         "embedded_page" as import("stripe").Stripe.Checkout.SessionCreateParams.UiMode,
-      line_items: lineItems,
-      customer_email: order.email,
-      client_reference_id: order.order_number,
-      metadata: { ref: order.order_number },
-      payment_intent_data: { metadata: { ref: order.order_number } },
-      return_url: `${origin}/checkout/success/${order.order_number}?session_id={CHECKOUT_SESSION_ID}`,
-      ...(shippingAmount > 0
-        ? {
-            shipping_options: [
-              {
-                shipping_rate_data: {
-                  type: "fixed_amount" as const,
-                  display_name: "Standard shipping",
-                  fixed_amount: { amount: shippingAmount, currency },
-                },
-              },
-            ],
-          }
-        : {}),
     });
 
     if (!session.client_secret)

@@ -1,7 +1,6 @@
 import { Price } from "@/components/price";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PRODUCTS } from "@/lib/products";
-import { getProductCover } from "@/lib/product-images";
 import { isRestricted } from "@/lib/products";
 
 const BRAND = "PeptidePen";
@@ -201,13 +200,17 @@ function HomePage() {
 
             {/* Product Visual */}
             <aside className="relative">
-              <div className="relative rounded-3xl border border-border bg-white overflow-hidden aspect-[4/5] sm:aspect-square lg:aspect-[4/5]">
+              <div className="relative rounded-3xl border border-border bg-muted/40 overflow-hidden aspect-[4/5] sm:aspect-square lg:aspect-[4/5]">
+                {/* Subtle orange gradient glow */}
+                <div aria-hidden className="absolute top-0 right-0 w-3/4 h-3/4 bg-[radial-gradient(ellipse_at_top_right,_oklch(0.62_0.24_25/_0.15),_transparent_70%)]" />
+                <div aria-hidden className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-[radial-gradient(ellipse_at_bottom_left,_oklch(0.74_0.2_60/_0.1),_transparent_70%)]" />
+                
                 {/* Product image */}
-                <div className="relative h-full w-full flex items-center justify-center">
+                <div className="relative h-full w-full flex items-center justify-center p-8 sm:p-12">
                   <img
                     src={PRODUCTS.find(p => p.name === "BPC-157")?.image || PRODUCTS[0].image}
                     alt="Research-grade peptide pen"
-                    className="h-full w-full object-contain"
+                    className="h-full w-full object-contain drop-shadow-2xl mix-blend-multiply"
                     loading="eager"
                   />
                 </div>
@@ -270,8 +273,8 @@ function HomePage() {
                 <span className="absolute top-3 left-3 z-10 inline-flex items-center gap-1 rounded-full bg-foreground text-background px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider">
                   ★ Bestseller
                 </span>
-                <Link to="/products/$productId" params={{ productId: p.id }} className="block aspect-square bg-white overflow-hidden" aria-label={`View ${p.name}`}>
-                  <img src={p.image} alt={getProductCover(p).alt} loading="lazy" className="w-full h-full object-contain" />
+                <Link to="/products/$productId" params={{ productId: p.id }} className="block aspect-square bg-muted overflow-hidden" aria-label={`View ${p.name}`}>
+                  <img src={p.image} alt={p.name} loading="lazy" className="w-full h-full object-contain p-6 group-hover:scale-110 transition-transform duration-500" />
                 </Link>
                 <div className="p-5 space-y-2 flex-1 flex flex-col border-t border-border">
                   <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold line-clamp-1">{p.categories}</p>
@@ -315,8 +318,8 @@ function HomePage() {
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               {newDrops.map((p) => (
                 <Link key={p.id} to="/products/$productId" params={{ productId: p.id }} className="group rounded-2xl border border-background/15 bg-background/5 overflow-hidden hover:bg-background hover:text-foreground transition-colors">
-                  <div className="aspect-square overflow-hidden bg-white">
-                    <img src={p.image} alt={getProductCover(p).alt} loading="lazy" className="w-full h-full object-contain" />
+                  <div className="aspect-square overflow-hidden bg-background/5 group-hover:bg-muted">
+                    <img src={p.image} alt={p.name} loading="lazy" className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-500" />
                   </div>
                   <div className="p-4 space-y-1">
                     <span className="inline-block text-[9px] uppercase tracking-widest font-bold text-primary">New</span>
@@ -356,8 +359,8 @@ function HomePage() {
         {/* SCIENCE */}
         <section id="science" className="border-y border-border bg-muted/30" aria-labelledby="science-heading">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-            <div className="aspect-square w-full rounded-3xl bg-white border border-border overflow-hidden flex items-center justify-center shadow-[var(--shadow-glow)]">
-              <img src={PRODUCTS[1].image} alt={getProductCover(PRODUCTS[1]).alt} className="w-full h-full object-contain" loading="lazy" />
+            <div className="aspect-square w-full rounded-3xl bg-card border border-border overflow-hidden flex items-center justify-center shadow-[var(--shadow-glow)]">
+              <img src={PRODUCTS[1].image} alt="Lab-tested research peptide" className="w-full h-full object-contain p-10 mix-blend-multiply" loading="lazy" />
             </div>
             <div className="space-y-6">
               <Pill>The Science</Pill>

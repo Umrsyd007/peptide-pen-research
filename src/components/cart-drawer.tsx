@@ -13,7 +13,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCartStore } from "@/stores/cart";
 import { Price } from "@/components/price";
-import { getCartItemImage } from "@/lib/product-images";
 
 
 interface CartDrawerProps {
@@ -94,12 +93,12 @@ export function CartDrawer({
                       key={item.variantId}
                       className="flex gap-4 p-2 border border-border rounded-lg"
                     >
-                      <div className="w-16 h-16 bg-white rounded-md overflow-hidden flex-shrink-0">
-                        {getCartItemImage(item).src && (
+                      <div className="w-16 h-16 bg-muted/40 rounded-md overflow-hidden flex-shrink-0">
+                        {item.image && (
                           <img
-                            src={getCartItemImage(item).src}
-                            alt={getCartItemImage(item).alt}
-                            className="w-full h-full object-contain"
+                            src={item.image}
+                            alt={item.title}
+                            className="w-full h-full object-contain mix-blend-multiply"
                           />
                         )}
                       </div>

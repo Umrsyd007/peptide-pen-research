@@ -1,5 +1,4 @@
 import { useLocalPrice } from "@/lib/currency";
-import { getCartItemImage } from "@/lib/product-images";
 import { useMemo, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
@@ -314,12 +313,12 @@ function CheckoutPage() {
             <ul className="space-y-3 pb-2">
               {items.map((i) => (
                 <li key={i.variantId} className="flex gap-3 text-sm">
-                  <div className="h-12 w-12 rounded bg-white overflow-hidden flex-shrink-0">
-                    {getCartItemImage(i).src && (
+                  <div className="h-12 w-12 rounded bg-muted/40 overflow-hidden flex-shrink-0">
+                    {i.image && (
                       <img
-                        src={getCartItemImage(i).src}
-                        alt={getCartItemImage(i).alt}
-                        className="h-full w-full object-contain"
+                        src={i.image}
+                        alt={i.title}
+                        className="h-full w-full object-contain mix-blend-multiply"
                       />
                     )}
                   </div>

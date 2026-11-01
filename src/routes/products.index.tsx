@@ -3,7 +3,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { PRODUCTS, type Product, type Tag } from "@/lib/products";
 import { getDefaultVariant } from "@/lib/product-variants";
-import { getProductCover } from "@/lib/product-images";
 import { CartDrawer } from "@/components/cart-drawer";
 
 const BRAND = "PeptidePen";
@@ -94,14 +93,14 @@ function ProductCard({ product }: { product: Product }) {
         to="/products/$productId"
         params={{ productId: product.id }}
         aria-label={`View details for ${product.name}`}
-        className="relative aspect-square bg-white flex items-center justify-center border-b border-border focus:outline-none focus-visible:ring-2 focus-visible:ring-ring overflow-hidden"
+        className="relative aspect-square bg-muted/50 flex items-center justify-center border-b border-border focus:outline-none focus-visible:ring-2 focus-visible:ring-ring overflow-hidden"
       >
         <TagBadge tag={product.tag} />
         <img
           src={imageSrc}
-          alt={getProductCover(product).alt}
+          alt={product.name}
           loading="lazy"
-          className="w-full h-full object-contain"
+          className="w-full h-full object-contain p-6 mix-blend-multiply group-hover:scale-105 transition-transform duration-500"
         />
         <span className="absolute bottom-3 right-3 inline-flex items-center gap-1 rounded-full bg-background/90 backdrop-blur px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-foreground border border-border opacity-0 group-hover:opacity-100 transition-opacity">
           View ↗

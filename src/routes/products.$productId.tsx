@@ -2,7 +2,9 @@ import { Price } from "@/components/price";
 import { useEffect, useRef, useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { getProduct, PRODUCTS } from "@/lib/products";
+import { getProduct, PRODUCTS, type Product } from "@/lib/products";
+import { absoluteProductImageUrl, getProductCover, getProductGallery } from "@/lib/product-images";
+import { ProductGallery } from "@/components/product-gallery";
 import { getDescription } from "@/lib/product-descriptions";
 import { getVariants } from "@/lib/product-variants";
 import { isRestricted } from "@/lib/products";
@@ -26,6 +28,7 @@ export const Route = createFileRoute("/products/$productId")({
       ? `${p.name}: ${desc.tagline} Pre-mixed pen, batch-matched COA. Research use only.`
       : "Research peptide pen with batch-matched COA. For research use only.";
     const url = `https://getpeptidepen.com/products/${params.productId}`;
+    const imageUrl = p ? absoluteProductImageUrl(getProductCover(p).src) : undefined;
     return {
       meta: [
         { title },
@@ -35,7 +38,7 @@ export const Route = createFileRoute("/products/$productId")({
         { property: "og:type", content: "product" },
         { property: "og:url", content: url },
         { name: "twitter:card", content: "summary_large_image" },
-        ...(p?.image?.startsWith("https://") ? [{ property: "og:image", content: p.image }, { name: "twitter:image", content: p.image }] : []),
+        ...(imageUrl ? [{ property: "og:image", content: imageUrl }, { name: "twitter:image", content: imageUrl }] : []),
       ],
       links: [{ rel: "canonical", href: url }],
       scripts: p
@@ -48,7 +51,7 @@ export const Route = createFileRoute("/products/$productId")({
                 name: p.name,
                 description,
                 category: p.categories,
-                image: p.image?.startsWith("https://") ? [p.image] : undefined,
+                image: imageUrl ? [imageUrl] : undefined,
                 url,
                 brand: { "@type": "Brand", name: "PeptidePen" },
                 offers: {
@@ -142,10 +145,14 @@ function Header() {
 
 function ProductDetailPage() {
   const { product } = Route.useLoaderData();
+  return <ProductDetailContent key={product.id} product={product} />;
+}
+
+function ProductDetailContent({ product }: { product: Product }) {
   const desc = getDescription(product.id);
   const variants = getVariants(product.id);
   const defaultIdx = Math.max(0, variants.findIndex((v) => v.isDefault));
-  const [variantIdx, setVariantIdx] = useState(defaultIdx === -1 ? 0 : defaultIdx);
+  const [variantIdx, setVariantIdx] = useState(defaultIdx);
   const [qty, setQty] = useState(1);
   const selected = variants[variantIdx];
   const restricted = isRestricted(product.id);
@@ -157,7 +164,7 @@ function ProductDetailPage() {
   const displayPriceNum = selected?.priceNum ?? parseFloat(product.price.replace(/[^0-9.]/g, ""));
   const compareAt = selected?.oldPrice;
   const inStock = true;
-  const heroImage = product.image;
+  const gallery = getProductGallery(product, selected?.sku);
 
   const addItem = useCartStore((s) => s.addItem);
   const cartLoading = useCartStore((s) => s.isLoading);
@@ -182,7 +189,7 @@ function ProductDetailPage() {
       productId: product.id,
       title: product.name,
       variantTitle: selected.name,
-      image: product.image,
+      image: getProductCover(product, selected.sku).src,
       price: { amount: selected.priceNum.toFixed(2), currencyCode: "USD" },
       quantity: qty,
     });
@@ -229,26 +236,8 @@ function ProductDetailPage() {
         <section aria-labelledby="product-heading" className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
           {/* Gallery */}
           <div className="lg:col-span-7 space-y-4">
-            <div className="relative aspect-square w-full rounded-2xl border border-border bg-gradient-to-br from-muted/60 via-muted/30 to-background overflow-hidden flex items-center justify-center">
-              <div className="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_30%_20%,hsl(var(--primary)/0.2),transparent_60%)]" aria-hidden />
-              <img
-                src={heroImage}
-                alt={`${product.name} research pen`}
-                className="relative w-full h-full object-contain p-8 sm:p-12 mix-blend-multiply"
-              />
-              {product.tag && (
-                <div className="absolute top-4 left-4">
-                  <Pill tone="accent">{product.tag}</Pill>
-                </div>
-              )}
-            </div>
-            <div className="grid grid-cols-4 gap-3">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="aspect-square rounded-xl border border-border bg-muted/40 overflow-hidden flex items-center justify-center hover:border-primary/40 transition-colors cursor-pointer">
-                  <img src={heroImage} alt="" aria-hidden="true" className="w-full h-full object-contain p-2 opacity-70 mix-blend-multiply" />
-                </div>
-              ))}
-            </div>
+            {product.tag && <Pill tone="accent">{product.tag}</Pill>}
+            <ProductGallery key={`${product.id}:${selected?.sku ?? ""}`} images={gallery} />
           </div>
 
           {/* Sticky buy box */}
@@ -638,8 +627,8 @@ function ProductDetailPage() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {related.map((r) => (
               <Link key={r.id} to="/products/$productId" params={{ productId: r.id }} className="block space-y-3 group rounded-2xl border border-border bg-card p-4 hover:border-primary/40 hover:shadow-sm transition">
-                <div className="aspect-square rounded-xl bg-muted/50 overflow-hidden flex items-center justify-center">
-                  <img src={r.image} alt={r.name} loading="lazy" className="w-full h-full object-contain p-3 mix-blend-multiply group-hover:scale-105 transition-transform" />
+                <div className="aspect-square rounded-xl bg-white overflow-hidden flex items-center justify-center">
+                  <img src={r.image} alt={getProductCover(r).alt} loading="lazy" className="w-full h-full object-contain" />
                 </div>
                 <div className="space-y-1">
                   <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{r.categories.split("•")[0]?.trim()}</p>

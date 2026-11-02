@@ -59,13 +59,13 @@ function AuthPage() {
     };
   }, [returnTo]);
 
-  async function handleGoogle() {
+  async function handleProvider(provider: "google" | "apple") {
     setLoading(true);
-    const result = await lovable.auth.signInWithOAuth("google", {
+    const result = await lovable.auth.signInWithOAuth(provider, {
       redirect_uri: `${window.location.origin}/auth?next=${encodeURIComponent(returnTo)}`,
     });
     if (result.error) {
-      toast.error(result.error.message || "Google sign-in failed");
+      toast.error(result.error.message || `${provider === "apple" ? "Apple" : "Google"} sign-in failed`);
       setLoading(false);
       return;
     }
@@ -73,6 +73,8 @@ function AuthPage() {
     // Popup path: session set — go to next
     window.location.replace(returnTo);
   }
+
+  const handleGoogle = () => handleProvider("google");
 
   async function handleEmailSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -118,15 +120,26 @@ function AuthPage() {
           </p>
         </div>
 
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full"
-          onClick={handleGoogle}
-          disabled={loading}
-        >
-          Continue with Google
-        </Button>
+        <div className="grid gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            onClick={handleGoogle}
+            disabled={loading}
+          >
+            Continue with Google
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            onClick={() => handleProvider("apple")}
+            disabled={loading}
+          >
+            Continue with Apple
+          </Button>
+        </div>
 
         <div className="my-6 flex items-center gap-3 text-xs text-muted-foreground">
           <span className="h-px flex-1 bg-border" />

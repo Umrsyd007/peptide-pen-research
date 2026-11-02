@@ -3,3 +3,8 @@
 - [x] Return Stripe-confirmed paid totals and avoid duplicate purchase reports; retain checkout and current consent choices.
 - [x] Test consent controls in the browser and purchase rules with automated tests and a simulated event.
 - [ ] Verify a real test payment, published tracking and Google receipt. Blockers: no test payment performed, not published, and Google Ads account not connected; browser collection requests failed in the sandbox.
+
+# Inquiry notifications
+- [ ] Repair inquiry emails using shared suppression and unsubscribe handling.
+- [ ] Test and publish the fix.
+- [ ] Re-trigger each missed inquiry once and verify send records.

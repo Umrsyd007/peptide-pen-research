@@ -1,4 +1,5 @@
 # Purchase tracking
+- [x] Enable limited pre-choice cookieless Google measurement; 12 tests pass and browser checks confirm denied storage, no Google cookies, refusal blocking and acceptance updates. Google receipt remains unverified because collection requests failed in the sandbox; unrelated Clarity script also reports an error.
 - [x] Install the confirmed Google tag and supplied purchase event with regional consent and privacy disclosure.
 - [x] Return Stripe-confirmed paid totals and avoid duplicate purchase reports; retain checkout and current consent choices.
 - [x] Test consent controls in the browser and purchase rules with automated tests and a simulated event.

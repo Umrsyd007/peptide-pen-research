@@ -59,13 +59,13 @@ function AuthPage() {
     };
   }, [returnTo]);
 
-  async function handleGoogle() {
+  async function handleProvider(provider: "google" | "apple") {
     setLoading(true);
-    const result = await lovable.auth.signInWithOAuth("google", {
+    const result = await lovable.auth.signInWithOAuth(provider, {
       redirect_uri: `${window.location.origin}/auth?next=${encodeURIComponent(returnTo)}`,
     });
     if (result.error) {
-      toast.error(result.error.message || "Google sign-in failed");
+      toast.error(result.error.message || `${provider === "apple" ? "Apple" : "Google"} sign-in failed`);
       setLoading(false);
       return;
     }
@@ -73,6 +73,8 @@ function AuthPage() {
     // Popup path: session set — go to next
     window.location.replace(returnTo);
   }
+
+  const handleGoogle = () => handleProvider("google");
 
   async function handleEmailSubmit(e: React.FormEvent) {
     e.preventDefault();

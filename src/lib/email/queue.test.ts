@@ -36,7 +36,7 @@ describe('inquiry notifications', () => {
   })
 
   it('records failures', async () => {
-    send.mockRejectedValue(new Error('boom'))
+    send.mockImplementation(async () => { throw new Error('boom') })
     const { client, rows } = fakeClient()
     await expect(notifyProductQuestion(client, q)).rejects.toThrow()
     expect(rows[0]?.status).toBe('failed')

@@ -3,6 +3,7 @@ import { measurementPermission, permission } from "./tracking-consent";
 export const GOOGLE_ADS_ID = "AW-18256993745";
 export const GOOGLE_PURCHASE_EVENT = "conversion_event_purchase_1";
 const GA4_ID = "G-1LLX7CCVZL";
+declare global { interface Window { "ga-disable-G-1LLX7CCVZL"?: boolean } }
 let installed = false;
 let analyticsConfigured = false;
 let adsConfigured = false;
@@ -12,7 +13,7 @@ export function syncGoogleTracking() {
   const advertising = permission("advertising");
   const measureAnalytics = measurementPermission("analytics");
   const measureAdvertising = measurementPermission("advertising");
-  (window as Window & Record<string, unknown>)[`ga-disable-${GA4_ID}`] = !measureAnalytics;
+  window["ga-disable-G-1LLX7CCVZL"] = !measureAnalytics;
   window.dataLayer ??= [];
   window.gtag ??= function (..._args: unknown[]) {
     // Google requires Arguments objects rather than arrays in its queue.

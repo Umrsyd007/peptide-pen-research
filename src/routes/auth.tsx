@@ -120,15 +120,26 @@ function AuthPage() {
           </p>
         </div>
 
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full"
-          onClick={handleGoogle}
-          disabled={loading}
-        >
-          Continue with Google
-        </Button>
+        <div className="grid gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            onClick={handleGoogle}
+            disabled={loading}
+          >
+            Continue with Google
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            onClick={() => handleProvider("apple")}
+            disabled={loading}
+          >
+            Continue with Apple
+          </Button>
+        </div>
 
         <div className="my-6 flex items-center gap-3 text-xs text-muted-foreground">
           <span className="h-px flex-1 bg-border" />

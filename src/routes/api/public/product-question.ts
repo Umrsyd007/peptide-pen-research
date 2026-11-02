@@ -1,13 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { createClient } from '@supabase/supabase-js'
-import * as React from 'react'
-import { render } from '@react-email/components'
 import { z } from 'zod'
-import { TEMPLATES } from '@/lib/email-templates/registry'
-
-const SITE_NAME = 'PeptidePen'
-const SENDER_DOMAIN = 'notify.getpeptidepen.com'
-const FROM_DOMAIN = 'getpeptidepen.com'
 
 const BodySchema = z.object({
   productId: z.string().max(200).optional().nullable(),
@@ -69,60 +62,8 @@ export const Route = createFileRoute('/api/public/product-question')({
 
         // 2. Fire-and-log email notification. Never fail the request on email issues.
         try {
-          const template = TEMPLATES['product-question']
-          if (!template) throw new Error('template_missing')
-
-          const recipient = template.to || 'hello@getpeptidepen.com'
-          const templateData = {
-            productName: data.productName ?? 'Unknown product',
-            productId: data.productId ?? '',
-            name: data.name,
-            email: data.email,
-            message: data.message,
-          }
-
-          const element = React.createElement(template.component, templateData)
-          const html = await render(element)
-          const plainText = await render(element, { plainText: true })
-          const subject =
-            typeof template.subject === 'function' ? template.subject(templateData) : template.subject
-
-          const messageId = `product-question-${inserted.id}`
-
-          await supabase.from('email_send_log').insert({
-            message_id: messageId,
-            template_name: 'product-question',
-            recipient_email: recipient,
-            status: 'pending',
-          })
-
-          const { error: enqueueError } = await supabase.rpc('enqueue_email', {
-            queue_name: 'transactional_emails',
-            payload: {
-              message_id: messageId,
-              to: recipient,
-              from: `${SITE_NAME} <noreply@${FROM_DOMAIN}>`,
-              sender_domain: SENDER_DOMAIN,
-              subject,
-              html,
-              text: plainText,
-              purpose: 'transactional',
-              label: 'product-question',
-              idempotency_key: messageId,
-              queued_at: new Date().toISOString(),
-            },
-          })
-
-          if (enqueueError) {
-            console.error('product-question enqueue failed', { error: enqueueError })
-            await supabase.from('email_send_log').insert({
-              message_id: messageId,
-              template_name: 'product-question',
-              recipient_email: recipient,
-              status: 'failed',
-              error_message: 'enqueue failed',
-            })
-          }
+          const { notifyProductQuestion } = await import('@/lib/email/product-question.server')
+          await notifyProductQuestion(supabase, { id: inserted.id, ...data })
         } catch (err) {
           console.error('product-question email dispatch error', { err })
         }

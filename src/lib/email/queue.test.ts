@@ -36,7 +36,7 @@ describe('inquiry notifications', () => {
   })
 
   it('records failures', async () => {
-    send.mockImplementation(() => Promise.reject(Object.assign(new Error('boom'), { handled: true })))
+    send.mockImplementation(async () => { throw 'boom' })
     const { client, rows } = fakeClient()
     const e = await notifyProductQuestion(client, q).catch((x: Error) => x)
     expect((e as Error).message).toBe('Inquiry notification could not be sent')

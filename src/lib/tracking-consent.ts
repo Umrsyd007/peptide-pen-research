@@ -1,5 +1,5 @@
 export const CONSENT_VERSION = "2026-10-29-v1";
-export const CONSENT_NOTICE = "Google Analytics measures visits and shopping activity. Google Ads receives page visits, advertising click identifiers, and paid purchase references, amounts and currencies for advertising measurement and optimization. No customer matching is enabled. You can reject optional tracking or change your choice in Cookie settings.";
+export const CONSENT_NOTICE = "Before you decide, Google Analytics and Google Ads receive limited cookieless visit, shopping and paid-purchase signals for measurement and modeled reporting. Optional cookies and advertising click identifiers require permission where applicable. No customer matching is enabled. Reject optional tracking to stop further measurement, or change your choice in Cookie settings.";
 export const CONSENT_KEY = "peptidepen-consent";
 const REQUIRED = new Set("AT BE BG HR CY CZ DK EE FI FR DE GR HU IS IE IT LV LI LT LU MT NL NO PL PT RO SK SI ES SE GB CH".split(" "));
 export interface ConsentRecord {
@@ -34,7 +34,14 @@ export function permission(kind: "analytics" | "advertising") {
   return choice ? choice[kind] : !requiresConsent(region);
 }
 export function consentContext() {
-  return { region, choice: readConsent() ?? null, advertising: permission("advertising") };
+  return { region, choice: readConsent() ?? null, advertising: permission("advertising"), measurement: measurementPermission("advertising") };
+}
+// The builder explicitly opted into limited pre-choice cookieless measurement.
+// A refusal is not permission to send a stripped-down event.
+export function measurementPermission(kind: "analytics" | "advertising") {
+  if (typeof window === "undefined" || navigator.globalPrivacyControl === true) return false;
+  const choice = readConsent();
+  return choice ? choice[kind] : true;
 }
 export function saveConsent(analytics: boolean, advertising: boolean) {
   const previous = readConsent();

@@ -1,4 +1,5 @@
 # Purchase tracking
+- [ ] Enable and test limited pre-choice cookieless Google measurement while retaining refusals, opt-outs and payment-time eligibility.
 - [x] Install the confirmed Google tag and supplied purchase event with regional consent and privacy disclosure.
 - [x] Return Stripe-confirmed paid totals and avoid duplicate purchase reports; retain checkout and current consent choices.
 - [x] Test consent controls in the browser and purchase rules with automated tests and a simulated event.

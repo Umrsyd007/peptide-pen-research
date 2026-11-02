@@ -73,6 +73,9 @@ export const createOrder = createServerFn({ method: "POST" })
       .insert(rows);
     if (itemsErr) throw new Error(itemsErr.message);
 
+    const { notifyOrderPending } = await import("@/lib/email/order-paid.server");
+    await notifyOrderPending(supabaseAdmin, order.id);
+
     return {
       id: order.id as string,
       total: Number(order.total),

@@ -12,7 +12,7 @@ export function syncGoogleTracking() {
   const advertising = permission("advertising");
   const measureAnalytics = measurementPermission("analytics");
   const measureAdvertising = measurementPermission("advertising");
-  window[`ga-disable-${GA4_ID}` as keyof Window] = !measureAnalytics as never;
+  (window as Window & Record<string, unknown>)[`ga-disable-${GA4_ID}`] = !measureAnalytics;
   window.dataLayer ??= [];
   window.gtag ??= function (..._args: unknown[]) {
     // Google requires Arguments objects rather than arrays in its queue.
@@ -47,8 +47,13 @@ export function syncGoogleTracking() {
 export function sendAnalytics(name: string, params: Record<string, unknown>) {
   if (typeof window === "undefined" || !measurementPermission("analytics")) return;
   // No product-level detail in limited pre-choice measurement.
-  const { items, ...limited } = params;
+  const limited = { ...params };
+  delete limited.items;
   window.gtag?.("event", name, { ...(permission("analytics") ? params : limited), send_to: GA4_ID });
+}
+export function sendAdvertisingPageView(params: { page_path: string; page_location: string }) {
+  if (typeof window === "undefined" || !measurementPermission("advertising")) return;
+  window.gtag?.("event", "page_view", { ...params, send_to: GOOGLE_ADS_ID });
 }
 export function sendPaidPurchase(args: { transaction_id: string; value: number; currency: string; permittedAtPayment: boolean }) {
   if (typeof window === "undefined" || !args.permittedAtPayment || !measurementPermission("advertising") || typeof window.gtag !== "function") return false;

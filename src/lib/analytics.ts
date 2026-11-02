@@ -1,5 +1,5 @@
 import { permission } from "./tracking-consent";
-import { sendAnalytics } from "./google-tracking";
+import { sendAdvertisingPageView, sendAnalytics } from "./google-tracking";
 // Analytics helpers. Safe to call from anywhere; no-op without permission.
 declare global {
   interface Window {
@@ -39,6 +39,7 @@ export function trackPageView(args: { path: string; title?: string }) {
     page_title: args.title ?? (typeof document !== "undefined" ? document.title : ""),
   });
   gtagEvent("page_view", { page_path: args.path.split("?")[0], page_location: typeof window !== "undefined" ? window.location.origin + window.location.pathname : args.path, page_title: args.title ?? (typeof document !== "undefined" ? document.title : "") });
+  sendAdvertisingPageView({ page_path: args.path.split("?")[0], page_location: typeof window !== "undefined" ? window.location.origin + window.location.pathname : args.path });
 }
 
 export function trackViewItem(item: AnalyticsItem) {

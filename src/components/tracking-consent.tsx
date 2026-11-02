@@ -3,7 +3,6 @@ import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { CONSENT_NOTICE, readConsent, requiresConsent, resolveRegion, saveConsent } from "@/lib/tracking-consent";
 import { syncGoogleTracking } from "@/lib/google-tracking";
-import { syncClarity } from "@/lib/clarity-tracking";
 import { trackPageView } from "@/lib/analytics";
 
 export function TrackingConsent() {
@@ -12,7 +11,7 @@ export function TrackingConsent() {
   const [advertising, setAdvertising] = useState(false);
   useEffect(() => {
     let active = true;
-    const sync = () => { syncGoogleTracking(); syncClarity(); };
+    const sync = () => { syncGoogleTracking(); };
     const storage = (event: StorageEvent) => { if (event.key?.startsWith("peptidepen-consent")) sync(); };
     window.addEventListener("tracking-consent-change", sync);
     window.addEventListener("storage", storage);

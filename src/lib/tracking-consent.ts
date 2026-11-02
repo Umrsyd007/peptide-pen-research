@@ -1,5 +1,5 @@
-export const CONSENT_VERSION = "2026-11-02-v2";
-export const CONSENT_NOTICE = "Google Analytics measures visits and shopping activity. Microsoft Clarity (analytics) records how pages are used, such as clicks and scrolling, with form entries masked. Google Ads receives page visits, advertising click identifiers, and paid purchase references, amounts and currencies for advertising measurement and optimization. No customer matching is enabled. You can reject optional tracking or change your choice in Cookie settings.";
+export const CONSENT_VERSION = "2026-10-29-v1";
+export const CONSENT_NOTICE = "Google Analytics measures visits and shopping activity. Google Ads receives page visits, advertising click identifiers, and paid purchase references, amounts and currencies for advertising measurement and optimization. No customer matching is enabled. You can reject optional tracking or change your choice in Cookie settings.";
 export const CONSENT_KEY = "peptidepen-consent";
 const REQUIRED = new Set("AT BE BG HR CY CZ DK EE FI FR DE GR HU IS IE IT LV LI LT LU MT NL NO PL PT RO SK SI ES SE GB CH".split(" "));
 export interface ConsentRecord {

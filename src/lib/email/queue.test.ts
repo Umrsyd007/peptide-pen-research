@@ -56,4 +56,14 @@ describe('inquiry notifications', () => {
       email: 'check@example.com', message: 'Check' })
     expect(rpc).not.toHaveBeenCalled()
   })
+
+  it('uses a fresh message history for a repaired historical inquiry', async () => {
+    const { client, rpc } = fakeClient()
+    await notifyProductQuestion(client, { id: 'inquiry-123', name: 'Check',
+      email: 'check@example.com', message: 'Check' }, true)
+    expect(rpc).toHaveBeenCalledWith('enqueue_email', expect.objectContaining({
+      payload: expect.objectContaining({ message_id: 'product-question-inquiry-123-recovery-v1',
+        idempotency_key: 'product-question-inquiry-123-recovery-v1' }),
+    }))
+  })
 })

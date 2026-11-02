@@ -8,8 +8,10 @@ export async function notifyProductQuestion(supabase: SupabaseClient, question: 
   name: string
   email: string
   message: string
-}): Promise<Response> {
-  const messageId = `product-question-${question.id}`
+}, recovery = false): Promise<Response> {
+  // A repaired retry gets its own history so exhausted attempts on the
+  // original message cannot immediately dead-letter the corrected payload.
+  const messageId = `product-question-${question.id}${recovery ? '-recovery-v1' : ''}`
   const { data: latest, error } = await supabase.from('email_send_log')
     .select('status').eq('message_id', messageId)
     .order('created_at', { ascending: false }).limit(1).maybeSingle()

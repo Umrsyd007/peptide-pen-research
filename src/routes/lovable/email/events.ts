@@ -1,6 +1,39 @@
 import { createEmailWebhookHandler } from '@lovable.dev/email-js'
 import { createFileRoute } from '@tanstack/react-router'
 
+type Reason = 'bounce' | 'complaint' | 'unsubscribe'
+const STATUS: Record<Reason, string> = { bounce: 'bounced', complaint: 'complained', unsubscribe: 'suppressed' }
+const MESSAGE: Record<Reason, string> = {
+  bounce: 'Permanent bounce — email address is invalid or rejected',
+  complaint: 'Spam complaint — recipient marked email as spam',
+  unsubscribe: 'Recipient unsubscribed',
+}
+
+// Notification-only record keeping; Lovable enforces suppression at send time.
+async function record(reason: Reason, recipient: string, messageId: string | null | undefined, eventId: string) {
+  const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
+  const email = recipient.toLowerCase()
+  const { error: suppressError } = await supabaseAdmin
+    .from('suppressed_emails')
+    .upsert({ email, reason, metadata: null }, { onConflict: 'email' })
+  if (suppressError) {
+    console.error('Failed to record suppression', { code: suppressError.code, message: suppressError.message, event_id: eventId })
+    throw new Error('suppression write failed')
+  }
+  const { error: logError } = await supabaseAdmin.from('email_send_log').insert({
+    message_id: messageId ?? null,
+    template_name: 'system',
+    recipient_email: email,
+    status: STATUS[reason],
+    error_message: MESSAGE[reason],
+    metadata: null,
+  })
+  if (logError) {
+    console.error('Failed to record email event', { code: logError.code, message: logError.message, event_id: eventId })
+    throw new Error('log write failed')
+  }
+}
+
 export const Route = createFileRoute("/lovable/email/events")({
   server: {
     handlers: {
@@ -13,17 +46,9 @@ export const Route = createFileRoute("/lovable/email/events")({
         const handler = createEmailWebhookHandler({
           apiKey,
           on: {
-            // Placeholder handlers — replace each log with the feature's reaction.
-            // Throw on failure so the delivery is retried.
-            'email.bounced': async (event) => {
-              console.log('Email bounced', { event_id: event.event_id })
-            },
-            'email.complaint': async (event) => {
-              console.log('Email complaint', { event_id: event.event_id })
-            },
-            'email.unsubscribed': async (event) => {
-              console.log('Email unsubscribed', { event_id: event.event_id })
-            },
+            'email.bounced': (event) => record('bounce', event.data.recipient, event.data.message_id, event.event_id),
+            'email.complaint': (event) => record('complaint', event.data.recipient, event.data.message_id, event.event_id),
+            'email.unsubscribed': (event) => record('unsubscribe', event.data.recipient, event.data.message_id, event.event_id),
           },
         })
         return handler(request)

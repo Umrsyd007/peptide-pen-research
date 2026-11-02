@@ -2,7 +2,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { SupabaseClient } from '@supabase/supabase-js'
 
 const send = vi.fn()
-vi.mock('@/lib/email-templates/send-email', () => ({ sendTemplateEmail: (...a: unknown[]) => send(...a) }))
+let fail = false
+vi.mock('@/lib/email-templates/send-email', () => ({ sendTemplateEmail: async (...a: unknown[]) => { if (fail) throw new Error('boom'); return send(...a) } }))
 import { notifyProductQuestion } from './product-question.server'
 
 function fakeClient(latest?: string) {
@@ -17,7 +18,7 @@ function fakeClient(latest?: string) {
 const q = { id: 'inquiry-123', name: 'Check', email: 'check@example.com', message: 'Check' }
 
 describe('inquiry notifications', () => {
-  beforeEach(() => send.mockReset())
+  beforeEach(() => { send.mockReset(); fail = false })
 
   it('sends to hello@getpeptidepen.com and records sent', async () => {
     send.mockResolvedValue({ sent: true })
@@ -36,7 +37,7 @@ describe('inquiry notifications', () => {
   })
 
   it('records failures', async () => {
-    send.mockImplementation(async () => { throw 'boom' })
+    fail = true
     const { client, rows } = fakeClient()
     const e = await notifyProductQuestion(client, q).catch((x: Error) => x)
     expect((e as Error).message).toBe('Inquiry notification could not be sent')

@@ -1,4 +1,4 @@
 - Catalog, prices, restricted list and cart are local (src/lib/products.ts, product-variants.ts, stores/cart.ts); no Shopify. Why: user wants manual control and checkout runs on our own orders + Stripe.
 - Google measurement is initialized only by google-tracking behind shared regional consent; do not add parallel GTM bootstraps. Why: prevent duplicate reporting and bypassed choices.
 - Purchase measurement uses Stripe-confirmed paid amounts and opaque references, with confirmation-time and current advertising choices. Why: unpaid sessions and later consent must not create purchases.
-- Inquiry actions and the authenticated email route share a server-only queue helper with suppression checks, stored unsubscribe tokens and event-based identifiers. Why: every submission path must use the same safe email preparation.
+- Inquiry submission paths share one server-only notifier that sends through the managed email helper with event-based idempotency keys and records sent/suppressed/failed status for dedupe. Why: every path must send the same way and never double-notify.

@@ -15,134 +15,134 @@ export interface ProductVariant {
 
 export const PRODUCT_VARIANTS: Record<string, ProductVariant[]> = {
   "04317a6e": [
-    {"name": "1500mg/3ml", "price": "$87.00", "priceNum": 87.0, "sku": "nmn-1500mg-300ml", "isDefault": true, "dailyDosage": "Dose: 40 mg/day, divided into 2 doses. Units: 4 units morning/4 units evening.", "courseDetails": "40 days. Repeat after 3-6 months.", "pensRequired": "1 pen for complete course", "penLastsDays": 38},
+    {"name": "1500mg/3ml", "price": "$174.00", "priceNum": 174.0, "sku": "nmn-1500mg-300ml", "isDefault": true, "dailyDosage": "Dose: 40 mg/day, divided into 2 doses. Units: 4 units morning/4 units evening.", "courseDetails": "40 days. Repeat after 3-6 months.", "pensRequired": "1 pen for complete course", "penLastsDays": 38},
   ],
   "080bb4c4": [
-    {"name": "500mg", "price": "$219.94", "priceNum": 219.94, "sku": "nad-500mg", "isDefault": true, "dailyDosage": "Dose: 2 \u00d7 40mg every other day. Units: 2 x 24 units every other day.", "courseDetails": "Every other day. Duration is 30 days followed by 15-20 days rest.", "pensRequired": "3 pens for complete course", "penLastsDays": 12},
-    {"name": "1200mg", "price": "$282.58", "priceNum": 282.58, "sku": "nad-1200mg", "isDefault": false, "dailyDosage": "Dose: 2 \u00d7 40 mg every other day. Units: 2 \u00d7 10 units every other day.", "courseDetails": "Every other day. Duration is 30 days followed by 15-20 days rest.", "pensRequired": "1 pen for a complete 30-day course", "penLastsDays": 30},
+    {"name": "500mg", "price": "$439.88", "priceNum": 439.88, "sku": "nad-500mg", "isDefault": true, "dailyDosage": "Dose: 2 \u00d7 40mg every other day. Units: 2 x 24 units every other day.", "courseDetails": "Every other day. Duration is 30 days followed by 15-20 days rest.", "pensRequired": "3 pens for complete course", "penLastsDays": 12},
+    {"name": "1200mg", "price": "$565.16", "priceNum": 565.16, "sku": "nad-1200mg", "isDefault": false, "dailyDosage": "Dose: 2 \u00d7 40 mg every other day. Units: 2 \u00d7 10 units every other day.", "courseDetails": "Every other day. Duration is 30 days followed by 15-20 days rest.", "pensRequired": "1 pen for a complete 30-day course", "penLastsDays": 30},
   ],
   "08f6ee52": [
-    {"name": "20mg", "price": "$99.17", "priceNum": 99.17, "sku": "retatrutide-6mg", "isDefault": true, "dailyDosage": "Dose: 2.5 mg/week, which may be increased to 6mg or 8mg/week. Units: 40 units/week.", "courseDetails": "Once per week. From 6 months to as long as needed.", "pensRequired": "3 pens for complete course", "penLastsDays": 60},
-    {"name": "60mg", "price": "$208.58", "priceNum": 208.58, "sku": "retatrutide-12", "isDefault": false, "dailyDosage": "Dose: 2 mg/week, which may be increased to 6 mg or 8 mg/week. Units: 20 units/week.", "courseDetails": "Once per week. From 6 months to as long as needed.", "pensRequired": "1 pens for complete course", "penLastsDays": 180},
+    {"name": "20mg", "price": "$198.34", "priceNum": 198.34, "sku": "retatrutide-6mg", "isDefault": true, "dailyDosage": "Dose: 2.5 mg/week, which may be increased to 6mg or 8mg/week. Units: 40 units/week.", "courseDetails": "Once per week. From 6 months to as long as needed.", "pensRequired": "3 pens for complete course", "penLastsDays": 60},
+    {"name": "60mg", "price": "$417.16", "priceNum": 417.16, "sku": "retatrutide-12", "isDefault": false, "dailyDosage": "Dose: 2 mg/week, which may be increased to 6 mg or 8 mg/week. Units: 20 units/week.", "courseDetails": "Once per week. From 6 months to as long as needed.", "pensRequired": "1 pens for complete course", "penLastsDays": 180},
   ],
   "1691332d": [
-    {"name": "20mg", "price": "$59.86", "priceNum": 59.86, "sku": "epitalon-20mg", "isDefault": true, "dailyDosage": "Dose: 3 mg/day may be increased to 5mg or 10mg/day. Units: 30 units/day, may be increased to 50units or 100units/day.", "courseDetails": "15-20 days followed by 15 days rest. Repeat 2-3 times per year (every 4-6 months).", "pensRequired": "6 pens for complete course", "penLastsDays": 6},
+    {"name": "20mg", "price": "$119.72", "priceNum": 119.72, "sku": "epitalon-20mg", "isDefault": true, "dailyDosage": "Dose: 3 mg/day may be increased to 5mg or 10mg/day. Units: 30 units/day, may be increased to 50units or 100units/day.", "courseDetails": "15-20 days followed by 15 days rest. Repeat 2-3 times per year (every 4-6 months).", "pensRequired": "6 pens for complete course", "penLastsDays": 6},
   ],
   "1b0959b6": [
-    {"name": "5mg", "price": "$104.40", "priceNum": 104.4, "sku": "tirzepatide-5mg", "isDefault": true, "dailyDosage": "Dose: 2,5 mg (can be increased up to 6 mg)/week. Units: 50 units/week.", "courseDetails": "Once per week. From 6 months to as long as needed.", "pensRequired": "12 pens for complete course", "penLastsDays": 14},
-    {"name": "10mg", "price": "$209.50", "priceNum": 209.5, "sku": "tirzepatide-10mg", "isDefault": false, "dailyDosage": "Dose: 2,5 mg (can be increased up to 6mg)/week. Units: 25 units/week.", "courseDetails": "Once per week. From 6 months to as long as needed.", "pensRequired": "6 pens for complete course", "penLastsDays": 28},
-    {"name": "15mg", "price": "$313.90", "priceNum": 313.9, "sku": "tirzepatide-15mg", "isDefault": false, "dailyDosage": "Dose: 2,5 mg (can be increased upto 6mg)/week. Units: 25 units/week.", "courseDetails": "Once per week. From 6 months to as long as needed.", "pensRequired": "4 pens for complete course", "penLastsDays": 42},
+    {"name": "5mg", "price": "$208.80", "priceNum": 208.8, "sku": "tirzepatide-5mg", "isDefault": true, "dailyDosage": "Dose: 2,5 mg (can be increased up to 6 mg)/week. Units: 50 units/week.", "courseDetails": "Once per week. From 6 months to as long as needed.", "pensRequired": "12 pens for complete course", "penLastsDays": 14},
+    {"name": "10mg", "price": "$419.00", "priceNum": 419.0, "sku": "tirzepatide-10mg", "isDefault": false, "dailyDosage": "Dose: 2,5 mg (can be increased up to 6mg)/week. Units: 25 units/week.", "courseDetails": "Once per week. From 6 months to as long as needed.", "pensRequired": "6 pens for complete course", "penLastsDays": 28},
+    {"name": "15mg", "price": "$627.80", "priceNum": 627.8, "sku": "tirzepatide-15mg", "isDefault": false, "dailyDosage": "Dose: 2,5 mg (can be increased upto 6mg)/week. Units: 25 units/week.", "courseDetails": "Once per week. From 6 months to as long as needed.", "pensRequired": "4 pens for complete course", "penLastsDays": 42},
   ],
   "21059df6": [
-    {"name": "200mg/3ml", "price": "$89.78", "priceNum": 89.78, "sku": "curcumin-200mg-3ml", "isDefault": true, "dailyDosage": "Dose: 13,33 mg/day. Units: 20 units/day.", "courseDetails": "15 days followed by 15 days rest. Repeat 2-3 cyles, then 3-6 months rest.", "pensRequired": "3 pens for complete course", "penLastsDays": 30},
+    {"name": "200mg/3ml", "price": "$179.56", "priceNum": 179.56, "sku": "curcumin-200mg-3ml", "isDefault": true, "dailyDosage": "Dose: 13,33 mg/day. Units: 20 units/day.", "courseDetails": "15 days followed by 15 days rest. Repeat 2-3 cyles, then 3-6 months rest.", "pensRequired": "3 pens for complete course", "penLastsDays": 30},
   ],
   "322e88af": [
-    {"name": "5mg", "price": "$91.87", "priceNum": 91.87, "sku": "semaglutide-5mg", "isDefault": true, "dailyDosage": "Dose: 0,25mg/week, may be increased to 0,5mg or 1mg/week. Units: 10units/week may be increased to 20 or\u00a040units/week", "courseDetails": "Once per week. From 6 months to as long as needed.", "pensRequired": "2 pens for complete course", "penLastsDays": 140},
+    {"name": "5mg", "price": "$183.74", "priceNum": 183.74, "sku": "semaglutide-5mg", "isDefault": true, "dailyDosage": "Dose: 0,25mg/week, may be increased to 0,5mg or 1mg/week. Units: 10units/week may be increased to 20 or\u00a040units/week", "courseDetails": "Once per week. From 6 months to as long as needed.", "pensRequired": "2 pens for complete course", "penLastsDays": 140},
   ],
   "357579fd": [
-    {"name": "10mg", "price": "$58.46", "priceNum": 58.46, "sku": "pt141-10mg", "isDefault": true, "dailyDosage": "Dose: 400 \u03bcg - 700 \u03bcg/day effect from 1 to 6 hours. Units 8-12 units/day.", "courseDetails": "Max 2x/week, once every 72h as needed.", "pensRequired": "3 pens for complete course", "penLastsDays": 91},
+    {"name": "10mg", "price": "$116.92", "priceNum": 116.92, "sku": "pt141-10mg", "isDefault": true, "dailyDosage": "Dose: 400 \u03bcg - 700 \u03bcg/day effect from 1 to 6 hours. Units 8-12 units/day.", "courseDetails": "Max 2x/week, once every 72h as needed.", "pensRequired": "3 pens for complete course", "penLastsDays": 91},
   ],
   "3afd37de": [
-    {"name": "100mg", "price": "$64.73", "priceNum": 64.73, "sku": "ghk-cu-100mg", "isDefault": true, "dailyDosage": "Dose: 2,33 mg/day. Units: 7 units/day.", "courseDetails": "Max 15 days, followed by 15 days rest. 2-3 cycles per year.", "pensRequired": "1 pen for complete course", "penLastsDays": 72},
+    {"name": "100mg", "price": "$129.46", "priceNum": 129.46, "sku": "ghk-cu-100mg", "isDefault": true, "dailyDosage": "Dose: 2,33 mg/day. Units: 7 units/day.", "courseDetails": "Max 15 days, followed by 15 days rest. 2-3 cycles per year.", "pensRequired": "1 pen for complete course", "penLastsDays": 72},
   ],
   "46f6d800": [
-    {"name": "10mg", "price": "$52.90", "priceNum": 52.9, "sku": "melanotan-ii-10mg", "isDefault": true, "dailyDosage": "Dose: 250 \u03bcg to 500 \u03bcg 3 times/week. Units: 5-10 units 3 times/week.", "courseDetails": "Week 1-2: 3x8 units, week 3: 2x8 units, week 4: 1x8 units, week 5-6: as desired: maintain or pause based on tanning goal.", "pensRequired": "1 pen for complete course", "penLastsDays": 96},
+    {"name": "10mg", "price": "$105.80", "priceNum": 105.8, "sku": "melanotan-ii-10mg", "isDefault": true, "dailyDosage": "Dose: 250 \u03bcg to 500 \u03bcg 3 times/week. Units: 5-10 units 3 times/week.", "courseDetails": "Week 1-2: 3x8 units, week 3: 2x8 units, week 4: 1x8 units, week 5-6: as desired: maintain or pause based on tanning goal.", "pensRequired": "1 pen for complete course", "penLastsDays": 96},
   ],
   "474ae481": [
-    {"name": "5mg/2ml", "price": "$80.04", "priceNum": 80.04, "sku": "delta-sleep-inducing-peptide-5mg", "isDefault": true, "dailyDosage": "250\u2013450 mcg per day", "courseDetails": "Used (before bedtime) daily for 1\u20132 months Recommended rest period equal to the cycle duration (e.g., 4 weeks on, 4 weeks off) One pen lasts 15\u201320 days, depending on daily dose", "pensRequired": "2\u20134 pens per cycle, depending on dosage and cycle length", "penLastsDays": 20},
+    {"name": "5mg/2ml", "price": "$160.08", "priceNum": 160.08, "sku": "delta-sleep-inducing-peptide-5mg", "isDefault": true, "dailyDosage": "250\u2013450 mcg per day", "courseDetails": "Used (before bedtime) daily for 1\u20132 months Recommended rest period equal to the cycle duration (e.g., 4 weeks on, 4 weeks off) One pen lasts 15\u201320 days, depending on daily dose", "pensRequired": "2\u20134 pens per cycle, depending on dosage and cycle length", "penLastsDays": 20},
   ],
   "4a666b8b": [
-    {"name": "5000 UI", "price": "$36.89", "priceNum": 36.89, "sku": "hcg-choriomon-5000ul-5mg", "isDefault": true, "dailyDosage": "Dose: 1000 IU every other day up to 5000 IU/week. Units: 20 units every other day up to 100 units/week.", "courseDetails": "Every other day for 3 months. Repeat after 2-3 months rest.", "pensRequired": "9 pens for complete course", "penLastsDays": 11},
+    {"name": "5000 UI", "price": "$73.78", "priceNum": 73.78, "sku": "hcg-choriomon-5000ul-5mg", "isDefault": true, "dailyDosage": "Dose: 1000 IU every other day up to 5000 IU/week. Units: 20 units every other day up to 100 units/week.", "courseDetails": "Every other day for 3 months. Repeat after 2-3 months rest.", "pensRequired": "9 pens for complete course", "penLastsDays": 11},
   ],
   "5696aeb5": [
-    {"name": "2000 mg/30mcg", "price": "$132.24", "priceNum": 132.24, "sku": "glutathione-methylene-blue-3ml", "isDefault": true, "dailyDosage": "Dose: 200 mg/day. Units: 30 units/day.", "courseDetails": "20 days followed by 20 days rest. 3-4 cycles per year.", "pensRequired": "2 pens for complete course", "penLastsDays": 10},
+    {"name": "2000 mg/30mcg", "price": "$264.48", "priceNum": 264.48, "sku": "glutathione-methylene-blue-3ml", "isDefault": true, "dailyDosage": "Dose: 200 mg/day. Units: 30 units/day.", "courseDetails": "20 days followed by 20 days rest. 3-4 cycles per year.", "pensRequired": "2 pens for complete course", "penLastsDays": 10},
   ],
   "591b5bd3": [
-    {"name": "5mg/2ml", "price": "$66.12", "priceNum": 66.12, "sku": "kisspeptin-5mg-2ml", "isDefault": true, "dailyDosage": "200mcg daily in the morning on an empty stomach", "courseDetails": "Daily for 4\u20138 weeks", "pensRequired": "\u2022 4 weeks\u2192 2 pens  \u2022 8 weeks \u2192 3 pens", "penLastsDays": 25},
+    {"name": "5mg/2ml", "price": "$132.24", "priceNum": 132.24, "sku": "kisspeptin-5mg-2ml", "isDefault": true, "dailyDosage": "200mcg daily in the morning on an empty stomach", "courseDetails": "Daily for 4\u20138 weeks", "pensRequired": "\u2022 4 weeks\u2192 2 pens  \u2022 8 weeks \u2192 3 pens", "penLastsDays": 25},
   ],
   "6587dd72": [
-    {"name": "1mg", "price": "$84.91", "priceNum": 84.91, "sku": "igf-1lr3-1mg", "isDefault": true, "dailyDosage": "Dose: 100 \u03bcg/week 3 times/week. Units: 10 units, 3 times/week.", "courseDetails": "3 times per week upto 45 days. Repeat after 2-3 months rest.", "pensRequired": "2 pens for complete course", "penLastsDays": 26},
+    {"name": "1mg", "price": "$169.82", "priceNum": 169.82, "sku": "igf-1lr3-1mg", "isDefault": true, "dailyDosage": "Dose: 100 \u03bcg/week 3 times/week. Units: 10 units, 3 times/week.", "courseDetails": "3 times per week upto 45 days. Repeat after 2-3 months rest.", "pensRequired": "2 pens for complete course", "penLastsDays": 26},
   ],
   "65df5f32": [
-    {"name": "5mg", "price": "$58.46", "priceNum": 58.46, "sku": "cjc-1295-no-dac-5mg", "isDefault": true, "dailyDosage": "Dose: 300 \u03bcg/day, divided into 2 doses. Units: 6 units morning/6 units evening.", "courseDetails": "Daily for 2-4 months. Repeat after 1-2 months rest.", "pensRequired": "8 pens for complete course", "penLastsDays": 17},
+    {"name": "5mg", "price": "$116.92", "priceNum": 116.92, "sku": "cjc-1295-no-dac-5mg", "isDefault": true, "dailyDosage": "Dose: 300 \u03bcg/day, divided into 2 doses. Units: 6 units morning/6 units evening.", "courseDetails": "Daily for 2-4 months. Repeat after 1-2 months rest.", "pensRequired": "8 pens for complete course", "penLastsDays": 17},
   ],
   "68831782": [
-    {"name": "10mg/2ml", "price": "$134.33", "priceNum": 134.33, "sku": "ss-31-10mg-2ml", "isDefault": true, "dailyDosage": "2.5 mg daily", "courseDetails": "Daily for 2\u20134 weeks. Pause for 4 weeks.", "pensRequired": "\u2022 2 weeks = 4 pens  \u2022 4 weeks = 7 pens", "penLastsDays": 4},
+    {"name": "10mg/2ml", "price": "$268.66", "priceNum": 268.66, "sku": "ss-31-10mg-2ml", "isDefault": true, "dailyDosage": "2.5 mg daily", "courseDetails": "Daily for 2\u20134 weeks. Pause for 4 weeks.", "pensRequired": "\u2022 2 weeks = 4 pens  \u2022 4 weeks = 7 pens", "penLastsDays": 4},
   ],
   "6aa9fd75": [
-    {"name": "5mg", "price": "$74.47", "priceNum": 74.47, "sku": "sermorelin-5mg", "isDefault": true, "dailyDosage": "Dose: 200 \u03bcg to 500 \u03bcg once at the evening. Units: 8-20 units at the evening.", "courseDetails": "Daily, up to 4 months. Repeat after 2-3 months rest.", "pensRequired": "4 pens for complete course", "penLastsDays": 25},
+    {"name": "5mg", "price": "$148.94", "priceNum": 148.94, "sku": "sermorelin-5mg", "isDefault": true, "dailyDosage": "Dose: 200 \u03bcg to 500 \u03bcg once at the evening. Units: 8-20 units at the evening.", "courseDetails": "Daily, up to 4 months. Repeat after 2-3 months rest.", "pensRequired": "4 pens for complete course", "penLastsDays": 25},
   ],
   "72d3cbf2": [
-    {"name": "10mg", "price": "$75.86", "priceNum": 75.86, "sku": "selank-ac-nh2-10mg", "isDefault": true, "dailyDosage": "Dose: 250- 500 \u03bcg/day. Units: 5-10 units in the evening.", "courseDetails": "20 days. Typically 1-3 months, 1 month rest.", "pensRequired": "1 pen for complete course", "penLastsDays": 40},
+    {"name": "10mg", "price": "$151.72", "priceNum": 151.72, "sku": "selank-ac-nh2-10mg", "isDefault": true, "dailyDosage": "Dose: 250- 500 \u03bcg/day. Units: 5-10 units in the evening.", "courseDetails": "20 days. Typically 1-3 months, 1 month rest.", "pensRequired": "1 pen for complete course", "penLastsDays": 40},
   ],
   "7389ae0d": [
-    {"name": "2600mg/3ml", "price": "$177.48", "priceNum": 177.48, "sku": "vitality-complex-2600mg-3ml", "isDefault": true, "dailyDosage": "Dose: 0,2 ml/day. Units: 20 units/day.", "courseDetails": "15 days followed by 15 days rest. 2-4 cycles per year.", "pensRequired": "1 pen for complete course", "penLastsDays": 30},
+    {"name": "2600mg/3ml", "price": "$354.96", "priceNum": 354.96, "sku": "vitality-complex-2600mg-3ml", "isDefault": true, "dailyDosage": "Dose: 0,2 ml/day. Units: 20 units/day.", "courseDetails": "15 days followed by 15 days rest. 2-4 cycles per year.", "pensRequired": "1 pen for complete course", "penLastsDays": 30},
   ],
   "75eaa7ac": [
-    {"name": "10mg/7ml", "price": "$48.72", "priceNum": 48.72, "sku": "melanotan-ii-nasal-spray-10mg", "isDefault": true, "dailyDosage": "The recommended dose is 2-4 sprays per day. Use 3 times weekly during the first week. 2 times weekly during the second week, and once weekly during the third week.", "courseDetails": "Use for 3 weeks followed by a 1 month break. Repeat if neccessary."},
+    {"name": "10mg/7ml", "price": "$97.44", "priceNum": 97.44, "sku": "melanotan-ii-nasal-spray-10mg", "isDefault": true, "dailyDosage": "The recommended dose is 2-4 sprays per day. Use 3 times weekly during the first week. 2 times weekly during the second week, and once weekly during the third week.", "courseDetails": "Use for 3 weeks followed by a 1 month break. Repeat if neccessary."},
   ],
   "821f7789": [
-    {"name": "20mg", "price": "$60.55", "priceNum": 60.55, "sku": "thymalin", "isDefault": true, "dailyDosage": "2mg/day", "courseDetails": "Daily for 10 days followed by 10 days break.", "pensRequired": "1", "penLastsDays": 20},
+    {"name": "20mg", "price": "$121.10", "priceNum": 121.1, "sku": "thymalin", "isDefault": true, "dailyDosage": "2mg/day", "courseDetails": "Daily for 10 days followed by 10 days break.", "pensRequired": "1", "penLastsDays": 20},
   ],
   "94badb0f": [
-    {"name": "Default", "price": "$278.40", "priceNum": 278.4, "sku": "DNA test", "isDefault": true},
+    {"name": "Default", "price": "$556.80", "priceNum": 556.8, "sku": "DNA test", "isDefault": true},
   ],
   "9a7347e7": [
-    {"name": "5mg", "price": "$58.46", "priceNum": 58.46, "sku": "tb500-5mg", "isDefault": true, "dailyDosage": "Dose: 500 \u03bcg to 1 mg 3 times/week. Units: 20-40 units 3 times/week.", "courseDetails": "Up to 45 days, followed by 15 days rest and can be repeated as per needs.", "pensRequired": "3 pens for complete course", "penLastsDays": 26},
+    {"name": "5mg", "price": "$116.92", "priceNum": 116.92, "sku": "tb500-5mg", "isDefault": true, "dailyDosage": "Dose: 500 \u03bcg to 1 mg 3 times/week. Units: 20-40 units 3 times/week.", "courseDetails": "Up to 45 days, followed by 15 days rest and can be repeated as per needs.", "pensRequired": "3 pens for complete course", "penLastsDays": 26},
   ],
   "a973f518": [
-    {"name": "1.5mg", "price": "$87.00", "priceNum": 87.0, "sku": " slu-pp-31", "isDefault": true, "dailyDosage": "35-50\u00b5g in the morning and 35-50\u00b5g in the afternoon", "courseDetails": "The cycle last upto 1 month, followed by 15 days break.", "pensRequired": "\u2022 7 units = 2 pens", "penLastsDays": 21},
+    {"name": "1.5mg", "price": "$174.00", "priceNum": 174.0, "sku": " slu-pp-31", "isDefault": true, "dailyDosage": "35-50\u00b5g in the morning and 35-50\u00b5g in the afternoon", "courseDetails": "The cycle last upto 1 month, followed by 15 days break.", "pensRequired": "\u2022 7 units = 2 pens", "penLastsDays": 21},
   ],
   "ad69b7ac": [
-    {"name": "1200mg/3ml", "price": "$165.65", "priceNum": 165.65, "sku": "glutathione-nad-resveratrol-1200mg-3ml", "isDefault": true, "dailyDosage": "Dose: 8 mg/day. Units: 20 units/day.", "courseDetails": "14 days followed by 14 days rest for 6 months. Standard cycle complete after 6 months.", "pensRequired": "6 pens for complete course", "penLastsDays": 29},
+    {"name": "1200mg/3ml", "price": "$331.30", "priceNum": 331.3, "sku": "glutathione-nad-resveratrol-1200mg-3ml", "isDefault": true, "dailyDosage": "Dose: 8 mg/day. Units: 20 units/day.", "courseDetails": "14 days followed by 14 days rest for 6 months. Standard cycle complete after 6 months.", "pensRequired": "6 pens for complete course", "penLastsDays": 29},
   ],
   "aff029b8": [
-    {"name": "10mg", "price": "$44.54", "priceNum": 44.54, "sku": "ipamorelin-10mg", "isDefault": true, "dailyDosage": "Dose: 400 \u03bcg/day, divided into 2 doses. Units: 4 units morning/4 units evening.", "courseDetails": "Daily for 4-6 months. Repeat after 2-3 months rest.", "pensRequired": "7 pens for complete course", "penLastsDays": 25},
+    {"name": "10mg", "price": "$89.08", "priceNum": 89.08, "sku": "ipamorelin-10mg", "isDefault": true, "dailyDosage": "Dose: 400 \u03bcg/day, divided into 2 doses. Units: 4 units morning/4 units evening.", "courseDetails": "Daily for 4-6 months. Repeat after 2-3 months rest.", "pensRequired": "7 pens for complete course", "penLastsDays": 25},
   ],
   "b8597fa0": [
-    {"name": "10mg", "price": "$62.64", "priceNum": 62.64, "sku": "mots-c-10mg", "isDefault": true, "dailyDosage": "Dose: 2,5 mg on every 5th day. Units: 50 units every 5th day.", "courseDetails": "Every 5th day as long as needed. Continuous, reassess after 3-6 months.", "pensRequired": "As needed for complete course", "penLastsDays": 20},
+    {"name": "10mg", "price": "$125.28", "priceNum": 125.28, "sku": "mots-c-10mg", "isDefault": true, "dailyDosage": "Dose: 2,5 mg on every 5th day. Units: 50 units every 5th day.", "courseDetails": "Every 5th day as long as needed. Continuous, reassess after 3-6 months.", "pensRequired": "As needed for complete course", "penLastsDays": 20},
   ],
   "c1680f7a": [
-    {"name": "5mg (hgh frag. 176-191) ", "price": "$48.02", "priceNum": 48.02, "sku": "hgh-Fragment-5mg", "isDefault": true, "dailyDosage": "Dose: 400 \u03bcg to 500 \u03bcg/day. Units: 16-20 units/day.", "courseDetails": "Daily for 2-4 months. Repeat after 1-2 months rest.", "pensRequired": "12 pens for complete course", "penLastsDays": 12},
+    {"name": "5mg (hgh frag. 176-191) ", "price": "$96.04", "priceNum": 96.04, "sku": "hgh-Fragment-5mg", "isDefault": true, "dailyDosage": "Dose: 400 \u03bcg to 500 \u03bcg/day. Units: 16-20 units/day.", "courseDetails": "Daily for 2-4 months. Repeat after 1-2 months rest.", "pensRequired": "12 pens for complete course", "penLastsDays": 12},
   ],
   "c777ccf6": [
-    {"name": "25mg/2ml", "price": "$59.86", "priceNum": 59.86, "sku": "spermidine-5mg-2ml", "isDefault": true, "dailyDosage": "Dose: 500 \u03bcg/day. Units: 20 units/day.", "courseDetails": "Daily for 4-6 weeks. Repeat after 2-3 months rest.", "pensRequired": "5 pens for complete course", "penLastsDays": 10},
+    {"name": "25mg/2ml", "price": "$119.72", "priceNum": 119.72, "sku": "spermidine-5mg-2ml", "isDefault": true, "dailyDosage": "Dose: 500 \u03bcg/day. Units: 20 units/day.", "courseDetails": "Daily for 4-6 weeks. Repeat after 2-3 months rest.", "pensRequired": "5 pens for complete course", "penLastsDays": 10},
   ],
   "c89a10d5": [
-    {"name": "5/10mg blend", "price": "$87.70", "priceNum": 87.7, "sku": "cjc-ipamorelin", "isDefault": true, "dailyDosage": "250 to 350\u00b5g in the morning and in the evening", "courseDetails": "Daily for 4-6 months followed by 8 weeks break. ", "pensRequired": "4 - 6 pens", "penLastsDays": 20},
+    {"name": "5/10mg blend", "price": "$175.40", "priceNum": 175.4, "sku": "cjc-ipamorelin", "isDefault": true, "dailyDosage": "250 to 350\u00b5g in the morning and in the evening", "courseDetails": "Daily for 4-6 months followed by 8 weeks break. ", "pensRequired": "4 - 6 pens", "penLastsDays": 20},
   ],
   "cd1d9cc4": [
-    {"name": "30 IU 9,9mg", "price": "$80.04", "priceNum": 80.04, "sku": "somatropin-hgh-30-iu-9.9mg", "isDefault": true, "dailyDosage": "Dose: 1 IU/day. Units: 1 unit/day.", "courseDetails": "From 3 to 6 months. As needed based on clinical judgements.", "pensRequired": "1 pen for complete course", "penLastsDays": 30},
+    {"name": "30 IU 9,9mg", "price": "$160.08", "priceNum": 160.08, "sku": "somatropin-hgh-30-iu-9.9mg", "isDefault": true, "dailyDosage": "Dose: 1 IU/day. Units: 1 unit/day.", "courseDetails": "From 3 to 6 months. As needed based on clinical judgements.", "pensRequired": "1 pen for complete course", "penLastsDays": 30},
   ],
   "d2a5603b": [
-    {"name": "10mg/5.8ml", "price": "$58.46", "priceNum": 58.46, "sku": "kpv-peptide", "isDefault": true, "dailyDosage": "The recommended dose is 1 spray in the morning and 1 in the evening (2 per day in total).", "courseDetails": "Used for 4 - 8 weeks followed by 2 - 4 weeks break then reassess symptoms before repeating."},
+    {"name": "10mg/5.8ml", "price": "$116.92", "priceNum": 116.92, "sku": "kpv-peptide", "isDefault": true, "dailyDosage": "The recommended dose is 1 spray in the morning and 1 in the evening (2 per day in total).", "courseDetails": "Used for 4 - 8 weeks followed by 2 - 4 weeks break then reassess symptoms before repeating."},
   ],
   "db401164": [
-    {"name": "20mg/10ml", "price": "$85.61", "priceNum": 85.61, "sku": "nootropic-p21-nasal-spray", "isDefault": true, "dailyDosage": "The recommended dose is 1 spray in the morning and 1 in the evening (2 per day in total).", "courseDetails": "Used for 4 - 8 weeks followed by 2 - 4 weeks break then reasses symptoms before repeating."},
+    {"name": "20mg/10ml", "price": "$171.22", "priceNum": 171.22, "sku": "nootropic-p21-nasal-spray", "isDefault": true, "dailyDosage": "The recommended dose is 1 spray in the morning and 1 in the evening (2 per day in total).", "courseDetails": "Used for 4 - 8 weeks followed by 2 - 4 weeks break then reasses symptoms before repeating."},
   ],
   "e6a824f0": [
-    {"name": "5mg", "price": "$87.70", "priceNum": 87.7, "sku": "thymosin-alfa", "isDefault": true, "dailyDosage": "500 - 600\u00b5g/day", "courseDetails": "Daily for 7 days followed by 4-8 weeks break. Repeat if necessary.", "pensRequired": "1 pen", "penLastsDays": 38},
+    {"name": "5mg", "price": "$175.40", "priceNum": 175.4, "sku": "thymosin-alfa", "isDefault": true, "dailyDosage": "500 - 600\u00b5g/day", "courseDetails": "Daily for 7 days followed by 4-8 weeks break. Repeat if necessary.", "pensRequired": "1 pen", "penLastsDays": 38},
   ],
   "e794817e": [
-    {"name": "5mg", "price": "$57.77", "priceNum": 57.77, "sku": "bpc-157-5mg", "isDefault": true, "dailyDosage": "Dose: 400 \u03bcg to 500 \u03bcg/day.    Units: 16-20 units/day.", "courseDetails": "Daily for 1-3 months. Repeat after 1-2 months rest if needed.", "pensRequired": "9 pens for complete course", "penLastsDays": 12},
+    {"name": "5mg", "price": "$115.54", "priceNum": 115.54, "sku": "bpc-157-5mg", "isDefault": true, "dailyDosage": "Dose: 400 \u03bcg to 500 \u03bcg/day.    Units: 16-20 units/day.", "courseDetails": "Daily for 1-3 months. Repeat after 1-2 months rest if needed.", "pensRequired": "9 pens for complete course", "penLastsDays": 12},
   ],
   "eaee73bb": [
-    {"name": "Default", "price": "$243.60", "priceNum": 243.6, "sku": "Microbiome test", "isDefault": true},
+    {"name": "Default", "price": "$487.20", "priceNum": 487.2, "sku": "Microbiome test", "isDefault": true},
   ],
   "eca4f03d": [
-    {"name": "5/5mg", "price": "$102.31", "priceNum": 102.31, "sku": "bpc157-tb500-5-5mg", "isDefault": true, "dailyDosage": "Dose: 375\u03bcg/day. Units: 15 units/day.", "courseDetails": "Upto 45 days, followed by 15 days rest and can be repeated as per needs.", "pensRequired": "3 pens for complete course", "penLastsDays": 13},
+    {"name": "5/5mg", "price": "$204.62", "priceNum": 204.62, "sku": "bpc157-tb500-5-5mg", "isDefault": true, "dailyDosage": "Dose: 375\u03bcg/day. Units: 15 units/day.", "courseDetails": "Upto 45 days, followed by 15 days rest and can be repeated as per needs.", "pensRequired": "3 pens for complete course", "penLastsDays": 13},
   ],
   "f2a12dcf": [
-    {"name": "Default", "price": "$104.40", "priceNum": 104.4, "sku": "consultation", "isDefault": true},
+    {"name": "Default", "price": "$208.80", "priceNum": 208.8, "sku": "consultation", "isDefault": true},
   ],
   "f386281f": [
-    {"name": "100mg", "price": "$64.73", "priceNum": 64.73, "sku": "5-amino-1mq-100mg", "isDefault": true, "dailyDosage": "11,3 mg/day, divided in 2 doses. Units: 17 units morning/17 units evening.", "courseDetails": "Daily for 2-4 months. Repeat after 1-2 months rest.", "pensRequired": "12 pens for complete course", "penLastsDays": 9},
+    {"name": "100mg", "price": "$129.46", "priceNum": 129.46, "sku": "5-amino-1mq-100mg", "isDefault": true, "dailyDosage": "11,3 mg/day, divided in 2 doses. Units: 17 units morning/17 units evening.", "courseDetails": "Daily for 2-4 months. Repeat after 1-2 months rest.", "pensRequired": "12 pens for complete course", "penLastsDays": 9},
   ],
   "f5aa4333": [
-    {"name": "10mg/2ml", "price": "$97.44", "priceNum": 97.44, "sku": "tesamorelin-10mg-2ml", "isDefault": true, "dailyDosage": "1 mg daily in the evening, before bedtime and 1\u20132 hours after meals", "courseDetails": "Once daily for 2\u20136 weeks. Pause for 1 month.", "pensRequired": "\u2022 2 weeks = 2 pens  \u2022 4 weeks = 3 pens  \u2022 6 weeks = 5 pens", "penLastsDays": 10},
+    {"name": "10mg/2ml", "price": "$194.88", "priceNum": 194.88, "sku": "tesamorelin-10mg-2ml", "isDefault": true, "dailyDosage": "1 mg daily in the evening, before bedtime and 1\u20132 hours after meals", "courseDetails": "Once daily for 2\u20136 weeks. Pause for 1 month.", "pensRequired": "\u2022 2 weeks = 2 pens  \u2022 4 weeks = 3 pens  \u2022 6 weeks = 5 pens", "penLastsDays": 10},
   ],
   "f76b7c74": [
-    {"name": "Default", "price": "$487.20", "priceNum": 487.2, "sku": "Personalized Gut Optimization Protocol", "isDefault": true},
+    {"name": "Default", "price": "$974.40", "priceNum": 974.4, "sku": "Personalized Gut Optimization Protocol", "isDefault": true},
   ],
 };
 

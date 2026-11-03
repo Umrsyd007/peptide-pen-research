@@ -103,9 +103,9 @@ function Gallery() {
         <button type="button" onClick={() => go(1)} aria-label="Next image" className="absolute right-3 top-1/2 -translate-y-1/2 grid h-10 w-10 place-items-center rounded-full bg-white/90 text-[#14212B] shadow">›</button>
         <span className="absolute bottom-3 right-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-[#14212B]">{i + 1} / {n}</span>
       </div>
-      <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:thin]">
+      <div className="flex min-w-0 gap-2 overflow-x-auto pb-1 [scrollbar-width:thin]">
         {PEPTICOOL_GALLERY.map((g, k) => (
-          <button key={g} type="button" onClick={() => setI(k)} aria-label={`Show image ${k + 1}`} className={`h-16 w-16 shrink-0 overflow-hidden rounded-lg border-2 ${k === i ? "border-[#136EA2]" : "border-transparent opacity-70 hover:opacity-100"}`}>
+          <button key={g} type="button" onClick={() => setI(k)} aria-label={`Show image ${k + 1}`} className={`h-[76px] w-[76px] shrink-0 overflow-hidden rounded-lg border-2 ${k === i ? "border-[#136EA2]" : "border-transparent opacity-70 hover:opacity-100"}`}>
             <img src={img(g, 160)} alt="" loading="lazy" className="h-full w-full object-cover" />
           </button>
         ))}
@@ -156,7 +156,7 @@ function BuyBox({ product }: { product: InjectorProduct }) {
     toast.success(`Added to cart — ${product.name}`);
   };
   return (
-    <div className="rounded-[20px] bg-white p-6 sm:p-7 shadow-[0_10px_40px_rgba(20,33,43,0.08)] space-y-5">
+    <div className="rounded-[20px] bg-white p-6 sm:p-[33px] shadow-[0_10px_40px_rgba(20,33,43,0.08)] space-y-5">
       <span className="inline-flex items-center gap-2 rounded-full bg-[#e6f4fb] px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.08em] text-[#136EA2]">
         <span className="h-1.5 w-1.5 rounded-full bg-[#136EA2]" /> Reliable temperature control on the go
       </span>
@@ -164,11 +164,11 @@ function BuyBox({ product }: { product: InjectorProduct }) {
         <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.06em] text-[#14212B]">
           <Stars className="text-[#F5A623]" /> Trusted by 30,000 peptide users worldwide
         </div>
-        <h1 className="text-[30px] sm:text-[34px] font-bold leading-[1.1] tracking-[-0.03em]" style={{ color: INK }}>{product.name}</h1>
+        <h1 className="text-[30px] lg:text-[40px] font-bold leading-[1.1] tracking-[-0.03em]" style={{ color: INK }}>{product.name}</h1>
       </div>
       <ul className="grid grid-cols-2 gap-2">
         {FEATURES.map((f) => (
-          <li key={f} className="flex items-center gap-2 rounded-xl bg-[#f1fbff] px-3 py-2.5 text-[13px] font-semibold text-[#14212B]">
+          <li key={f} className="flex min-h-[41px] items-center gap-2 rounded-xl bg-[#f1fbff] p-[11px] text-[13px] leading-tight font-semibold text-[#14212B]">
             <Check className="text-[#136EA2]" /> {f}
           </li>
         ))}
@@ -189,11 +189,11 @@ function BuyBox({ product }: { product: InjectorProduct }) {
       </div>
       <div className="flex gap-3">
         <div className="inline-flex items-center rounded-xl border border-[#d8e3ea]">
-          <button type="button" aria-label="Decrease quantity" onClick={() => setQty((q) => Math.max(1, q - 1))} className="h-[52px] w-10 text-lg">−</button>
+          <button type="button" aria-label="Decrease quantity" onClick={() => setQty((q) => Math.max(1, q - 1))} className="h-[54px] w-10 text-lg">−</button>
           <span className="w-6 text-center font-semibold">{qty}</span>
-          <button type="button" aria-label="Increase quantity" onClick={() => setQty((q) => Math.min(10, q + 1))} className="h-[52px] w-10 text-lg">+</button>
+          <button type="button" aria-label="Increase quantity" onClick={() => setQty((q) => Math.min(10, q + 1))} className="h-[54px] w-10 text-lg">+</button>
         </div>
-        <button type="button" onClick={add} className="flex-1 h-[52px] rounded-xl text-white text-[15px] font-extrabold transition-opacity hover:opacity-90" style={{ background: BLUE }}>
+        <button type="button" onClick={add} className="flex-1 h-[54px] rounded-xl text-white text-[15px] font-extrabold transition-opacity hover:opacity-90" style={{ background: BLUE }}>
           Add to cart · {formatGbp(variant.price * qty)}
         </button>
       </div>
@@ -212,16 +212,16 @@ function BuyBox({ product }: { product: InjectorProduct }) {
 
 function UgcSection() {
   return (
-    <section className="bg-[#F1FBFF] py-16 sm:py-20 px-4">
-      <div className="max-w-6xl mx-auto text-center space-y-3">
+    <section className="bg-[#F1FBFF] py-16 sm:py-[88px] px-4">
+      <div className="max-w-[860px] mx-auto text-center space-y-3">
         <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#136EA2]">Real people. Real protocols.</p>
-        <h2 className="text-[30px] sm:text-[36px] tracking-[-0.035em] text-[#16212A]">Rated 4.8 by 30,000+ peptide users</h2>
+        <h2 className="text-[32px] sm:text-[48px] font-normal leading-[1.03] tracking-[-0.035em] text-[#16212A]">Rated 4.8 by 30,000+ peptide users</h2>
         <p className="text-[#55636e]">See how PeptiCool fits into real routines at home and on the move.</p>
       </div>
-      <div className="max-w-5xl mx-auto mt-10 grid gap-5 sm:grid-cols-3">
+      <div className="mx-auto mt-10 grid max-w-[945px] gap-[30px] sm:grid-cols-3">
         {UGC.map((u) => (
           <figure key={u.id} className="overflow-hidden rounded-[18px] bg-white shadow-[0_10px_30px_rgba(20,33,43,0.08)]">
-            <div className="relative aspect-[3/4] bg-black">
+            <div className="relative aspect-[295/480] bg-black">
               <video controls preload="none" playsInline poster={`${CDN}/files/preview_images/${u.poster}`} className="h-full w-full object-cover">
                 <source src={`${CDN}/videos/c/vp/${u.id}/${u.file}?v=0`} type="video/mp4" />
               </video>
@@ -242,13 +242,13 @@ function UgcSection() {
 function ActiveCooling() {
   const [cells, setCells] = useState(2);
   return (
-    <section className="bg-[#0B0E14] text-white py-16 sm:py-24 px-4">
-      <div className="max-w-6xl mx-auto grid gap-10 lg:grid-cols-2 items-center">
+    <section className="bg-[#0B0E14] text-white py-16 sm:py-[70px] px-4 sm:px-6">
+      <div className="max-w-[1232px] mx-auto grid gap-12 lg:grid-cols-2 items-center">
         <div className="overflow-hidden rounded-[20px] bg-black">
           <img src={img("Untitled_design_12_feaa9b89-9198-410c-a36a-4967c6c05180.png?v=1789354073", 1200)} alt="PeptiCool with charging cable and carry sleeve" loading="lazy" className="w-full object-cover" />
         </div>
         <div className="space-y-7">
-          <h2 className="text-[32px] sm:text-[38px] font-bold leading-tight tracking-[-0.01em]">Active Cooling is the breakthrough</h2>
+          <h2 className="text-[32px] sm:text-[38px] font-bold leading-[1.18] tracking-[-0.01em]">Active Cooling is the breakthrough</h2>
           {[
             ["7-9 hrs", "Of active cordless cooling per fully charged 9,000 mAh Power Cell."],
             ["2-8°C (36-46°F)", "Precision temperature control, live readout & tap-to-lock touch display."],
@@ -286,11 +286,11 @@ function FitFinder() {
   const [sel, setSel] = useState(0);
   const f = FIT[sel];
   return (
-    <section className="bg-[#070C12] text-white py-16 sm:py-24 px-4">
-      <div className="max-w-6xl mx-auto grid gap-10 lg:grid-cols-2 items-center">
+    <section className="bg-[#070C12] text-white py-16 sm:py-[90px] px-4 sm:px-6">
+      <div className="max-w-[1232px] mx-auto grid gap-12 lg:grid-cols-2 items-center">
         <div className="space-y-6">
           <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#60C5F8]">Medication compatibility finder</p>
-          <h2 className="text-[34px] sm:text-[44px] font-bold leading-[1.05] tracking-[-0.02em]">Find the exact fit for your pens &amp; vials.</h2>
+          <h2 className="max-w-[614px] text-[34px] sm:text-[52px] font-bold leading-[1.08] tracking-[-0.02em]">Find the exact fit for your pens &amp; vials.</h2>
           <p className="text-white/70 max-w-lg">Select your specific prescription pen, cartridge, or peptide vial to visualize chamber capacity. We’ll display how many units fit comfortably inside your PeptiCool™ or PeptiCool XL travel cooler.</p>
           <div className="flex flex-wrap gap-2">
             {["100+ Verified Pen Formats", "GLP-1 & Insulin Compatible", "PeptiCool Classic & XL"].map((p) => (
@@ -300,7 +300,7 @@ function FitFinder() {
           <a href="#pc-specs" className="inline-flex h-12 items-center rounded-[30px] bg-[#60C5F8] px-7 text-sm font-bold text-[#050A10]">Check My Fit →</a>
           <p className="text-xs text-white/45">Capacity guides are based on standard dimensions. Please verify your specific pen or vial measurements prior to travel.</p>
         </div>
-        <div className="rounded-[24px] border border-white/10 bg-gradient-to-b from-[#121b26] to-[#0a1018] p-6 sm:p-8">
+        <div className="w-full max-w-[558px] justify-self-end rounded-[24px] border border-white/10 bg-gradient-to-b from-[#121b26] to-[#0a1018] p-6 sm:p-8">
           <div className="grid grid-cols-[1fr_auto] gap-6 items-center">
             <div className="relative overflow-hidden rounded-2xl bg-black">
               <img src={img("download_58.png?v=1789375388", 700)} alt="Interactive chamber preview" loading="lazy" className="w-full object-cover" />
@@ -325,8 +325,8 @@ function FitFinder() {
 
 function Specs() {
   return (
-    <section id="pc-specs" className="bg-[#F7F4EE] py-16 sm:py-24 px-4">
-      <div className="max-w-6xl mx-auto grid gap-10 lg:grid-cols-2 items-center">
+    <section id="pc-specs" className="bg-[#F7F4EE] py-16 sm:py-20 px-4 sm:px-6">
+      <div className="max-w-[1100px] mx-auto grid gap-10 lg:grid-cols-[1fr_567px] items-center">
         <div className="flex flex-col items-center">
           <div className="flex items-center gap-5">
             <div className="flex h-[340px] flex-col items-center justify-between text-[10px] text-[#8a8f94]">
@@ -348,8 +348,8 @@ function Specs() {
           <p className="mt-5 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#8a8f94]">Exterior 27.5 × 8 cm · 900 g</p>
         </div>
         <div className="space-y-5">
-          <div className="rounded-[20px] bg-white p-6 shadow-[0_8px_24px_rgba(20,33,43,0.05)]">
-            <h3 className="text-lg font-bold text-[#14212B]">Free space</h3>
+          <div className="rounded-[20px] bg-white p-7 shadow-[0_8px_24px_rgba(20,33,43,0.05)]">
+            <h3 className="text-[24px] font-bold leading-[1.2] text-[#14212B]">Free space</h3>
             <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#8a8f94]">Interior chamber</p>
             <div className="mt-4 flex items-center gap-4 border-b border-[#efefef] pb-4">
               <span className="grid h-12 w-12 place-items-center rounded-full border border-[#d8d8d8] text-[#14212B]">⤢</span>
@@ -358,7 +358,7 @@ function Specs() {
             <p className="mt-3 text-xs text-[#8a8f94]">17.8 cm deep · pens ride upright, longest at a slight diagonal</p>
           </div>
           <div className="rounded-[20px] bg-white p-6 shadow-[0_8px_24px_rgba(20,33,43,0.05)]">
-            <h3 className="text-lg font-bold text-[#14212B]">What fits inside</h3>
+            <h3 className="text-[24px] font-bold leading-[1.2] text-[#14212B]">What fits inside</h3>
             <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#8a8f94]">Up to — per trip</p>
             <ul className="mt-3 divide-y divide-[#efefef]">
               {[
@@ -386,13 +386,13 @@ function Comparison({ price }: { price: number }) {
     : c === "8hr" ? <span className="text-[#136EA2] font-bold">✓ 8-hr<br /><span className="text-[10px] font-normal text-[#8a8f94]">all-day cooling</span></span>
     : <span className="text-[#8a8f94]">{c}</span>;
   return (
-    <section className="bg-[#F7FBFE] py-16 sm:py-24 px-4">
-      <div className="max-w-4xl mx-auto text-center space-y-3">
+    <section className="bg-[#F7FBFE] py-16 sm:py-20 px-4">
+      <div className="max-w-[980px] mx-auto text-center space-y-3">
         <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#136EA2]">The difference</p>
-        <h2 className="text-[30px] sm:text-[38px] font-bold tracking-[-0.03em] text-[#14212B]">The end of melting ice packs.</h2>
+        <h2 className="text-[30px] sm:text-[42px] font-extrabold leading-[1.2] tracking-[-0.03em] text-[#14212B]">The end of melting ice packs.</h2>
       </div>
-      <div className="max-w-4xl mx-auto mt-10 overflow-x-auto rounded-[18px] bg-white shadow-[0_10px_40px_rgba(20,33,43,0.06)]">
-        <table className="w-full min-w-[640px] text-sm text-[#1E293B]">
+      <div className="max-w-[980px] mx-auto mt-10 overflow-x-auto rounded-[18px] bg-white shadow-[0_10px_40px_rgba(20,33,43,0.06)]">
+        <table className="w-full min-w-[640px] text-[15px] text-[#1E293B]">
           <thead>
             <tr className="border-b border-[#E2E8F0]">
               <th className="p-4 text-left font-normal" />
@@ -405,7 +405,7 @@ function Comparison({ price }: { price: number }) {
           <tbody>
             {COMPARISON.map((r) => (
               <tr key={r.row} className="border-b border-[#E2E8F0]">
-                <td className="p-4 text-left text-[13px]">{r.row}</td>
+                <td className="px-5 py-[18px] text-left text-[14px]">{r.row}</td>
                 {r.cells.map((c, k) => (
                   <td key={k} className={`p-4 text-center ${k === 0 ? "bg-[#F0F8FF]" : ""}`}>{mark(c, k === 0)}</td>
                 ))}
@@ -428,12 +428,12 @@ function Comparison({ price }: { price: number }) {
 
 function Testimonials() {
   return (
-    <section className="bg-white py-16 sm:py-24 px-4">
-      <div className="max-w-6xl mx-auto text-center space-y-2">
-        <h2 className="text-[30px] sm:text-[38px] font-bold tracking-[-0.03em] text-[#14212B]">Join over 30,000+ Happy Customers</h2>
+    <section className="bg-white py-16 sm:py-20 px-4 sm:px-6">
+      <div className="max-w-[1180px] mx-auto text-center space-y-2">
+        <h2 className="text-[28px] sm:text-[35px] font-bold leading-[1.23] tracking-[-0.02em] text-[#14212B]">Join over 30,000+ Happy Customers</h2>
         <p className="text-sm text-[#55636e]"><span className="font-bold text-[#14212B]">Excellent</span> <Stars className="text-[#1cb5b0]" /> 4.8 | 10,000+ Customers</p>
       </div>
-      <div className="max-w-6xl mx-auto mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="max-w-[1180px] mx-auto mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {TESTIMONIALS.map((t) => (
           <article key={t.name} className="overflow-hidden rounded-[18px] border border-[#e3eef5] bg-white shadow-[0_8px_24px_rgba(20,33,43,0.05)]">
             <img src={img(t.img, 700)} alt="" loading="lazy" className="aspect-square w-full object-cover" />
@@ -453,22 +453,22 @@ function Testimonials() {
 function Faq() {
   const [open, setOpen] = useState<number | null>(null);
   return (
-    <section className="bg-[#F1FBFF] py-16 sm:py-24 px-4">
-      <div className="max-w-5xl mx-auto text-center space-y-3">
+    <section className="bg-[#F1FBFF] py-16 sm:py-24 px-4 sm:px-6">
+      <div className="max-w-[760px] mx-auto mb-12 text-center space-y-3">
         <p className="text-[13px] font-bold uppercase tracking-[0.12em] text-[#126EA2]">Need to know</p>
         <h2 className="text-[34px] sm:text-[48px] font-bold leading-[1.05] tracking-[-0.02em] text-[#126EA2]">Frequently Asked Questions</h2>
         <p className="text-[#55636e]">Find quick answers to the most common questions about our product.</p>
       </div>
-      <div className="max-w-5xl mx-auto mt-10 grid gap-3 md:grid-cols-2 items-start">
+      <div className="max-w-[1100px] mx-auto grid gap-3.5 md:grid-cols-2 items-start">
         {FAQ.map((f, k) => {
           const isOpen = open === k;
           return (
             <div key={f.q} className={`overflow-hidden rounded-2xl border bg-white shadow-[0_10px_32px_rgba(29,65,74,0.08)] transition-colors ${isOpen ? "border-[#126EA2]/60" : "border-[#e3eef5]"}`}>
-              <button type="button" onClick={() => setOpen(isOpen ? null : k)} aria-expanded={isOpen} className="flex min-h-[80px] w-full items-center justify-between gap-6 px-6 py-5 text-left">
-                <span className="font-semibold leading-snug text-[#126EA2]">{f.q}</span>
+              <button type="button" onClick={() => setOpen(isOpen ? null : k)} aria-expanded={isOpen} className="flex min-h-[96px] w-full items-center justify-between gap-6 px-7 py-[22px] text-left">
+                <span className="text-[17px] font-semibold leading-[1.3] text-[#126EA2]">{f.q}</span>
                 <span className={`grid h-[38px] w-[38px] shrink-0 place-items-center rounded-full text-lg transition-colors ${isOpen ? "bg-[#126EA2] text-white" : "bg-[#e6f4fb] text-[#126EA2]"}`}>{isOpen ? "−" : "+"}</span>
               </button>
-              {isOpen && <p className="px-6 pb-5 text-[15px] leading-relaxed text-[#55636e]">{f.a}</p>}
+              {isOpen && <p className="px-7 pb-[22px] text-[15px] leading-relaxed text-[#55636e]">{f.a}</p>}
             </div>
           );
         })}
@@ -483,19 +483,19 @@ function Faq() {
 export function PepticoolPage({ product }: { product: InjectorProduct }) {
   return (
     <div style={{ fontFamily: "Inter, sans-serif" }} className="text-[#14212B]">
-      <section className="bg-[#eaf6fc] px-4 py-8 sm:py-12">
-        <div className="max-w-6xl mx-auto grid gap-8 lg:grid-cols-[1.15fr_1fr] items-start">
-          <div className="space-y-5 lg:sticky lg:top-24">
+      <section className="bg-[#eaf6fc] px-4 sm:px-6 py-6 sm:py-8">
+        <div className="max-w-[1232px] mx-auto grid gap-10 lg:grid-cols-2 items-start">
+          <div className="min-w-0 space-y-5 lg:sticky lg:top-24">
             <Gallery />
             <HeroReviews />
           </div>
-          <BuyBox product={product} />
+          <div className="min-w-0"><BuyBox product={product} /></div>
         </div>
       </section>
       <UgcSection />
       <ActiveCooling />
-      <section className="bg-white px-4 py-16 text-center">
-        <h2 className="mx-auto max-w-xl text-[28px] sm:text-[34px] font-bold leading-tight tracking-[-0.02em] text-[#14212B]">Precision cooling built for your essential peptides.</h2>
+      <section className="bg-white px-4 py-20 text-center">
+        <h2 className="mx-auto max-w-[600px] text-[28px] sm:text-[35px] font-bold leading-[1.2] tracking-[-0.02em] text-[#14212B]">Precision cooling built for your essential peptides.</h2>
       </section>
       <FitFinder />
       <Specs />

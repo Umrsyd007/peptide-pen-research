@@ -15,8 +15,7 @@ A private page at `/admin/orders`, visible only to your admin account, showing l
    - Customer name, email, full shipping address.
    - Each product with size, quantity, price, line total, and order total.
    - Copy-address button.
-4. **Export CSV** of the currently filtered orders.
-5. **Admin link** in the account page header, shown only to admins.
+4. **Admin link** in the account page header, shown only to admins.
 
 Out of scope for now: marking orders shipped / tracking numbers (we can add later).
 
@@ -32,7 +31,6 @@ Out of scope for now: marking orders shipped / tracking numbers (we can add late
   - Verifies admin via `user_roles` through the user's own client (existing `read_own_roles` policy), throws Forbidden otherwise.
   - Reads `orders` + `order_items` through the user's client — existing `admin_read_orders` / `admin_read_order_items` policies already allow admins, so no service-role key and no schema changes needed.
   - Inputs: period, status, search, page; returns rows, totals for cards, and page count.
-- CSV built client-side from a server fn that returns all filtered rows (capped at 5,000).
 - Uses existing shadcn Table, Card, Sheet, Badge, Tabs, Input components and `formatMoney`.
 - Head metadata with `noindex`.
 - Test: small unit test for the summary-card math (revenue only counts paid orders; pending value counts pending only).

@@ -29,6 +29,7 @@ import { Route as ProductsIndexRouteImport } from './routes/products.index'
 import { Route as ProductsProductIdRouteImport } from './routes/products.$productId'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as AuthenticatedAdminOrdersRouteImport } from './routes/_authenticated/admin.orders'
 import { Route as ApiPublicProductQuestionRouteImport } from './routes/api/public/product-question'
 import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
 import { Route as CheckoutSuccessOrderNumberRouteImport } from './routes/checkout.success.$orderNumber'
@@ -139,6 +140,12 @@ const Char91DotmcpChar93InvokeToolToolRoute =
     path: '/.mcp/invoke-tool/$tool',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AuthenticatedAdminOrdersRoute =
+  AuthenticatedAdminOrdersRouteImport.update({
+    id: '/admin/orders',
+    path: '/admin/orders',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const ApiPublicProductQuestionRoute =
   ApiPublicProductQuestionRouteImport.update({
     id: '/api/public/product-question',
@@ -188,6 +195,7 @@ export interface FileRoutesByFullPath {
   '/products/': typeof ProductsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/admin/orders': typeof AuthenticatedAdminOrdersRoute
   '/api/public/product-question': typeof ApiPublicProductQuestionRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/checkout/success/$orderNumber': typeof CheckoutSuccessOrderNumberRoute
@@ -213,6 +221,7 @@ export interface FileRoutesByTo {
   '/products': typeof ProductsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/admin/orders': typeof AuthenticatedAdminOrdersRoute
   '/api/public/product-question': typeof ApiPublicProductQuestionRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/checkout/success/$orderNumber': typeof CheckoutSuccessOrderNumberRoute
@@ -241,6 +250,7 @@ export interface FileRoutesById {
   '/products/': typeof ProductsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/_authenticated/admin/orders': typeof AuthenticatedAdminOrdersRoute
   '/api/public/product-question': typeof ApiPublicProductQuestionRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/checkout/success/$orderNumber': typeof CheckoutSuccessOrderNumberRoute
@@ -269,6 +279,7 @@ export interface FileRouteTypes {
     | '/products/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/admin/orders'
     | '/api/public/product-question'
     | '/api/public/stripe-webhook'
     | '/checkout/success/$orderNumber'
@@ -294,6 +305,7 @@ export interface FileRouteTypes {
     | '/products'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/admin/orders'
     | '/api/public/product-question'
     | '/api/public/stripe-webhook'
     | '/checkout/success/$orderNumber'
@@ -321,6 +333,7 @@ export interface FileRouteTypes {
     | '/products/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/_authenticated/admin/orders'
     | '/api/public/product-question'
     | '/api/public/stripe-webhook'
     | '/checkout/success/$orderNumber'
@@ -494,6 +507,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/orders': {
+      id: '/_authenticated/admin/orders'
+      path: '/admin/orders'
+      fullPath: '/admin/orders'
+      preLoaderRoute: typeof AuthenticatedAdminOrdersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/api/public/product-question': {
       id: '/api/public/product-question'
       path: '/api/public/product-question'
@@ -534,10 +554,12 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAccountRoute: typeof AuthenticatedAccountRoute
+  AuthenticatedAdminOrdersRoute: typeof AuthenticatedAdminOrdersRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAccountRoute: AuthenticatedAccountRoute,
+  AuthenticatedAdminOrdersRoute: AuthenticatedAdminOrdersRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

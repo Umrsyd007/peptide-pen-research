@@ -1,0 +1,11 @@
+ALTER TABLE public.orders ADD COLUMN ai_summary text, ADD COLUMN ai_summary_status text NOT NULL DEFAULT 'pending', ADD COLUMN ai_summary_created_at timestamptz;
+ALTER TABLE public.orders ADD CONSTRAINT orders_ai_summary_status_check CHECK (ai_summary_status IN ('pending','generating','ready','failed'));
+CREATE TABLE public.user_roles (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE, role text NOT NULL CHECK (role IN ('admin')), UNIQUE(user_id,role));
+GRANT SELECT ON public.user_roles TO authenticated;
+GRANT ALL ON public.user_roles TO service_role;
+ALTER TABLE public.user_roles ENABLE ROW LEVEL SECURITY;
+CREATE POLICY read_own_roles ON public.user_roles FOR SELECT TO authenticated USING (user_id=auth.uid());
+GRANT SELECT ON public.orders, public.order_items TO authenticated;
+GRANT ALL ON public.orders, public.order_items TO service_role;
+CREATE POLICY admin_read_orders ON public.orders FOR SELECT TO authenticated USING (EXISTS (SELECT 1 FROM public.user_roles WHERE user_id=auth.uid() AND role='admin'));
+CREATE POLICY admin_read_order_items ON public.order_items FOR SELECT TO authenticated USING (EXISTS (SELECT 1 FROM public.user_roles WHERE user_id=auth.uid() AND role='admin'));

@@ -74,7 +74,11 @@ export const createOrder = createServerFn({ method: "POST" })
     if (itemsErr) throw new Error(itemsErr.message);
 
     const { notifyOrderPending } = await import("@/lib/email/order-paid.server");
-    await notifyOrderPending(supabaseAdmin, order.id);
+    const { summarizeNewOrder } = await import("@/lib/order-summary.server");
+    await Promise.all([
+      notifyOrderPending(supabaseAdmin, order.id),
+      summarizeNewOrder(supabaseAdmin, order.id),
+    ]);
 
     return {
       id: order.id as string,

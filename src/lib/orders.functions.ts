@@ -28,8 +28,13 @@ export const SHIPPING_FLAT = 0;
 export const createOrder = createServerFn({ method: "POST" })
   .inputValidator((raw: unknown) => CreateOrderSchema.parse(raw))
   .handler(async ({ data }) => {
-    const { STOREFRONT_OPEN } = await import("@/lib/products");
-    if (!STOREFRONT_OPEN) throw new Error("Ordering is currently unavailable.");
+    const { priceForLine, CURRENCY } = await import("@/lib/injector");
+    // Charge catalog prices only; reject anything not currently for sale.
+    for (const item of data.items) {
+      const price = priceForLine(item.productId, item.variant);
+      if (price === null) throw new Error("Some items in your cart are no longer available. Please remove them and try again.");
+      item.price = price;
+    }
     const { supabaseAdmin } = await import(
       "@/integrations/supabase/client.server"
     );
@@ -48,7 +53,7 @@ export const createOrder = createServerFn({ method: "POST" })
         subtotal,
         shipping,
         total,
-        currency: "USD",
+        currency: CURRENCY,
         ship_name: data.ship_name,
         ship_address1: data.ship_address1,
         ship_address2: data.ship_address2 || null,

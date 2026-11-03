@@ -144,9 +144,6 @@ export type Database = {
       }
       orders: {
         Row: {
-          ai_summary: string | null
-          ai_summary_created_at: string | null
-          ai_summary_status: string
           created_at: string
           currency: string
           email: string
@@ -166,9 +163,6 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
-          ai_summary?: string | null
-          ai_summary_created_at?: string | null
-          ai_summary_status?: string
           created_at?: string
           currency?: string
           email: string
@@ -188,9 +182,6 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
-          ai_summary?: string | null
-          ai_summary_created_at?: string | null
-          ai_summary_status?: string
           created_at?: string
           currency?: string
           email?: string
@@ -265,24 +256,6 @@ export type Database = {
           id?: string
           metadata?: Json | null
           reason?: string
-        }
-        Relationships: []
-      }
-      user_roles: {
-        Row: {
-          id: string
-          role: string
-          user_id: string
-        }
-        Insert: {
-          id?: string
-          role: string
-          user_id: string
-        }
-        Update: {
-          id?: string
-          role?: string
-          user_id?: string
         }
         Relationships: []
       }

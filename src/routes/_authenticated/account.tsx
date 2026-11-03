@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { useServerFn } from "@tanstack/react-start";
-import { getOrderManagementAccess } from "@/lib/order-management.functions";
 
 export const Route = createFileRoute("/_authenticated/account")({
   head: () => ({
@@ -25,13 +23,10 @@ function AccountPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState<string | null>(null);
   const [signingOut, setSigningOut] = useState(false);
-  const [canManageOrders, setCanManageOrders] = useState(false);
-  const checkOrderAccess = useServerFn(getOrderManagementAccess);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setEmail(data.user?.email ?? null));
-    checkOrderAccess().then(({ allowed }) => setCanManageOrders(allowed)).catch(() => {});
-  }, [checkOrderAccess]);
+  }, []);
 
   async function handleSignOut() {
     setSigningOut(true);
@@ -47,7 +42,6 @@ function AccountPage() {
       </Link>
       <h1 className="mt-4 text-2xl font-semibold">My Account</h1>
       <p className="mt-2 text-sm text-muted-foreground">Signed in as {email ?? "…"}</p>
-      {canManageOrders && <Button asChild className="mt-6"><Link to="/orders">Manage orders</Link></Button>}
       <div className="mt-8 rounded-lg border border-border bg-card p-6">
         <h2 className="text-lg font-medium">AI Assistant integrations</h2>
         <p className="mt-2 text-sm text-muted-foreground">

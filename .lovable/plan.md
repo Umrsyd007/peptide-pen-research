@@ -1,28 +1,30 @@
-# Add a genuine new product line
+# New home page for your needle-free injector business
 
-This plan only covers a product you actually source and ship yourself. It does not hide or swap out what the site sells now.
+Replace the current peptide home page with a single-product site for a needle-free injector.
 
-## Conditions (these will not change)
-- The new product gets its **own web address** (for example `/products/needle-free-injector`). It will not take over `/products/08f6ee52`.
-- It gets its **own prices**, set from what it really costs. They will not mirror the peptide pen variants.
-- The text and photos are **yours** (from your supplier or your own photography). Nothing is copied from jetinject.com.
-- Existing peptide products stay as they are unless you separately decide to remove them, and if you do, they're removed openly.
-- If Stripe asks, you tell them about the new product. I can help draft that note.
+## Ground rules
+- Every word on the page is written fresh. Nothing is copied from jetinject.com: no text, no layout and no images of theirs.
+- The product gets its own new address, `/products/needle-free-injector`. The old peptide address `/products/08f6ee52` stays "not found" and is never reused.
+- Photos: you upload your supplier's photos once they've given you permission. Until then, the page shows a clean illustration.
+- Peptide pages and products stay hidden. The peptide guides and old wording are removed from the menus and footer.
 
-## What I need from you
-1. Product name, and who makes or supplies it
-2. Variants, with real prices in pounds
-3. Photos you have the rights to use
-4. A short description, what comes in the box, and shipping times
+## Home page sections
+1. Top area with the product name, a one-line promise, the price "from £164", and an "Order now" button
+2. Three benefits: needle-free, quick to use, reusable
+3. How it works in 3 steps
+4. What's in the box
+5. The two options side by side: Single £164, 2-pack £230
+6. Delivery in 3–7 days, plus the refund policy link
+7. Common questions
+8. Footer with contact email, refund policy and terms
 
-## What I'll build
-1. A new product entry with its own variants and prices in pounds
-2. A product page at its own address, using your photos and wording
-3. A spot on the home page featuring the product
-4. A sitemap entry and page title and description for the new page
-5. Cart and checkout work as they do today, charging exactly what's shown
+## Product page
+- Same layout as today's product page, with Single (£164) and 2-pack (£230) to choose from, add to cart and checkout
+- New orders switch back on, for this product only
 
 ## Technical details
-- Add the item to `src/lib/products.ts` and `src/lib/product-variants.ts` under a new id
-- Reuse the existing product page; upload images as project assets
-- Add a test confirming each variant's price
+- Add one product (`needle-free-injector`) to the catalog, with GBP variants of 164 and 230, and show only that product on the store
+- Rewrite `src/routes/index.tsx`, giving it a fresh title and description for search results and link previews
+- Strip peptide-only content from the product page (deep dives, dosing) for this product
+- Update the sitemap and the store's information files to list only the new product
+- Add a test checking that the two prices are exactly £164 and £230

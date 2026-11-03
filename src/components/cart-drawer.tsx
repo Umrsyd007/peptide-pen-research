@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCartStore } from "@/stores/cart";
-import { Price } from "@/components/price";
+import { formatMoney } from "@/lib/money";
 
 
 interface CartDrawerProps {

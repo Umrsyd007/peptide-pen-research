@@ -1,3 +1,5 @@
+import injectorImg from "@/assets/injector-device.jpg";
+
 export type Tag = "NEW" | "BESTSELLER" | null;
 
 export interface Product {
@@ -47,8 +49,6 @@ export const RETIRED_PRODUCTS: Product[] = [
   { id: "04317a6e", name: "NMN (Nicotinamide Mononucleotide)", categories: "Cognitive & Neuro • Cellular Longevity", price: "$87.00", tag: null , image: "/__l5e/assets-v1/54f18cbd-73e1-4c3f-a8ac-515253921174/04317a6e.png" },
   { id: "21059df6", name: "Curcumin", categories: "Cognitive & Neuro • Cellular Longevity", price: "$89.78", tag: null , image: "/__l5e/assets-v1/00c31390-f8af-4c06-a63f-951c86f7a545/21059df6.png" },
 ];
-
-import injectorImg from "@/assets/injector-device.jpg";
 
 export const PRODUCTS: Product[] = [
   { id: "needle-free-injector", name: "Needle-Free Injector", categories: "Needle-free devices", price: "£164", tag: "NEW", image: injectorImg },

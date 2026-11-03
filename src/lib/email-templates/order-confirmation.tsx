@@ -14,7 +14,7 @@ const OrderConfirmationEmail = (d: OrderEmailData) => (
       <Container style={container}>
         <Heading style={h1}>Thanks for your order</Heading>
         <Text style={subhead}>
-          {d.shipName ? `Hi ${d.shipName}, ` : ''}we've received your payment for order #{d.orderNumber}. We'll ship it free to the address below. Delivery is expected in 1-2 weeks, we will email you the tracking number when your item ships out.
+          {d.shipName ? `Hi ${d.shipName}, ` : ''}we've received your payment for order #{d.orderNumber}. We'll ship it free to the address below. We are preparing your order and your item is expected to ship within 5-7 business days. We will email you a tracking number when your order ships out. Thank you for placing your trust in us and we hope to serve you again.
         </Text>
         <Section style={card}>
           <Text style={label}>Order summary</Text>

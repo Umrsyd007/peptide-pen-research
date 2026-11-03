@@ -1,6 +1,6 @@
 // The single product sold on the store. Prices are in GBP and are the
 // source of truth for what customers are charged.
-export const PRODUCT_ID = "needle-free-injector";
+export const PRODUCT_ID = "08f6ee52";
 export const PRODUCT_NAME = "Needle-Free Injector";
 export const CURRENCY = "GBP";
 

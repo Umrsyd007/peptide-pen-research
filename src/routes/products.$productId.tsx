@@ -25,6 +25,7 @@ export const Route = createFileRoute("/products/$productId")({
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "product" },
+      { property: "og:url", content: `https://getpeptidepen.com/products/${PRODUCT_ID}` },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: `https://getpeptidepen.com/products/${PRODUCT_ID}` }],

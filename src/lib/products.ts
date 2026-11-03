@@ -51,7 +51,7 @@ export const RETIRED_PRODUCTS: Product[] = [
 ];
 
 export const PRODUCTS: Product[] = [
-  { id: "needle-free-injector", name: "Needle-Free Injector", categories: "Needle-free devices", price: "£164", tag: "NEW", image: injectorImg },
+  { id: "08f6ee52", name: "Needle-Free Injector", categories: "Needle-free devices", price: "£164", tag: "NEW", image: injectorImg },
 ];
 
 export function getProduct(id: string): Product | undefined {

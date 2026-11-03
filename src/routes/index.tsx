@@ -164,7 +164,7 @@ function HomePage() {
               </h1>
 
               <p className="text-base sm:text-lg text-muted-foreground max-w-xl">
-                Peptide Pen Research supplies pre-mixed peptide pens with batch-level COAs, cold-chain shipping and transparent dosing references — built for laboratories that can't afford guesswork.
+                PeptidePen supplies pre-mixed peptide pens with batch-level COAs, cold-chain shipping and transparent dosing references — built for laboratories that can't afford guesswork.
               </p>
 
               <div className="flex flex-wrap gap-3">

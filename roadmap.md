@@ -1,4 +1,9 @@
 # Purchase tracking
+ # AI order summaries
+- [ ] Generate and persist an AI Gateway summary for each new order without delaying checkout on failure.
+- [ ] Display summaries in an authorized order management view and verify permissions and generation.
+
+# Purchase tracking
 - [x] Install the confirmed Google tag and supplied purchase event with regional consent and privacy disclosure.
 - [x] Return Stripe-confirmed paid totals and avoid duplicate purchase reports; retain checkout and current consent choices.
 - [x] Test consent controls in the browser and purchase rules with automated tests and a simulated event.

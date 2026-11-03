@@ -1,14 +1,16 @@
-# Remove the cookie banner
+# Restyle the cookie banner to match the screenshot
 
 ## What changes
-- The cookie banner and the "Cookie settings" link at the bottom of the page are removed from every page.
-- Google tracking stays as it is today in the US and other regions where no permission is needed.
-- In the EU, UK and Switzerland, visitors can no longer click Accept. Because of that, Google tracking stays off for them. I won't switch it on without their permission, since that breaks Google's rules and privacy laws.
-- Microsoft Clarity keeps running for every visitor, as it does now.
-- The privacy policy will no longer mention the banner or Cookie settings. Instead it will say that tracking is off in regions where permission is required.
+- The banner gets the look of your screenshot. The heading reads "We value your privacy" in large, bold text.
+- The body text reads: "We use cookies to enhance your browsing experience, serve personalised ads or content, and analyse our traffic. By clicking "Accept All", you consent to our use of cookies." It is followed by a Privacy policy link.
+- Three equal buttons sit in one row (they stack on phones):
+  - **Customise** (outlined) opens the Analytics and Advertising checkboxes with a "Save choices" button.
+  - **Reject All** (solid dark) turns off optional tracking.
+  - **Accept All** (solid dark) turns on all tracking.
+- Who sees the banner, what each choice does, and the "Cookie settings" link at the bottom of each page all stay the same.
 
 ## Technical details
-- Remove `<TrackingConsent />` and its import from `src/routes/__root.tsx`, and delete `src/components/tracking-consent.tsx`.
-- Delete `src/lib/tracking-consent.ts`. Move its region detection into a small check inside `src/lib/google-tracking.ts`, so Google stays blocked in regions that need permission. Update `analytics.ts`, `checkout.tsx` and the checkout success page, which currently import it.
-- Update the paragraph about privacy choices in `src/routes/privacy-policy.tsx`.
-- Run the existing tracking tests and check the build.
+- Only `src/components/tracking-consent.tsx` changes, in its layout and text. A local `customising` state shows the checkboxes.
+- The buttons use the existing design colors (`default` and `outline` variants) instead of fixed hex colors.
+- `src/lib/tracking-consent.ts` and the Google behavior stay unchanged.
+- Check the banner's look with a browser screenshot set to an EU region.

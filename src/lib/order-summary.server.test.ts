@@ -42,12 +42,14 @@ describe('new order summary lifecycle', () => {
     expect(saved[0]).toMatchObject({ ai_summary_status: 'ready', ai_summary: '1 Pen, 20mg, USD 165.29, free shipping to US.' });
   });
   it('does not fail checkout or replay inference when AI fails', async () => {
+    const log = vi.spyOn(console, 'error').mockImplementation(() => {});
     generate.mockRejectedValue(new Error('Inference failed'));
     const { db, saved } = database();
     await expect(summarizeNewOrder(db, 'test-order')).resolves.toBeUndefined();
     await summarizeNewOrder(db, 'test-order');
     expect(generate).toHaveBeenCalledTimes(1);
     expect(saved).toEqual([{ ai_summary_status: 'failed' }]);
+    log.mockRestore();
   });
   it('does not call AI for an order already summarized', async () => {
     const { db } = database(false);

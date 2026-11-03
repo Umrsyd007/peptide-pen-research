@@ -40,7 +40,11 @@ export async function summarizeNewOrder(db: SupabaseClient<Database>, orderId: s
       ? { code: error.code, outcome: error.outcome, ids: error.ids, recovery: error.recovery }
       : { reason: 'application_failure' });
     // A failed or unknown inference is not automatically replayed, and cannot fail checkout.
-    await db.from('orders').update({ ai_summary_status: 'failed' }).eq('id', orderId)
-      .eq('ai_summary_status', 'generating');
+    try {
+      await db.from('orders').update({ ai_summary_status: 'failed' }).eq('id', orderId)
+        .eq('ai_summary_status', 'generating');
+    } catch {
+      console.error('Unable to record order summary failure');
+    }
   }
 }

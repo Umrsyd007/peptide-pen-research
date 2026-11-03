@@ -9,6 +9,6 @@
 
 ## Technical details
 - Remove `<TrackingConsent />` and its import from `src/routes/__root.tsx`, and delete `src/components/tracking-consent.tsx`.
-- Keep `src/lib/tracking-consent.ts` (region detection and permission checks) unchanged, so Google stays blocked in regions that need permission.
+- Delete `src/lib/tracking-consent.ts`. Move its region detection into a small check inside `src/lib/google-tracking.ts`, so Google stays blocked in regions that need permission. Update `analytics.ts`, `checkout.tsx` and the checkout success page, which currently import it.
 - Update the paragraph about privacy choices in `src/routes/privacy-policy.tsx`.
 - Run the existing tracking tests and check the build.

@@ -115,7 +115,7 @@ function CheckoutPage() {
 
       const order = await submitOrder({ data: input });
       const { clientSecret: secret } = await startCheckout({
-        data: { orderId: order.id },
+        data: { orderId: order.id, token: order.token },
       });
       const { key } = await fetchPublishableKey();
       await resolveRegion();

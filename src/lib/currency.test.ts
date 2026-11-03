@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { convertUsd, currencyForLocale } from "./currency";
+import { convertUsd, currencyForLocale, currencyForVisitor } from "./currency";
 
 describe("local currency", () => {
   it("converts USD with the latest rate", () => {
@@ -12,5 +12,11 @@ describe("local currency", () => {
     expect(currencyForLocale("en-GB")).toBe("GBP");
     expect(currencyForLocale("de-DE")).toBe("EUR");
     expect(currencyForLocale("en")).toBe("USD");
+  });
+  it("uses the visitor's country before browser language", () => {
+    expect(currencyForVisitor("GB", "en-US")).toBe("GBP");
+    expect(currencyForVisitor("DE", "en")).toBe("EUR");
+    expect(currencyForVisitor(null, "en-AU")).toBe("AUD");
+    expect(currencyForVisitor("KE", "en-GB")).toBe("USD");
   });
 });

@@ -1,4 +1,4 @@
-import { Price } from "@/components/price";
+import { Price, LocalPriceNote } from "@/components/price";
 import { useEffect, useRef, useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { toast } from "sonner";
@@ -277,6 +277,7 @@ function ProductDetailPage() {
                 )}
                 <Pill tone="accent">Save 20%</Pill>
               </div>
+              <LocalPriceNote />
 
               {/* Variant selector */}
               {variants.length > 0 && (

@@ -62,6 +62,15 @@ export default defineTool({
         isError: true,
       };
     }
+    try {
+      const { notifyProductQuestion } = await import('@/lib/email/product-question.server');
+      await notifyProductQuestion(supabase, {
+        id: data.id, productId, productName: product?.name,
+        name: name ?? email, email, message,
+      });
+    } catch {
+      console.error('Saved MCP inquiry notification could not be queued');
+    }
     return {
       content: [
         {

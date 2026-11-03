@@ -32,12 +32,12 @@ export const INJECTOR_PRODUCTS: InjectorProduct[] = [
     ],
   },
   {
-    // Second variation. Placeholder copy — build out the page content later.
+    // PeptiCool travel cooler — page design lives in src/components/pepticool-page.tsx.
     id: "1b0959b6",
-    name: "Needle-Free Injector — Variation",
-    title: "Needle-Free Injector — £129.76 | PeptidePen",
+    name: "PeptiCool™ — GLP-1 & Vial Travel Cooler",
+    title: "PeptiCool™ — GLP-1 & Vial Travel Cooler | £129.76",
     description:
-      "Order the reusable needle-free injector. Comes with nozzles, adapters and a carry case. Free UK delivery in 3–7 days.",
+      "Active cooling for GLP-1 pens and vials: precise 2–8°C, touchscreen readout, USB-C power and 7–9 hrs cordless. No ice packs.",
     variants: [
       { sku: "single", name: "Single", price: 129.76, note: "One device with starter kit" },
     ],

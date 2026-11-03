@@ -1,5 +1,9 @@
 import injectorImg from "@/assets/injector-device.jpg";
 
+// Hosted on the PeptiCool Shopify CDN (same file as the page gallery's first image).
+const PEPTICOOL_IMAGE =
+  "https://www.pepticool.com/cdn/shop/files/hf_20260813_201457_4c21c13a-7874-42cf-836b-d284716090fc_1.png?v=1786660755&width=900";
+
 export type Tag = "NEW" | "BESTSELLER" | null;
 
 export interface Product {
@@ -52,7 +56,7 @@ export const RETIRED_PRODUCTS: Product[] = [
 
 export const PRODUCTS: Product[] = [
   { id: "08f6ee52", name: "Needle-Free Injector", categories: "Needle-free devices", price: "£164", tag: "NEW", image: injectorImg },
-  { id: "1b0959b6", name: "Needle-Free Injector — Variation", categories: "Needle-free devices", price: "£129.76", tag: "NEW", image: injectorImg },
+  { id: "1b0959b6", name: "PeptiCool™ — GLP-1 & Vial Travel Cooler", categories: "Travel coolers", price: "£129.76", tag: "NEW", image: PEPTICOOL_IMAGE },
 ];
 
 export function getProduct(id: string): Product | undefined {

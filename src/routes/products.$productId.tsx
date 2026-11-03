@@ -6,6 +6,9 @@ import { useCartStore } from "@/stores/cart";
 import { trackAddToCart, trackViewItem } from "@/lib/analytics";
 import { CURRENCY, getInjectorProduct, formatGbp } from "@/lib/injector";
 import injectorImg from "@/assets/injector-device.jpg";
+import { PEPTICOOL_IMAGE, PepticoolPage } from "@/components/pepticool-page";
+
+const PEPTICOOL_ID = "1b0959b6";
 
 // Pre-selected option is passed in navigation state (not the URL) so product
 // URLs stay clean, e.g. /products/08f6ee52 rather than ?option=single.
@@ -43,6 +46,7 @@ export const Route = createFileRoute("/products/$productId")({
       product?.description ??
       "A reusable needle-free injector. Free UK delivery in 3–7 days.";
     const url = `https://getpeptidepen.com/products/${params.productId}`;
+    const isPepticool = params.productId === PEPTICOOL_ID;
     return {
       meta: [
         { title },
@@ -51,9 +55,15 @@ export const Route = createFileRoute("/products/$productId")({
         { property: "og:description", content: description },
         { property: "og:type", content: "product" },
         { property: "og:url", content: url },
+        ...(isPepticool ? [{ property: "og:image", content: PEPTICOOL_IMAGE }] : []),
         { name: "twitter:card", content: "summary_large_image" },
       ],
-      links: [{ rel: "canonical", href: url }],
+      links: [
+        { rel: "canonical", href: url },
+        ...(isPepticool
+          ? [{ rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" }]
+          : []),
+      ],
     };
   },
   component: ProductPage,
@@ -68,6 +78,18 @@ const FEATURES = [
 ];
 
 function ProductPage() {
+  const { product } = Route.useLoaderData();
+  if (product.id === PEPTICOOL_ID) {
+    return (
+      <SiteShell>
+        <PepticoolPage product={product} />
+      </SiteShell>
+    );
+  }
+  return <InjectorPage />;
+}
+
+function InjectorPage() {
   const { product } = Route.useLoaderData();
   const option = useLocation({ select: (l) => l.state.option });
   const variants = product.variants;

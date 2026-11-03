@@ -18,7 +18,8 @@ export function SiteShell({ children }: { children: ReactNode }) {
             <span className="text-lg font-black tracking-tight uppercase">{BRAND}</span>
           </Link>
           <nav className="flex items-center gap-1 sm:gap-2" aria-label="Primary">
-            <Link to="/products/$productId" params={{ productId: PRODUCT_ID }} className="px-3 py-2 text-sm font-semibold rounded-full hover:bg-muted">Shop</Link>
+            <Link to="/products/$productId" params={{ productId: PRODUCT_ID }} className="px-3 py-2 text-sm font-semibold rounded-full hover:bg-muted">Injector</Link>
+            <Link to="/products/$productId" params={{ productId: "1b0959b6" }} className="px-3 py-2 text-sm font-semibold rounded-full hover:bg-muted">Cooler</Link>
             <Link to="/contact" className="hidden sm:inline-flex px-3 py-2 text-sm font-semibold rounded-full hover:bg-muted">Contact</Link>
             <CartDrawer />
           </nav>

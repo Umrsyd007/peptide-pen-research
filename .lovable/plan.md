@@ -15,7 +15,8 @@ A private page at `/admin/orders`, visible only to your admin account, showing l
    - Customer name, email, full shipping address.
    - Each product with size, quantity, price, line total, and order total.
    - Copy-address button.
-4. **Admin link** in the account page header, shown only to admins.
+4. **Export CSV** of the currently filtered orders.
+5. **Admin link** in the account page header, shown only to admins.
 
 Out of scope for now: marking orders shipped / tracking numbers (we can add later).
 

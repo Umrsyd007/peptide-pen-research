@@ -45,7 +45,8 @@ describe('new order summary lifecycle', () => {
     const log = vi.spyOn(console, 'error').mockImplementation(() => {});
     generate.mockImplementation(async () => { throw new Error('Inference failed'); });
     const { db, saved } = database();
-    await expect(summarizeNewOrder(db, 'test-order')).resolves.toBeUndefined();
+    const result = await summarizeNewOrder(db, 'test-order');
+    expect(result).toBeUndefined();
     await summarizeNewOrder(db, 'test-order');
     expect(generate).toHaveBeenCalledTimes(1);
     expect(saved).toEqual([{ ai_summary_status: 'failed' }]);

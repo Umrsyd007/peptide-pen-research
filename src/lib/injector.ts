@@ -4,8 +4,8 @@
 // currency at checkout. `price` (USD) is the source of truth for charges.
 export const CURRENCY = "USD";
 
-/** Fixed GBP→USD rate. 1.2718 reproduces the earlier £164 → $208.58 charge. */
-export const GBP_TO_USD = 1.2718;
+/** Fixed GBP→USD rate: market rate on 3 Nov 2026 (≈1.3415). Update deliberately; tests pin the resulting prices. */
+export const GBP_TO_USD = 1.3415;
 
 /** Converts a GBP list price to the USD amount we charge, rounded to cents. */
 export function gbpToUsd(gbp: number) {

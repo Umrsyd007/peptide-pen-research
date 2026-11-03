@@ -28,6 +28,8 @@ export const SHIPPING_FLAT = 0;
 export const createOrder = createServerFn({ method: "POST" })
   .inputValidator((raw: unknown) => CreateOrderSchema.parse(raw))
   .handler(async ({ data }) => {
+    const { STOREFRONT_OPEN } = await import("@/lib/products");
+    if (!STOREFRONT_OPEN) throw new Error("Ordering is currently unavailable.");
     const { supabaseAdmin } = await import(
       "@/integrations/supabase/client.server"
     );

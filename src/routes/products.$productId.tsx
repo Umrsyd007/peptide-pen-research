@@ -5,31 +5,36 @@ import { z } from "zod";
 import { SiteShell } from "@/components/site-shell";
 import { useCartStore } from "@/stores/cart";
 import { trackAddToCart, trackViewItem } from "@/lib/analytics";
-import { CURRENCY, PRODUCT_ID, PRODUCT_NAME, VARIANTS, formatGbp } from "@/lib/injector";
+import { CURRENCY, getInjectorProduct, formatGbp } from "@/lib/injector";
 import injectorImg from "@/assets/injector-device.jpg";
-
-const TITLE = `${PRODUCT_NAME} — Single £164 or 2-Pack £230 | PeptidePen`;
-const DESCRIPTION =
-  "Order the reusable needle-free injector. Comes with nozzles, adapters and a carry case. Free UK delivery in 3–7 days.";
 
 export const Route = createFileRoute("/products/$productId")({
   validateSearch: z.object({ option: z.string().optional() }),
   loader: ({ params }) => {
-    if (params.productId !== PRODUCT_ID) throw notFound();
-    return null;
+    const product = getInjectorProduct(params.productId);
+    if (!product) throw notFound();
+    return { product };
   },
-  head: () => ({
-    meta: [
-      { title: TITLE },
-      { name: "description", content: DESCRIPTION },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESCRIPTION },
-      { property: "og:type", content: "product" },
-      { property: "og:url", content: `https://getpeptidepen.com/products/${PRODUCT_ID}` },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-    links: [{ rel: "canonical", href: `https://getpeptidepen.com/products/${PRODUCT_ID}` }],
-  }),
+  head: ({ params, loaderData }) => {
+    const product = loaderData?.product;
+    const title = product?.title ?? "Needle-Free Injector | PeptidePen";
+    const description =
+      product?.description ??
+      "A reusable needle-free injector. Free UK delivery in 3–7 days.";
+    const url = `https://getpeptidepen.com/products/${params.productId}`;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "product" },
+        { property: "og:url", content: url },
+        { name: "twitter:card", content: "summary_large_image" },
+      ],
+      links: [{ rel: "canonical", href: url }],
+    };
+  },
   component: ProductPage,
 });
 
@@ -42,39 +47,41 @@ const FEATURES = [
 ];
 
 function ProductPage() {
+  const { product } = Route.useLoaderData();
   const { option } = Route.useSearch();
-  const [idx, setIdx] = useState(() => Math.max(0, VARIANTS.findIndex((v) => v.sku === option)));
+  const variants = product.variants;
+  const [idx, setIdx] = useState(() => Math.max(0, variants.findIndex((v) => v.sku === option)));
   const [qty, setQty] = useState(1);
   const addItem = useCartStore((s) => s.addItem);
-  const selected = VARIANTS[idx];
+  const selected = variants[idx];
 
   useEffect(() => {
-    trackViewItem({ item_id: PRODUCT_ID, item_name: PRODUCT_NAME, item_variant: selected.name, price: selected.price, currency: CURRENCY });
-  }, [selected]);
+    trackViewItem({ item_id: product.id, item_name: product.name, item_variant: selected.name, price: selected.price, currency: CURRENCY });
+  }, [selected, product]);
 
   const handleAdd = async () => {
     await addItem({
-      variantId: `${PRODUCT_ID}:${selected.sku}`,
-      productId: PRODUCT_ID,
-      title: PRODUCT_NAME,
+      variantId: `${product.id}:${selected.sku}`,
+      productId: product.id,
+      title: product.name,
       variantTitle: selected.name,
       image: injectorImg,
       price: { amount: selected.price.toFixed(2), currencyCode: CURRENCY },
       quantity: qty,
     });
-    trackAddToCart({ item_id: PRODUCT_ID, item_name: PRODUCT_NAME, item_variant: selected.name, price: selected.price, quantity: qty, currency: CURRENCY });
-    toast.success(`Added to cart — ${PRODUCT_NAME}`, { description: selected.name });
+    trackAddToCart({ item_id: product.id, item_name: product.name, item_variant: selected.name, price: selected.price, quantity: qty, currency: CURRENCY });
+    toast.success(`Added to cart — ${product.name}`, { description: selected.name });
   };
 
   return (
     <SiteShell>
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-16 grid gap-10 lg:grid-cols-2 items-start">
         <div className="aspect-square rounded-3xl border border-border bg-card overflow-hidden lg:sticky lg:top-24">
-          <img src={injectorImg} alt={PRODUCT_NAME} width={1024} height={1024} className="h-full w-full object-cover" />
+          <img src={injectorImg} alt={product.name} width={1024} height={1024} className="h-full w-full object-cover" />
         </div>
         <div className="space-y-7">
           <div className="space-y-3">
-            <h1 className="text-4xl sm:text-5xl font-black uppercase tracking-tight leading-none">{PRODUCT_NAME}</h1>
+            <h1 className="text-4xl sm:text-5xl font-black uppercase tracking-tight leading-none">{product.name}</h1>
             <p className="text-3xl font-black">{formatGbp(selected.price)}</p>
             <p className="text-muted-foreground">
               A reusable device that delivers with a quick, gentle pulse instead of a needle.
@@ -84,7 +91,7 @@ function ProductPage() {
           <fieldset className="space-y-3">
             <legend className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3">Choose an option</legend>
             <div className="grid grid-cols-2 gap-3">
-              {VARIANTS.map((v, i) => (
+              {variants.map((v, i) => (
                 <button
                   key={v.sku}
                   type="button"

@@ -1,7 +1,5 @@
-// The single product sold on the store. Prices are in GBP and are the
+// The products sold on the store. Prices are in GBP and are the
 // source of truth for what customers are charged.
-export const PRODUCT_ID = "08f6ee52";
-export const PRODUCT_NAME = "Needle-Free Injector";
 export const CURRENCY = "GBP";
 
 export interface InjectorVariant {
@@ -11,13 +9,54 @@ export interface InjectorVariant {
   note: string;
 }
 
-export const VARIANTS: InjectorVariant[] = [
-  { sku: "single", name: "Single", price: 164, note: "One device with starter kit" },
-  { sku: "two-pack", name: "2-Pack", price: 230, note: "Two devices — save £98" },
+export interface InjectorProduct {
+  id: string;
+  name: string;
+  /** SEO + social title for the product page <head>. */
+  title: string;
+  /** SEO + social description for the product page <head>. */
+  description: string;
+  variants: InjectorVariant[];
+}
+
+export const INJECTOR_PRODUCTS: InjectorProduct[] = [
+  {
+    id: "08f6ee52",
+    name: "Needle-Free Injector",
+    title: "Needle-Free Injector — Single £164 or 2-Pack £230 | PeptidePen",
+    description:
+      "Order the reusable needle-free injector. Comes with nozzles, adapters and a carry case. Free UK delivery in 3–7 days.",
+    variants: [
+      { sku: "single", name: "Single", price: 164, note: "One device with starter kit" },
+      { sku: "two-pack", name: "2-Pack", price: 230, note: "Two devices — save £98" },
+    ],
+  },
+  {
+    // Second variation. Placeholder copy — build out the page content later.
+    id: "1b0959b6",
+    name: "Needle-Free Injector — Variation",
+    title: "Needle-Free Injector — £129.76 | PeptidePen",
+    description:
+      "Order the reusable needle-free injector. Comes with nozzles, adapters and a carry case. Free UK delivery in 3–7 days.",
+    variants: [
+      { sku: "single", name: "Single", price: 129.76, note: "One device with starter kit" },
+    ],
+  },
 ];
 
-export function findVariant(name: string): InjectorVariant | undefined {
-  return VARIANTS.find((v) => v.name === name || v.sku === name);
+/** Look up a sellable product by its id (which is also its URL slug). */
+export function getInjectorProduct(id: string): InjectorProduct | undefined {
+  return INJECTOR_PRODUCTS.find((p) => p.id === id);
+}
+
+// Featured product — what the home page, nav and the /products redirect point at.
+const FEATURED = INJECTOR_PRODUCTS[0];
+export const PRODUCT_ID = FEATURED.id;
+export const PRODUCT_NAME = FEATURED.name;
+export const VARIANTS = FEATURED.variants;
+
+export function findVariant(product: InjectorProduct, name: string): InjectorVariant | undefined {
+  return product.variants.find((v) => v.name === name || v.sku === name);
 }
 
 export function formatGbp(n: number) {
@@ -30,6 +69,7 @@ export function formatGbp(n: number) {
 
 /** Returns the catalog price for a cart line, or null if it isn't sellable. */
 export function priceForLine(productId: string, variant: string): number | null {
-  if (productId !== PRODUCT_ID) return null;
-  return findVariant(variant)?.price ?? null;
+  const product = getInjectorProduct(productId);
+  if (!product) return null;
+  return findVariant(product, variant)?.price ?? null;
 }

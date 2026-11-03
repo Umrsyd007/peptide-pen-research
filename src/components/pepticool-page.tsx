@@ -2,7 +2,8 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { useCartStore } from "@/stores/cart";
 import { trackAddToCart } from "@/lib/analytics";
-import { CURRENCY, formatGbp, type InjectorProduct } from "@/lib/injector";
+import { CURRENCY, type InjectorProduct } from "@/lib/injector";
+import { Price } from "@/components/price";
 
 // Design and copy mirror pepticool.com's GLP-1 & Vial Travel Cooler page.
 // Media is served from the PeptiCool Shopify CDN.
@@ -185,7 +186,7 @@ function BuyBox({ product }: { product: InjectorProduct }) {
             <p className="mt-1 text-xs font-semibold text-[#136EA2]">Regular Price</p>
           </div>
         </div>
-        <p className="text-xl font-bold text-[#14212B]">{formatGbp(variant.price)}</p>
+        <p className="text-xl font-bold text-[#14212B]"><Price usd={variant.price} /></p>
       </div>
       <div className="flex gap-3">
         <div className="inline-flex items-center rounded-xl border border-[#d8e3ea]">
@@ -194,7 +195,7 @@ function BuyBox({ product }: { product: InjectorProduct }) {
           <button type="button" aria-label="Increase quantity" onClick={() => setQty((q) => Math.min(10, q + 1))} className="h-[54px] w-10 text-lg">+</button>
         </div>
         <button type="button" onClick={add} className="flex-1 h-[54px] rounded-xl text-white text-[15px] font-extrabold transition-opacity hover:opacity-90" style={{ background: BLUE }}>
-          Add to cart · {formatGbp(variant.price * qty)}
+          Add to cart · <Price usd={variant.price * qty} />
         </button>
       </div>
       <div className="rounded-2xl bg-[#f1fbff] p-4 space-y-1.5">
@@ -413,10 +414,10 @@ function Comparison({ price }: { price: number }) {
             ))}
             <tr>
               <td className="p-4 text-left text-[13px]">Price</td>
-              <td className="bg-[#F0F8FF] p-4 text-center font-bold text-[#136EA2]">from {formatGbp(price)}</td>
-              <td className="p-4 text-center text-[#8a8f94]">£8–16</td>
-              <td className="p-4 text-center text-[#8a8f94]">~£24</td>
-              <td className="p-4 text-center text-[#8a8f94]">~£235</td>
+              <td className="bg-[#F0F8FF] p-4 text-center font-bold text-[#136EA2]">from <Price usd={price} /></td>
+              <td className="p-4 text-center text-[#8a8f94]"><Price usd={10} />–<Price usd={20} /></td>
+              <td className="p-4 text-center text-[#8a8f94]">~<Price usd={30} /></td>
+              <td className="p-4 text-center text-[#8a8f94]">~<Price usd={299} /></td>
             </tr>
           </tbody>
         </table>

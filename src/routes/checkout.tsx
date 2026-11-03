@@ -76,7 +76,7 @@ function CheckoutPage() {
     currency: string;
   } | null>(null);
 
-  const currency = items[0]?.price.currencyCode ?? "GBP";
+  const currency = items[0]?.price.currencyCode ?? "USD";
   const subtotal = useMemo(
     () =>
       items.reduce((s, i) => s + parseFloat(i.price.amount) * i.quantity, 0),
@@ -367,5 +367,5 @@ function Row({ k, v, big }: { k: string; v: string; big?: boolean }) {
 }
 
 function CurrencyNotice() {
-  return <p className="text-xs text-muted-foreground">All prices are in GBP (£).</p>;
+  return <p className="text-xs text-muted-foreground">Charged in USD. You can pay in your local currency at the payment step.</p>;
 }

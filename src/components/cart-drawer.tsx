@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCartStore } from "@/stores/cart";
 import { formatMoney } from "@/lib/money";
+import { Price } from "@/components/price";
 
 
 interface CartDrawerProps {
@@ -35,7 +36,7 @@ export function CartDrawer({
 
 
   const totalItems = items.reduce((s, i) => s + i.quantity, 0);
-  const currency = items[0]?.price.currencyCode ?? "GBP";
+  const currency = items[0]?.price.currencyCode ?? "USD";
   const totalPrice = items.reduce(
     (s, i) => s + parseFloat(i.price.amount) * i.quantity,
     0,
@@ -113,7 +114,7 @@ export function CartDrawer({
                             </p>
                           )}
                         <p className="text-sm font-semibold mt-1">
-                          {formatMoney(item.price.amount, item.price.currencyCode)}
+                          {item.price.currencyCode === "USD" ? <Price usd={item.price.amount} /> : formatMoney(item.price.amount, item.price.currencyCode)}
                         </p>
                       </div>
                       <div className="flex flex-col items-end gap-2 flex-shrink-0">
@@ -162,11 +163,11 @@ export function CartDrawer({
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-muted-foreground">Subtotal</span>
                   <span className="text-xl font-bold">
-                    {formatMoney(totalPrice, currency)}
+                    {currency === "USD" ? <Price usd={totalPrice} /> : formatMoney(totalPrice, currency)}
                   </span>
                 </div>
                 <p className="text-[11px] text-muted-foreground">
-                  Free delivery in 3–7 days. Prices in GBP (£).
+                  Free delivery in 3–7 days. Charged in USD; pay in your local currency at checkout.
                 </p>
                 <Button
                   onClick={handleCheckout}

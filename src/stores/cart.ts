@@ -53,7 +53,7 @@ export const useCartStore = create<CartStore>()(
       clearCart: () => set({ items: [] }),
     }),
     {
-      name: "peptidepen-cart-v2",
+      name: "peptidepen-cart-v3",
       storage: createJSONStorage(() => localStorage),
       partialize: (s) => ({ items: s.items }),
     },

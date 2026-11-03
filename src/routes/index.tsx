@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteShell } from "@/components/site-shell";
-import { INJECTOR_PRODUCTS, PRODUCT_ID, formatGbp } from "@/lib/injector";
+import { INJECTOR_PRODUCTS, PRODUCT_ID } from "@/lib/injector";
+import { Price } from "@/components/price";
 import { PEPTICOOL_IMAGE } from "@/components/pepticool-page";
 import injectorImg from "@/assets/injector-device.jpg";
 
@@ -45,7 +46,7 @@ const SHOP = [
     from: injector.variants.length > 1,
     img: injectorImg,
     imgBg: "bg-[#F4F1EA]",
-    tag: "Single £164 · 2-Pack £230",
+    tag: "Single or 2-Pack",
   },
   {
     id: cooler.id,
@@ -157,7 +158,7 @@ function HomePage() {
                     <h3 className="text-xl font-bold">{p.name}</h3>
                     <p className="text-sm leading-relaxed text-[#4A5D70]">{p.blurb}</p>
                     <div className="flex items-center justify-between pt-2">
-                      <p className="text-2xl font-extrabold">{p.from && <span className="text-sm font-medium text-[#6B7C8D]">From </span>}{formatGbp(p.price)}</p>
+                      <p className="text-2xl font-extrabold">{p.from && <span className="text-sm font-medium text-[#6B7C8D]">From </span>}<Price usd={p.price} /></p>
                       <span className="inline-flex h-11 items-center rounded-full px-5 text-sm font-bold text-white" style={{ background: BLUE }}>View product →</span>
                     </div>
                   </div>
@@ -195,7 +196,7 @@ function HomePage() {
               ))}
             </ol>
             <Link to="/products/$productId" params={{ productId: injector.id }} className="mt-8 inline-flex h-12 items-center rounded-full px-6 text-sm font-bold text-white hover:opacity-90" style={{ background: BLUE }}>
-              Shop the injector — from {formatGbp(fromPrice(injector))}
+              Shop the injector — from <Price usd={fromPrice(injector)} />
             </Link>
           </div>
         </section>
@@ -219,7 +220,7 @@ function HomePage() {
                 ))}
               </ul>
               <Link to="/products/$productId" params={{ productId: cooler.id }} className="inline-flex h-12 items-center rounded-full bg-[#60C5F8] px-6 text-sm font-bold text-[#050A10] hover:opacity-90">
-                Shop the cooler — {formatGbp(fromPrice(cooler))}
+                Shop the cooler — <Price usd={fromPrice(cooler)} />
               </Link>
             </div>
           </div>

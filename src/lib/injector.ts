@@ -1,12 +1,29 @@
-// The products sold on the store. Prices are in GBP and are the
-// source of truth for what customers are charged.
-export const CURRENCY = "GBP";
+// The products sold on the store. List prices are set in GBP; customers are
+// charged in USD (the store currency), converted at a fixed rate below.
+// Stripe Adaptive Pricing then presents the charge in the buyer's local
+// currency at checkout. `price` (USD) is the source of truth for charges.
+export const CURRENCY = "USD";
+
+/** Fixed GBP→USD rate. 1.2718 reproduces the earlier £164 → $208.58 charge. */
+export const GBP_TO_USD = 1.2718;
+
+/** Converts a GBP list price to the USD amount we charge, rounded to cents. */
+export function gbpToUsd(gbp: number) {
+  return Math.round(gbp * GBP_TO_USD * 100) / 100;
+}
 
 export interface InjectorVariant {
   sku: string;
   name: string;
+  /** GBP list price (what the price is set in). */
+  gbp: number;
+  /** USD price charged at checkout, derived from `gbp`. */
   price: number;
   note: string;
+}
+
+function variant(sku: string, name: string, gbp: number, note: string): InjectorVariant {
+  return { sku, name, gbp, price: gbpToUsd(gbp), note };
 }
 
 export interface InjectorProduct {
@@ -23,23 +40,23 @@ export const INJECTOR_PRODUCTS: InjectorProduct[] = [
   {
     id: "08f6ee52",
     name: "Needle-Free Injector",
-    title: "Needle-Free Injector — Single £164 or 2-Pack £230 | PeptidePen",
+    title: "Needle-Free Injector — Single or 2-Pack | PeptidePen",
     description:
       "Order the reusable needle-free injector. Comes with nozzles, adapters and a carry case. Free UK delivery in 3–7 days.",
     variants: [
-      { sku: "single", name: "Single", price: 164, note: "One device with starter kit" },
-      { sku: "two-pack", name: "2-Pack", price: 230, note: "Two devices — save £98" },
+      variant("single", "Single", 164, "One device with starter kit"),
+      variant("two-pack", "2-Pack", 230, "Two devices — save 30%"),
     ],
   },
   {
     // PeptiCool travel cooler — page design lives in src/components/pepticool-page.tsx.
     id: "1b0959b6",
     name: "PeptiCool™ — GLP-1 & Vial Travel Cooler",
-    title: "PeptiCool™ — GLP-1 & Vial Travel Cooler | £129.76",
+    title: "PeptiCool™ — GLP-1 & Vial Travel Cooler | PeptidePen",
     description:
       "Active cooling for GLP-1 pens and vials: precise 2–8°C, touchscreen readout, USB-C power and 7–9 hrs cordless. No ice packs.",
     variants: [
-      { sku: "single", name: "Single", price: 129.76, note: "One device with starter kit" },
+      variant("single", "Single", 129.76, "One device with starter kit"),
     ],
   },
 ];
@@ -59,8 +76,8 @@ export function findVariant(product: InjectorProduct, name: string): InjectorVar
   return product.variants.find((v) => v.name === name || v.sku === name);
 }
 
-export function formatGbp(n: number) {
-  return new Intl.NumberFormat("en-GB", {
+export function formatUsd(n: number) {
+  return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: CURRENCY,
     minimumFractionDigits: Number.isInteger(n) ? 0 : 2,

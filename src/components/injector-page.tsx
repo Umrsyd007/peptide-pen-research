@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useCartStore } from "@/stores/cart";
 import { trackAddToCart, trackViewItem } from "@/lib/analytics";
-import { CURRENCY, formatGbp, type InjectorProduct } from "@/lib/injector";
+import { CURRENCY, type InjectorProduct } from "@/lib/injector";
+import { Price } from "@/components/price";
 import injectorImg from "@/assets/injector-device.jpg";
 
 // Layout follows the flow of a typical needle-free device page (hero + buy box,
@@ -103,7 +104,7 @@ export function InjectorPage({ product, option }: { product: InjectorProduct; op
           <div className="min-w-0 space-y-5">
             <div className="space-y-2">
               <h1 className="text-[28px] sm:text-[30px] font-bold leading-tight tracking-[-0.01em]">{product.name}</h1>
-              <p className="text-[26px] font-bold">{formatGbp(selected.price)} <span className="text-sm font-medium text-[#6B7C8D]">GBP</span></p>
+              <p className="text-[26px] font-bold"><Price usd={selected.price} /></p>
             </div>
 
             <p className="flex items-start gap-2 text-sm text-[#4A5D70]">
@@ -115,7 +116,7 @@ export function InjectorPage({ product, option }: { product: InjectorProduct; op
               <legend className="sr-only">Choose your kit</legend>
               <div className="bg-[#EEF5FD] px-4 py-3">
                 <p className="text-sm font-bold">Choose your kit</p>
-                <p className="text-xs text-[#4A5D70]">Save £98 when you take the 2-Pack.</p>
+                <p className="text-xs text-[#4A5D70]">Save 30% when you take the 2-Pack.</p>
               </div>
               {variants.map((v, i) => (
                 <button
@@ -132,7 +133,7 @@ export function InjectorPage({ product, option }: { product: InjectorProduct; op
                     <span className="block text-sm font-bold">{v.name}</span>
                     <span className="block text-xs text-[#6B7C8D]">{v.note}</span>
                   </span>
-                  <span className="font-bold">{formatGbp(v.price)}</span>
+                  <span className="font-bold"><Price usd={v.price} /></span>
                 </button>
               ))}
             </fieldset>
@@ -142,7 +143,7 @@ export function InjectorPage({ product, option }: { product: InjectorProduct; op
                 <p className="text-sm font-bold">Your total</p>
                 <p className="text-xs text-[#6B7C8D]">One-time purchase</p>
               </div>
-              <p className="text-xl font-bold">{formatGbp(selected.price * qty)}</p>
+              <p className="text-xl font-bold"><Price usd={selected.price * qty} /></p>
             </div>
 
             <div className="flex items-center gap-3 rounded-xl bg-[#F4F6F8] px-4 py-3 text-sm">

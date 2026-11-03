@@ -43,7 +43,7 @@ describe('new order summary lifecycle', () => {
   });
   it('does not fail checkout or replay inference when AI fails', async () => {
     const log = vi.spyOn(console, 'error').mockImplementation(() => {});
-    generate.mockImplementation(async () => { throw new Error('Inference failed'); });
+    generate.mockResolvedValue({ status: 'failed', output: [] });
     const { db, saved } = database();
     const result = await summarizeNewOrder(db, 'test-order');
     expect(result).toBeUndefined();

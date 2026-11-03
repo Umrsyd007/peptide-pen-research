@@ -1,15 +1,36 @@
 import { useEffect, useState } from "react";
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute, notFound, redirect, useLocation } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { z } from "zod";
 import { SiteShell } from "@/components/site-shell";
 import { useCartStore } from "@/stores/cart";
 import { trackAddToCart, trackViewItem } from "@/lib/analytics";
 import { CURRENCY, getInjectorProduct, formatGbp } from "@/lib/injector";
 import injectorImg from "@/assets/injector-device.jpg";
 
+// Pre-selected option is passed in navigation state (not the URL) so product
+// URLs stay clean, e.g. /products/08f6ee52 rather than ?option=single.
+declare module "@tanstack/react-router" {
+  interface HistoryState {
+    option?: string;
+  }
+}
+
 export const Route = createFileRoute("/products/$productId")({
-  validateSearch: z.object({ option: z.string().optional() }),
+  beforeLoad: ({ search, params }) => {
+    // Old links carried ?option=…; send them to the clean URL. Other params
+    // (e.g. gclid/utm_*) are kept so ad attribution isn't lost.
+    const s = search as Record<string, unknown>;
+    if ("option" in s) {
+      const { option: _drop, ...rest } = s;
+      throw redirect({
+        to: "/products/$productId",
+        params,
+        search: rest as never,
+        statusCode: 301,
+        replace: true,
+      });
+    }
+  },
   loader: ({ params }) => {
     const product = getInjectorProduct(params.productId);
     if (!product) throw notFound();
@@ -48,7 +69,7 @@ const FEATURES = [
 
 function ProductPage() {
   const { product } = Route.useLoaderData();
-  const { option } = Route.useSearch();
+  const option = useLocation({ select: (l) => l.state.option });
   const variants = product.variants;
   const [idx, setIdx] = useState(() => Math.max(0, variants.findIndex((v) => v.sku === option)));
   const [qty, setQty] = useState(1);

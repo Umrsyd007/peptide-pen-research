@@ -140,7 +140,7 @@ function HomePage() {
               <Link
                 to="/products/$productId"
                 params={{ productId: PRODUCT_ID }}
-                search={{ option: v.sku }}
+                state={{ option: v.sku }}
                 className="inline-flex h-11 items-center justify-center rounded-full bg-foreground text-background text-xs font-bold uppercase tracking-wider hover:bg-primary transition-colors"
               >
                 Choose {v.name}

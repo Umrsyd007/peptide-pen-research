@@ -1,4 +1,4 @@
-import injectorImg from "@/assets/injector-device.jpg";
+import injectorImg from "@/assets/injector/g1-hero-800.webp";
 
 // Hosted on the PeptiCool Shopify CDN (same file as the page gallery's first image).
 const PEPTICOOL_IMAGE =

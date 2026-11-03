@@ -3,6 +3,7 @@ import { SiteShell } from "@/components/site-shell";
 import { getInjectorProduct } from "@/lib/injector";
 import { InjectorPage } from "@/components/injector-page";
 import { PEPTICOOL_IMAGE, PepticoolPage } from "@/components/pepticool-page";
+import { OG_IMAGE as INJECTOR_OG_IMAGE } from "@/components/injector-media";
 
 const PEPTICOOL_ID = "1b0959b6";
 
@@ -43,6 +44,24 @@ export const Route = createFileRoute("/products/$productId")({
       "A reusable needle-free injector. Free UK delivery in 3–7 days.";
     const url = `https://getpeptidepen.com/products/${params.productId}`;
     const isPepticool = params.productId === PEPTICOOL_ID;
+    const image = isPepticool ? PEPTICOOL_IMAGE : INJECTOR_OG_IMAGE;
+    // Structured data so search engines can show price and availability.
+    const prices = product?.variants.map((v) => v.price) ?? [];
+    const offers =
+      prices.length > 1
+        ? { "@type": "AggregateOffer", priceCurrency: "USD", lowPrice: Math.min(...prices).toFixed(2), highPrice: Math.max(...prices).toFixed(2), offerCount: prices.length, availability: "https://schema.org/InStock", url }
+        : { "@type": "Offer", priceCurrency: "USD", price: (prices[0] ?? 0).toFixed(2), availability: "https://schema.org/InStock", url };
+    const jsonLd = product && {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      name: product.name,
+      description,
+      image: [image],
+      sku: product.id,
+      url,
+      brand: { "@type": "Brand", name: "PeptidePen" },
+      offers,
+    };
     return {
       meta: [
         { title },
@@ -51,13 +70,16 @@ export const Route = createFileRoute("/products/$productId")({
         { property: "og:description", content: description },
         { property: "og:type", content: "product" },
         { property: "og:url", content: url },
-        ...(isPepticool ? [{ property: "og:image", content: PEPTICOOL_IMAGE }] : []),
+        { property: "og:image", content: image },
+        ...(isPepticool ? [] : [{ property: "og:image:width", content: "1200" }, { property: "og:image:height", content: "630" }]),
         { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:image", content: image },
       ],
       links: [
         { rel: "canonical", href: url },
         { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" },
       ],
+      scripts: jsonLd ? [{ type: "application/ld+json", children: JSON.stringify(jsonLd) }] : [],
     };
   },
   component: ProductPage,

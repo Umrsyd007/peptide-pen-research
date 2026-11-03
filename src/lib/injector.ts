@@ -42,7 +42,7 @@ export const INJECTOR_PRODUCTS: InjectorProduct[] = [
     name: "Needle-Free Injector",
     title: "Needle-Free Injector — Single or 2-Pack | PeptidePen",
     description:
-      "Order the reusable needle-free injector. Comes with nozzles, adapters and a carry case. Free UK delivery in 3–7 days.",
+      "A reusable needle-free injector that delivers with a fast, narrow stream instead of a needle. Kit includes sterile nozzles, adapters and a carry case. Free delivery.",
     variants: [
       variant("single", "Single", 164, "One device with starter kit"),
       variant("two-pack", "2-Pack", 230, "Two devices — save 30%"),

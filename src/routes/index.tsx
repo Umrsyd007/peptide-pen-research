@@ -4,7 +4,7 @@ import { SiteShell } from "@/components/site-shell";
 import { INJECTOR_PRODUCTS, PRODUCT_ID } from "@/lib/injector";
 import { Price } from "@/components/price";
 import { PEPTICOOL_IMAGE } from "@/components/pepticool-page";
-import injectorImg from "@/assets/injector-device.jpg";
+import injectorImg from "@/assets/injector/g1-hero-800.webp";
 
 const COOLER_ID = "1b0959b6";
 const NAVY = "#0E2A47";

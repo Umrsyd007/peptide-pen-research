@@ -32,7 +32,7 @@ export const Route = createFileRoute("/auth")({
 function safeNext(next: string | undefined): string {
   if (!next) return "/";
   // Only allow same-origin relative paths beginning with a single slash
-  if (!next.startsWith("/") || next.startsWith("//")) return "/";
+  if (!next.startsWith("/") || next.startsWith("//") || next.includes("\\") || /[\u0000-\u001f]/.test(next)) return "/";
   return next;
 }
 

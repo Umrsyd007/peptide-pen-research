@@ -207,12 +207,14 @@ function HomePage() {
                 
                 {/* Product image */}
                 <div className="relative h-full w-full flex items-center justify-center p-8 sm:p-12">
+                  <Link to="/products/$productId" params={{ productId: (PRODUCTS.find(p => p.name === "BPC-157") ?? PRODUCTS[0]).id }} aria-label="View BPC-157" className="block h-full w-full">
                   <img
                     src={PRODUCTS.find(p => p.name === "BPC-157")?.image || PRODUCTS[0].image}
                     alt="Research-grade peptide pen"
                     className="h-full w-full object-contain drop-shadow-2xl mix-blend-multiply"
                     loading="eager"
                   />
+                  </Link>
                 </div>
               </div>
 
@@ -360,7 +362,7 @@ function HomePage() {
         <section id="science" className="border-y border-border bg-muted/30" aria-labelledby="science-heading">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
             <div className="aspect-square w-full rounded-3xl bg-card border border-border overflow-hidden flex items-center justify-center shadow-[var(--shadow-glow)]">
-              <img src={PRODUCTS[1].image} alt="Lab-tested research peptide" className="w-full h-full object-contain p-10 mix-blend-multiply" loading="lazy" />
+              <Link to="/products/$productId" params={{ productId: PRODUCTS[1].id }} aria-label={`View ${PRODUCTS[1].name}`} className="block w-full h-full"><img src={PRODUCTS[1].image} alt="Lab-tested research peptide" className="w-full h-full object-contain p-10 mix-blend-multiply" loading="lazy" /></Link>
             </div>
             <div className="space-y-6">
               <Pill>The Science</Pill>

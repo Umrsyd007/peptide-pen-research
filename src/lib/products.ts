@@ -9,7 +9,9 @@ export interface Product {
   image: string;
 }
 
-export const PRODUCTS: Product[] = [
+import { PRODUCT_VARIANTS } from "./product-variants";
+
+const RAW_PRODUCTS: Product[] = [
   { id: "08f6ee52", name: "(Ret) - GLP3R (Standard Pen)", categories: "Metabolic & Fat Optimization", price: "$307.40", tag: "BESTSELLER" , image: "/__l5e/assets-v1/7c637d58-c76e-4ddd-b830-9f83ca801425/08f6ee52.png" },
   { id: "72d3cbf2", name: "AC-Selank-nH2", categories: "Cognitive & Neuro • Cellular Longevity", price: "$126.44", tag: "NEW" , image: "/__l5e/assets-v1/434b906a-7615-4b61-a745-b343bcf8deb5/72d3cbf2.png" },
   { id: "d2a5603b", name: "KPV Peptide (Nasal Spray)", categories: "Cellular Longevity • Immune & Inflammation", price: "$97.44", tag: "NEW" , image: "/__l5e/assets-v1/b815d774-9df8-4296-9363-f568c59bc388/d2a5603b.png" },
@@ -46,6 +48,17 @@ export const PRODUCTS: Product[] = [
   { id: "04317a6e", name: "NMN (Nicotinamide Mononucleotide)", categories: "Cognitive & Neuro • Cellular Longevity", price: "$145.00", tag: null , image: "/__l5e/assets-v1/54f18cbd-73e1-4c3f-a8ac-515253921174/04317a6e.png" },
   { id: "21059df6", name: "Curcumin", categories: "Cognitive & Neuro • Cellular Longevity", price: "$149.64", tag: null , image: "/__l5e/assets-v1/00c31390-f8af-4c06-a63f-951c86f7a545/21059df6.png" },
 ];
+
+/** Live USD price = the default size's price, the same one checkout charges. */
+export function getLivePrice(id: string): number | undefined {
+  const vs = PRODUCT_VARIANTS[id];
+  return (vs?.find((v) => v.isDefault) ?? vs?.[0])?.priceNum;
+}
+
+export const PRODUCTS: Product[] = RAW_PRODUCTS.map((p) => {
+  const live = getLivePrice(p.id);
+  return live === undefined ? p : { ...p, price: `$${live.toFixed(2)}` };
+});
 
 export function getProduct(id: string): Product | undefined {
   return PRODUCTS.find((p) => p.id === id);

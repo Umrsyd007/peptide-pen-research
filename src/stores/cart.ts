@@ -1,6 +1,16 @@
 // Local, persistent cart. Checkout is handled by our own orders + Stripe.
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { PRODUCT_VARIANTS } from "@/lib/product-variants";
+
+/** Re-price saved cart lines from the current catalog; drop lines that no longer exist. */
+export function refreshCartPrices(items: CartItem[]): CartItem[] {
+  return items.flatMap((i) => {
+    const v = PRODUCT_VARIANTS[i.productId]?.find((x) => x.name === i.variantTitle);
+    if (!v) return [];
+    return [{ ...i, price: { amount: v.priceNum.toFixed(2), currencyCode: "USD" } }];
+  });
+}
 
 export interface CartItem {
   variantId: string; // local key: `${productId}:${sku}`
@@ -56,6 +66,10 @@ export const useCartStore = create<CartStore>()(
       name: "peptidepen-cart-v2",
       storage: createJSONStorage(() => localStorage),
       partialize: (s) => ({ items: s.items }),
+      merge: (persisted, current) => ({
+        ...current,
+        items: refreshCartPrices((persisted as { items?: CartItem[] } | undefined)?.items ?? []),
+      }),
     },
   ),
 );

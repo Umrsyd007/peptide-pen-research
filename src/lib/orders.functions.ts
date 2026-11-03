@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { signOrderToken } from "@/lib/order-token.server";
 
 const ItemSchema = z.object({
   productId: z.string().min(1).max(120),
@@ -32,9 +33,19 @@ export const createOrder = createServerFn({ method: "POST" })
       "@/integrations/supabase/client.server"
     );
 
+    // Never trust browser-submitted prices: resolve each line from the catalog.
+    const { PRODUCTS } = await import("@/lib/products");
+    const { PRODUCT_VARIANTS } = await import("@/lib/product-variants");
+    const lines = data.items.map((i) => {
+      const product = PRODUCTS.find((p) => p.id === i.productId);
+      const variant = PRODUCT_VARIANTS[i.productId]?.find(
+        (v) => v.name === i.variant,
+      );
+      if (!product || !variant) throw new Error("An item in your cart is no longer available. Please re-add it.");
+      return { productId: product.id, name: product.name, variant: variant.name, price: variant.priceNum, qty: i.qty };
+    });
     const subtotal =
-      Math.round(data.items.reduce((s, i) => s + i.price * i.qty, 0) * 100) /
-      100;
+      Math.round(lines.reduce((s, i) => s + i.price * i.qty, 0) * 100) / 100;
     const shipping = 0;
     const total = Math.round((subtotal + shipping) * 100) / 100;
 
@@ -60,7 +71,7 @@ export const createOrder = createServerFn({ method: "POST" })
 
     if (error || !order) throw new Error(error?.message || "Order failed");
 
-    const rows = data.items.map((i) => ({
+    const rows = lines.map((i) => ({
       order_id: order.id,
       product_id: i.productId,
       name: i.name,
@@ -80,29 +91,6 @@ export const createOrder = createServerFn({ method: "POST" })
       id: order.id as string,
       total: Number(order.total),
       orderNumber: order.order_number as string,
+      token: await signOrderToken(order.id as string),
     };
-  });
-
-export const getOrderByNumber = createServerFn({ method: "GET" })
-  .inputValidator((raw: unknown) =>
-    z.object({ number: z.string().regex(/^\d{6}$/) }).parse(raw),
-  )
-  .handler(async ({ data }) => {
-    const { supabaseAdmin } = await import(
-      "@/integrations/supabase/client.server"
-    );
-    const { data: order, error } = await supabaseAdmin
-      .from("orders")
-      .select(
-        "id,order_number,email,status,subtotal,shipping,total,currency,ship_name,ship_city,ship_region,ship_postal,ship_country,created_at",
-      )
-      .eq("order_number", data.number)
-      .maybeSingle();
-    if (error) throw new Error(error.message);
-    if (!order) return null;
-    const { data: items } = await supabaseAdmin
-      .from("order_items")
-      .select("product_id,name,variant,price,qty")
-      .eq("order_id", order.id);
-    return { order, items: items || [] };
   });

@@ -8,9 +8,9 @@ export const Route = createFileRoute("/refund-policy")({
   head: () => ({
     meta: [
       { title: PAGE_TITLE },
-      { name: "description", content: "Refund and return policy for Peptide Pen Research products." },
+      { name: "description", content: "Refund and return policy for PeptidePen products." },
       { property: "og:title", content: PAGE_TITLE },
-      { property: "og:description", content: "Refund and return policy for Peptide Pen Research products." },
+      { property: "og:description", content: "Refund and return policy for PeptidePen products." },
       { property: "og:url", content: "https://getpeptidepen.com/refund-policy" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

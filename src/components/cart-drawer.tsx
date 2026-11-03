@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCartStore } from "@/stores/cart";
-import { Price } from "@/components/price";
+import { formatMoney } from "@/lib/money";
 
 
 interface CartDrawerProps {
@@ -35,7 +35,7 @@ export function CartDrawer({
 
 
   const totalItems = items.reduce((s, i) => s + i.quantity, 0);
-  const currency = items[0]?.price.currencyCode ?? "USD";
+  const currency = items[0]?.price.currencyCode ?? "GBP";
   const totalPrice = items.reduce(
     (s, i) => s + parseFloat(i.price.amount) * i.quantity,
     0,
@@ -113,7 +113,7 @@ export function CartDrawer({
                             </p>
                           )}
                         <p className="text-sm font-semibold mt-1">
-                          <Price usd={item.price.amount} />
+                          {formatMoney(item.price.amount, item.price.currencyCode)}
                         </p>
                       </div>
                       <div className="flex flex-col items-end gap-2 flex-shrink-0">
@@ -162,11 +162,11 @@ export function CartDrawer({
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-muted-foreground">Subtotal</span>
                   <span className="text-xl font-bold">
-                    <Price usd={totalPrice} />
+                    {formatMoney(totalPrice, currency)}
                   </span>
                 </div>
                 <p className="text-[11px] text-muted-foreground">
-                  Free worldwide shipping. Prices shown in your local currency are estimates; you are charged in USD at checkout.
+                  Free delivery in 3–7 days. Prices in GBP (£).
                 </p>
                 <Button
                   onClick={handleCheckout}

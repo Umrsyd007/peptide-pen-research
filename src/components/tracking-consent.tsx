@@ -43,9 +43,9 @@ export function TrackingConsent() {
           <Button size="sm" variant="outline" onClick={() => save(analytics, advertising)}>Save choices</Button>
         </div>}
         <div className="grid gap-3 sm:grid-cols-3">
-          <Button variant="outline" className="h-12 border-2 border-foreground text-base font-bold" onClick={() => setCustomising(c => !c)}>Customise</Button>
-          <Button className="h-12 text-base font-bold" onClick={() => save(false, false)}>Reject All</Button>
-          <Button className="h-12 text-base font-bold" onClick={() => save(true, true)}>Accept All</Button>
+          <Button variant="outline" className="h-12 border-2 border-foreground bg-background text-foreground hover:bg-muted hover:text-foreground text-base font-bold" onClick={() => setCustomising(c => !c)}>Customise</Button>
+          <Button className="h-12 bg-foreground text-background hover:bg-foreground/90 text-base font-bold" onClick={() => save(false, false)}>Reject All</Button>
+          <Button className="h-12 bg-foreground text-background hover:bg-foreground/90 text-base font-bold" onClick={() => save(true, true)}>Accept All</Button>
         </div>
       </div>
     </section>}

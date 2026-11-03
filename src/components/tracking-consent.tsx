@@ -33,21 +33,23 @@ export function TrackingConsent() {
       <Button variant="link" size="sm" onClick={() => { const choice = readConsent(); setAnalytics(choice?.analytics ?? true); setAdvertising(choice?.advertising ?? true); setOpen(true); }}>Cookie settings</Button>
       <Link to="/privacy-policy" className="self-center underline">Privacy policy</Link>
     </div>
-    {open && <div className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/40 p-4">
-      <section role="dialog" aria-label="Our cookies" className="w-full max-w-2xl rounded-3xl bg-background p-8 text-center shadow-2xl space-y-6">
-        <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">Our cookies</h2>
-        <p className="text-sm md:text-base leading-relaxed">Our website uses small bits of data (known as cookies) to make the website work, remember who you are, personalise content and provide a safer experience on our site. Some of these cookies are essential for the website to function while others can be switched on or off. By clicking “Accept all” you agree to the uses explained in our <Link to="/privacy-policy" className="underline">Privacy policy</Link>. If you click “Reject all” we’ll block all non-essential cookies but those crucial to the website’s operation will still be used. To set your cookie preferences, click “Let me choose”.</p>
-        {customising && <div className="space-y-3 rounded-2xl border border-border p-4 text-left text-sm">
-          <label className="flex gap-2 items-center"><input type="checkbox" checked={analytics} onChange={e => setAnalytics(e.target.checked)} />Analytics</label>
-          <label className="flex gap-2 items-center"><input type="checkbox" checked={advertising} onChange={e => setAdvertising(e.target.checked)} />Advertising measurement</label>
-          <Button size="sm" className="rounded-full" onClick={() => save(analytics, advertising)}>Save my choices</Button>
-        </div>}
-        <div className="grid gap-3 sm:grid-cols-3 items-center">
-          <button type="button" className="text-base font-bold underline underline-offset-4" onClick={() => setCustomising(c => !c)}>Let me choose</button>
-          <Button variant="outline" className="h-12 rounded-full border-2 border-foreground text-base font-bold" onClick={() => save(false, false)}>Reject all</Button>
-          <Button variant="outline" className="h-12 rounded-full border-2 border-foreground text-base font-bold" onClick={() => save(true, true)}>Accept all</Button>
+    {open && <section role="dialog" aria-label="Our cookies" className="fixed bottom-0 inset-x-0 z-50 border-t border-border bg-background px-4 py-3 shadow-lg">
+      <div className="mx-auto max-w-6xl flex flex-col md:flex-row md:items-center gap-3">
+        <div className="flex-1 space-y-1">
+          <h2 className="text-sm font-bold">Our cookies</h2>
+          <p className="text-xs leading-relaxed text-muted-foreground">We use cookies to make the site work, personalise content and measure traffic. By clicking “Accept all” you agree to the uses explained in our <Link to="/privacy-policy" className="underline">Privacy policy</Link>. “Reject all” blocks non-essential cookies.</p>
+          {customising && <div className="flex flex-wrap items-center gap-4 pt-2 text-xs">
+            <label className="flex gap-2 items-center"><input type="checkbox" checked={analytics} onChange={e => setAnalytics(e.target.checked)} />Analytics</label>
+            <label className="flex gap-2 items-center"><input type="checkbox" checked={advertising} onChange={e => setAdvertising(e.target.checked)} />Advertising measurement</label>
+            <Button size="sm" className="h-7 rounded-full text-xs" onClick={() => save(analytics, advertising)}>Save my choices</Button>
+          </div>}
         </div>
-      </section>
-    </div>}
+        <div className="flex items-center gap-2 shrink-0">
+          <button type="button" className="text-xs font-semibold underline underline-offset-4 px-2" onClick={() => setCustomising(c => !c)}>Let me choose</button>
+          <Button variant="outline" size="sm" className="rounded-full text-xs font-semibold" onClick={() => save(false, false)}>Reject all</Button>
+          <Button size="sm" className="rounded-full text-xs font-semibold" onClick={() => save(true, true)}>Accept all</Button>
+        </div>
+      </div>
+    </section>}
   </>;
 }

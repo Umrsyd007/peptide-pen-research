@@ -86,7 +86,7 @@ function TermsOfServicePage() {
         <section className="space-y-4">
           <h2 className="text-xl font-bold tracking-tight">4. Orders & Payment</h2>
           <p className="text-sm text-foreground/80 leading-relaxed">
-            All orders are subject to acceptance and availability. We reserve the right to refuse or cancel any order for any reason, including suspected fraud, unauthorized reselling, or violation of these terms. Prices are displayed in USD for convenience; payments are processed in EUR at checkout.
+            All orders are subject to acceptance and availability. We reserve the right to refuse or cancel any order for any reason, including suspected fraud, unauthorized reselling, or violation of these terms. Prices are set in pounds sterling (GBP); you may choose to pay in USD or EUR, converted at the exchange rate shown at checkout.
           </p>
         </section>
 

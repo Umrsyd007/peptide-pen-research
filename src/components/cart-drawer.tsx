@@ -166,7 +166,7 @@ export function CartDrawer({
                   </span>
                 </div>
                 <p className="text-[11px] text-muted-foreground">
-                  Free worldwide shipping. Prices shown in your local currency are estimates; you are charged in USD at checkout.
+                  Free worldwide shipping.
                 </p>
                 <Button
                   onClick={handleCheckout}

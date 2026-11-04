@@ -9,3 +9,6 @@
 - [x] Test the fix: seven tests passed and a real verification inquiry was logged sent.
 - [ ] Confirm published deployment completion. Publishing requested; deployment completion is not yet confirmed.
 - [x] Re-trigger the 45 missed inquiry notifications once; all 45 recovery send records are sent.
+# Pounds and currency picker
+- [x] Convert catalog to GBP, remove USD conversion notes.
+- [x] Header picker (GBP/USD/EUR) that also sets checkout and receipt currency.

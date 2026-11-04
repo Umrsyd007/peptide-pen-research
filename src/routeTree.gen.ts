@@ -23,18 +23,18 @@ import { Route as TermsOfServiceRouteImport } from './routes/terms-of-service'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
-import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
+import { Route as GuidesPeptideDosageCalculatorRouteImport } from './routes/guides.peptide-dosage-calculator'
+import { Route as GuidesRetatrutideDosageGuideRouteImport } from './routes/guides.retatrutide-dosage-guide'
 import { Route as ProductsIndexRouteImport } from './routes/products.index'
 import { Route as ProductsProductIdRouteImport } from './routes/products.$productId'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as AuthenticatedAdminOrdersRouteImport } from './routes/_authenticated/admin.orders'
 import { Route as ApiPublicProductQuestionRouteImport } from './routes/api/public/product-question'
 import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
 import { Route as CheckoutSuccessOrderNumberRouteImport } from './routes/checkout.success.$orderNumber'
-import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
-import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
+import { Route as LovableEmailEventsRouteImport } from './routes/lovable/email/events'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
-import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -107,11 +107,18 @@ const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
   path: '/account',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
-  id: '/email/unsubscribe',
-  path: '/email/unsubscribe',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const GuidesPeptideDosageCalculatorRoute =
+  GuidesPeptideDosageCalculatorRouteImport.update({
+    id: '/guides/peptide-dosage-calculator',
+    path: '/guides/peptide-dosage-calculator',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const GuidesRetatrutideDosageGuideRoute =
+  GuidesRetatrutideDosageGuideRouteImport.update({
+    id: '/guides/retatrutide-dosage-guide',
+    path: '/guides/retatrutide-dosage-guide',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ProductsIndexRoute = ProductsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -133,6 +140,12 @@ const Char91DotmcpChar93InvokeToolToolRoute =
     path: '/.mcp/invoke-tool/$tool',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AuthenticatedAdminOrdersRoute =
+  AuthenticatedAdminOrdersRouteImport.update({
+    id: '/admin/orders',
+    path: '/admin/orders',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const ApiPublicProductQuestionRoute =
   ApiPublicProductQuestionRouteImport.update({
     id: '/api/public/product-question',
@@ -150,27 +163,15 @@ const CheckoutSuccessOrderNumberRoute =
     path: '/success/$orderNumber',
     getParentRoute: () => CheckoutRoute,
   } as any)
-const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
-  id: '/lovable/email/suppression',
-  path: '/lovable/email/suppression',
+const LovableEmailEventsRoute = LovableEmailEventsRouteImport.update({
+  id: '/lovable/email/events',
+  path: '/lovable/email/events',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LovableEmailQueueProcessRoute =
-  LovableEmailQueueProcessRouteImport.update({
-    id: '/lovable/email/queue/process',
-    path: '/lovable/email/queue/process',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const LovableEmailTransactionalPreviewRoute =
   LovableEmailTransactionalPreviewRouteImport.update({
     id: '/lovable/email/transactional/preview',
     path: '/lovable/email/transactional/preview',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const LovableEmailTransactionalSendRoute =
-  LovableEmailTransactionalSendRouteImport.update({
-    id: '/lovable/email/transactional/send',
-    path: '/lovable/email/transactional/send',
     getParentRoute: () => rootRouteImport,
   } as any)
 
@@ -188,18 +189,18 @@ export interface FileRoutesByFullPath {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/account': typeof AuthenticatedAccountRoute
-  '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/guides/peptide-dosage-calculator': typeof GuidesPeptideDosageCalculatorRoute
+  '/guides/retatrutide-dosage-guide': typeof GuidesRetatrutideDosageGuideRoute
   '/products/$productId': typeof ProductsProductIdRoute
   '/products/': typeof ProductsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/admin/orders': typeof AuthenticatedAdminOrdersRoute
   '/api/public/product-question': typeof ApiPublicProductQuestionRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/checkout/success/$orderNumber': typeof CheckoutSuccessOrderNumberRoute
-  '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
-  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
+  '/lovable/email/events': typeof LovableEmailEventsRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
-  '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -214,18 +215,18 @@ export interface FileRoutesByTo {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/account': typeof AuthenticatedAccountRoute
-  '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/guides/peptide-dosage-calculator': typeof GuidesPeptideDosageCalculatorRoute
+  '/guides/retatrutide-dosage-guide': typeof GuidesRetatrutideDosageGuideRoute
   '/products/$productId': typeof ProductsProductIdRoute
   '/products': typeof ProductsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/admin/orders': typeof AuthenticatedAdminOrdersRoute
   '/api/public/product-question': typeof ApiPublicProductQuestionRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/checkout/success/$orderNumber': typeof CheckoutSuccessOrderNumberRoute
-  '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
-  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
+  '/lovable/email/events': typeof LovableEmailEventsRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
-  '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -243,18 +244,18 @@ export interface FileRoutesById {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
-  '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/guides/peptide-dosage-calculator': typeof GuidesPeptideDosageCalculatorRoute
+  '/guides/retatrutide-dosage-guide': typeof GuidesRetatrutideDosageGuideRoute
   '/products/$productId': typeof ProductsProductIdRoute
   '/products/': typeof ProductsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/_authenticated/admin/orders': typeof AuthenticatedAdminOrdersRoute
   '/api/public/product-question': typeof ApiPublicProductQuestionRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/checkout/success/$orderNumber': typeof CheckoutSuccessOrderNumberRoute
-  '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
-  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
+  '/lovable/email/events': typeof LovableEmailEventsRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
-  '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -272,18 +273,18 @@ export interface FileRouteTypes {
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/account'
-    | '/email/unsubscribe'
+    | '/guides/peptide-dosage-calculator'
+    | '/guides/retatrutide-dosage-guide'
     | '/products/$productId'
     | '/products/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/admin/orders'
     | '/api/public/product-question'
     | '/api/public/stripe-webhook'
     | '/checkout/success/$orderNumber'
-    | '/lovable/email/suppression'
-    | '/lovable/email/queue/process'
+    | '/lovable/email/events'
     | '/lovable/email/transactional/preview'
-    | '/lovable/email/transactional/send'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -298,18 +299,18 @@ export interface FileRouteTypes {
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/account'
-    | '/email/unsubscribe'
+    | '/guides/peptide-dosage-calculator'
+    | '/guides/retatrutide-dosage-guide'
     | '/products/$productId'
     | '/products'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/admin/orders'
     | '/api/public/product-question'
     | '/api/public/stripe-webhook'
     | '/checkout/success/$orderNumber'
-    | '/lovable/email/suppression'
-    | '/lovable/email/queue/process'
+    | '/lovable/email/events'
     | '/lovable/email/transactional/preview'
-    | '/lovable/email/transactional/send'
   id:
     | '__root__'
     | '/'
@@ -326,18 +327,18 @@ export interface FileRouteTypes {
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/_authenticated/account'
-    | '/email/unsubscribe'
+    | '/guides/peptide-dosage-calculator'
+    | '/guides/retatrutide-dosage-guide'
     | '/products/$productId'
     | '/products/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/_authenticated/admin/orders'
     | '/api/public/product-question'
     | '/api/public/stripe-webhook'
     | '/checkout/success/$orderNumber'
-    | '/lovable/email/suppression'
-    | '/lovable/email/queue/process'
+    | '/lovable/email/events'
     | '/lovable/email/transactional/preview'
-    | '/lovable/email/transactional/send'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -354,15 +355,14 @@ export interface RootRouteChildren {
   TermsOfServiceRoute: typeof TermsOfServiceRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
-  EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
+  GuidesPeptideDosageCalculatorRoute: typeof GuidesPeptideDosageCalculatorRoute
+  GuidesRetatrutideDosageGuideRoute: typeof GuidesRetatrutideDosageGuideRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicProductQuestionRoute: typeof ApiPublicProductQuestionRoute
   ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
-  LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
-  LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
+  LovableEmailEventsRoute: typeof LovableEmailEventsRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
-  LovableEmailTransactionalSendRoute: typeof LovableEmailTransactionalSendRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -465,11 +465,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAccountRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/email/unsubscribe': {
-      id: '/email/unsubscribe'
-      path: '/email/unsubscribe'
-      fullPath: '/email/unsubscribe'
-      preLoaderRoute: typeof EmailUnsubscribeRouteImport
+    '/guides/peptide-dosage-calculator': {
+      id: '/guides/peptide-dosage-calculator'
+      path: '/guides/peptide-dosage-calculator'
+      fullPath: '/guides/peptide-dosage-calculator'
+      preLoaderRoute: typeof GuidesPeptideDosageCalculatorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guides/retatrutide-dosage-guide': {
+      id: '/guides/retatrutide-dosage-guide'
+      path: '/guides/retatrutide-dosage-guide'
+      fullPath: '/guides/retatrutide-dosage-guide'
+      preLoaderRoute: typeof GuidesRetatrutideDosageGuideRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/products/': {
@@ -500,6 +507,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/orders': {
+      id: '/_authenticated/admin/orders'
+      path: '/admin/orders'
+      fullPath: '/admin/orders'
+      preLoaderRoute: typeof AuthenticatedAdminOrdersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/api/public/product-question': {
       id: '/api/public/product-question'
       path: '/api/public/product-question'
@@ -521,18 +535,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CheckoutSuccessOrderNumberRouteImport
       parentRoute: typeof CheckoutRoute
     }
-    '/lovable/email/suppression': {
-      id: '/lovable/email/suppression'
-      path: '/lovable/email/suppression'
-      fullPath: '/lovable/email/suppression'
-      preLoaderRoute: typeof LovableEmailSuppressionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/lovable/email/queue/process': {
-      id: '/lovable/email/queue/process'
-      path: '/lovable/email/queue/process'
-      fullPath: '/lovable/email/queue/process'
-      preLoaderRoute: typeof LovableEmailQueueProcessRouteImport
+    '/lovable/email/events': {
+      id: '/lovable/email/events'
+      path: '/lovable/email/events'
+      fullPath: '/lovable/email/events'
+      preLoaderRoute: typeof LovableEmailEventsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lovable/email/transactional/preview': {
@@ -542,22 +549,17 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/lovable/email/transactional/send': {
-      id: '/lovable/email/transactional/send'
-      path: '/lovable/email/transactional/send'
-      fullPath: '/lovable/email/transactional/send'
-      preLoaderRoute: typeof LovableEmailTransactionalSendRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAccountRoute: typeof AuthenticatedAccountRoute
+  AuthenticatedAdminOrdersRoute: typeof AuthenticatedAdminOrdersRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAccountRoute: AuthenticatedAccountRoute,
+  AuthenticatedAdminOrdersRoute: AuthenticatedAdminOrdersRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -604,15 +606,14 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
-  EmailUnsubscribeRoute: EmailUnsubscribeRoute,
+  GuidesPeptideDosageCalculatorRoute: GuidesPeptideDosageCalculatorRoute,
+  GuidesRetatrutideDosageGuideRoute: GuidesRetatrutideDosageGuideRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicProductQuestionRoute: ApiPublicProductQuestionRoute,
   ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
-  LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
-  LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
+  LovableEmailEventsRoute: LovableEmailEventsRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
-  LovableEmailTransactionalSendRoute: LovableEmailTransactionalSendRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,18 +1,12 @@
-# PeptidePen
+# Peptide Pen Research
 
-> PeptidePen sells a reusable needle-free injector and the PeptiCool™ active travel cooler for GLP-1 pens and vials. Prices are charged in USD; delivery is free.
+> Pre-mixed, lab-tested research peptide pens with full COA documentation, cold-chain shipping and dosing references. For in-vitro laboratory use only.
 
-The needle-free injector delivers through the skin with a fast, narrow stream instead of a needle. Each kit includes sterile single-use nozzles, vial and ampoule adapters, a reset tool, a carry case and a quick-start guide. It is a delivery device, not a medicine.
-
-PeptiCool is a thermoelectric travel cooler that holds a set temperature (2–8°C) with a touchscreen readout and USB-C power, with no ice packs.
+Peptide Pen Research supplies research-grade peptide pens to laboratories. Every batch ships with HPLC-verified purity (≥99%), mass-spec identity confirmation, endotoxin/sterility screening, and temperature-monitored cold-chain delivery.
 
 ## Pages
-- [Home](/): Overview of both products
-- [Needle-Free Injector](/products/08f6ee52): Single or 2-Pack, how it works, what's in the box, FAQ
-- [PeptiCool travel cooler](/products/1b0959b6): Specs, capacity, comparison, FAQ
-- [Contact](/contact): Order, delivery and product questions
-- [Refund Policy](/refund-policy): 30-day returns on unopened items
-- [Terms of Service](/terms-of-service)
+- [Home](/): Brand overview, value props, science, and featured catalog
+- [All Products](/products): Full catalog of research peptides, longevity compounds, and wellness protocols
 
 ## Optional
 - [Sitemap](/sitemap.xml)

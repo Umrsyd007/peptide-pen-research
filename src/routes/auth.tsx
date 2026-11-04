@@ -17,10 +17,10 @@ export const Route = createFileRoute("/auth")({
   }),
   head: () => ({
     meta: [
-      { title: "Sign in | PeptidePen" },
-      { name: "description", content: "Sign in or create an account for PeptidePen." },
-      { property: "og:title", content: "Sign in | PeptidePen" },
-      { property: "og:description", content: "Sign in or create an account for PeptidePen." },
+      { title: "Sign in | Peptide Pen Research" },
+      { name: "description", content: "Sign in or create an account for Peptide Pen Research." },
+      { property: "og:title", content: "Sign in | Peptide Pen Research" },
+      { property: "og:description", content: "Sign in or create an account for Peptide Pen Research." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex, nofollow" },
@@ -32,7 +32,7 @@ export const Route = createFileRoute("/auth")({
 function safeNext(next: string | undefined): string {
   if (!next) return "/";
   // Only allow same-origin relative paths beginning with a single slash
-  if (!next.startsWith("/") || next.startsWith("//")) return "/";
+  if (!next.startsWith("/") || next.startsWith("//") || next.includes("\\") || /[\u0000-\u001f]/.test(next)) return "/";
   return next;
 }
 
@@ -59,13 +59,13 @@ function AuthPage() {
     };
   }, [returnTo]);
 
-  async function handleGoogle() {
+  async function handleProvider(provider: "google" | "apple") {
     setLoading(true);
-    const result = await lovable.auth.signInWithOAuth("google", {
+    const result = await lovable.auth.signInWithOAuth(provider, {
       redirect_uri: `${window.location.origin}/auth?next=${encodeURIComponent(returnTo)}`,
     });
     if (result.error) {
-      toast.error(result.error.message || "Google sign-in failed");
+      toast.error(result.error.message || `${provider === "apple" ? "Apple" : "Google"} sign-in failed`);
       setLoading(false);
       return;
     }
@@ -73,6 +73,8 @@ function AuthPage() {
     // Popup path: session set — go to next
     window.location.replace(returnTo);
   }
+
+  const handleGoogle = () => handleProvider("google");
 
   async function handleEmailSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -113,20 +115,31 @@ function AuthPage() {
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             {mode === "sign-in"
-              ? "Sign in to your PeptidePen account."
+              ? "Sign in to your Peptide Pen Research account."
               : "Create an account to manage integrations."}
           </p>
         </div>
 
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full"
-          onClick={handleGoogle}
-          disabled={loading}
-        >
-          Continue with Google
-        </Button>
+        <div className="grid gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            onClick={handleGoogle}
+            disabled={loading}
+          >
+            Continue with Google
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            onClick={() => handleProvider("apple")}
+            disabled={loading}
+          >
+            Continue with Apple
+          </Button>
+        </div>
 
         <div className="my-6 flex items-center gap-3 text-xs text-muted-foreground">
           <span className="h-px flex-1 bg-border" />

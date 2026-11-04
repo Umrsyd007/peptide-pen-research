@@ -3,14 +3,17 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { checkIsAdmin } from "@/lib/admin-orders.functions";
 
 export const Route = createFileRoute("/_authenticated/account")({
   head: () => ({
     meta: [
-      { title: "My Account | PeptidePen" },
-      { name: "description", content: "Manage your PeptidePen account and assistant connections." },
-      { property: "og:title", content: "My Account | PeptidePen" },
-      { property: "og:description", content: "Manage your PeptidePen account and assistant connections." },
+      { title: "My Account | Peptide Pen Research" },
+      { name: "description", content: "Manage your Peptide Pen Research account and assistant connections." },
+      { property: "og:title", content: "My Account | Peptide Pen Research" },
+      { property: "og:description", content: "Manage your Peptide Pen Research account and assistant connections." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex, nofollow" },
@@ -23,6 +26,9 @@ function AccountPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState<string | null>(null);
   const [signingOut, setSigningOut] = useState(false);
+  const isAdminFn = useServerFn(checkIsAdmin);
+  const { data: adminData } = useQuery({ queryKey: ["is-admin"], queryFn: () => isAdminFn() });
+  const isAdmin = adminData?.isAdmin === true;
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setEmail(data.user?.email ?? null));
@@ -42,6 +48,11 @@ function AccountPage() {
       </Link>
       <h1 className="mt-4 text-2xl font-semibold">My Account</h1>
       <p className="mt-2 text-sm text-muted-foreground">Signed in as {email ?? "…"}</p>
+      {isAdmin && (
+        <Link to="/admin/orders" className="mt-4 inline-block">
+          <Button>Open orders dashboard</Button>
+        </Link>
+      )}
       <div className="mt-8 rounded-lg border border-border bg-card p-6">
         <h2 className="text-lg font-medium">AI Assistant integrations</h2>
         <p className="mt-2 text-sm text-muted-foreground">

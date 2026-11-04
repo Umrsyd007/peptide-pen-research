@@ -24,25 +24,26 @@ export function currencyForLocale(locale: string | undefined) {
   return (region && REGION_CURRENCY[region]) || "USD";
 }
 
-// Time zone is a better location signal than language (many UK/EU devices are
-// set to en-US), so it's checked first. Unlisted zones fall back to language.
-const ZONE_REGION: Record<string, string> = {
-  "Europe/London": "GB", "Europe/Belfast": "GB", "Europe/Jersey": "GB", "Europe/Guernsey": "GB", "Europe/Isle_of_Man": "GB",
-  "Europe/Dublin": "IE", "Europe/Paris": "FR", "Europe/Berlin": "DE", "Europe/Madrid": "ES", "Europe/Rome": "IT",
-  "Europe/Amsterdam": "NL", "Europe/Brussels": "BE", "Europe/Vienna": "AT", "Europe/Lisbon": "PT", "Europe/Helsinki": "FI",
-  "Europe/Athens": "GR", "Europe/Luxembourg": "LU", "Europe/Malta": "MT", "Europe/Zurich": "CH", "Europe/Stockholm": "SE",
-  "Europe/Oslo": "NO", "Europe/Copenhagen": "DK", "Europe/Warsaw": "PL", "Europe/Prague": "CZ", "Europe/Budapest": "HU",
-  "America/Toronto": "CA", "America/Vancouver": "CA", "America/Edmonton": "CA", "America/Winnipeg": "CA", "America/Halifax": "CA",
-  "America/Mexico_City": "MX", "America/Sao_Paulo": "BR",
-  "Australia/Sydney": "AU", "Australia/Melbourne": "AU", "Australia/Brisbane": "AU", "Australia/Perth": "AU", "Australia/Adelaide": "AU",
-  "Pacific/Auckland": "NZ", "Asia/Dubai": "AE", "Asia/Singapore": "SG", "Asia/Hong_Kong": "HK", "Asia/Tokyo": "JP",
-  "Asia/Kolkata": "IN", "Africa/Johannesburg": "ZA",
-};
-
-export function currencyForVisitor(timeZone: string | undefined, locale: string | undefined) {
-  const region = timeZone ? ZONE_REGION[timeZone] : undefined;
-  if (region && REGION_CURRENCY[region]) return REGION_CURRENCY[region];
+/** Country (from the visitor's location) wins; browser language is the fallback. */
+export function currencyForVisitor(country: string | null | undefined, locale: string | undefined) {
+  const c = country?.toUpperCase();
+  if (c && REGION_CURRENCY[c]) return REGION_CURRENCY[c];
+  if (c) return "USD";
   return currencyForLocale(locale);
+}
+
+const RATES_KEY = "pp-usd-rates-v1";
+const RATES_TTL = 60 * 60 * 1000;
+
+async function loadRates(): Promise<Record<string, number> | null> {
+  try {
+    const cached = JSON.parse(sessionStorage.getItem(RATES_KEY) || "null");
+    if (cached && Date.now() - cached.at < RATES_TTL) return cached.rates;
+  } catch {}
+  const j = await fetch("https://open.er-api.com/v6/latest/USD").then((r) => r.json());
+  if (!j?.rates) return null;
+  try { sessionStorage.setItem(RATES_KEY, JSON.stringify({ at: Date.now(), rates: j.rates })); } catch {}
+  return j.rates;
 }
 
 type State = { currency: string; rates: Record<string, number> | null; init: () => void };
@@ -54,14 +55,17 @@ export const useCurrencyStore = create<State>((set) => ({
   init: () => {
     if (started || typeof window === "undefined") return;
     started = true;
-    let zone: string | undefined;
-    try { zone = Intl.DateTimeFormat().resolvedOptions().timeZone; } catch { /* ignore */ }
-    const currency = currencyForVisitor(zone, navigator.languages?.[0] ?? navigator.language);
-    if (currency === "USD") return;
-    set({ currency });
-    fetch("https://open.er-api.com/v6/latest/USD")
-      .then((r) => r.json())
-      .then((j) => j?.rates && set({ rates: j.rates }))
+    const locale = navigator.languages?.[0] ?? navigator.language;
+    import("./currency.functions")
+      .then((m) => m.getVisitorCountry())
+      .then((r) => r.country, () => null)
+      .then(async (country) => {
+        const currency = currencyForVisitor(country, locale);
+        if (currency === "USD") return;
+        set({ currency });
+        const rates = await loadRates();
+        if (rates) set({ rates });
+      })
       .catch(() => {});
   },
 }));

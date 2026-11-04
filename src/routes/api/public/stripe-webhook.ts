@@ -46,10 +46,18 @@ export const Route = createFileRoute("/api/public/stripe-webhook")({
             const { supabaseAdmin } = await import(
               "@/integrations/supabase/client.server"
             );
-            await supabaseAdmin
+            const paid = paidEvents.includes(event.type);
+            // Never downgrade an already-paid order (e.g. a late expiry event).
+            let q = supabaseAdmin
               .from("orders")
-              .update({ status: paidEvents.includes(event.type) ? "paid" : "failed" })
+              .update({ status: paid ? "paid" : "failed" })
               .eq("order_number", ref);
+            if (!paid) q = q.neq("status", "paid");
+            await q;
+            if (paid && session.payment_status !== "unpaid") {
+              const { notifyOrderPaid } = await import("@/lib/email/order-paid.server");
+              await notifyOrderPaid(supabaseAdmin, ref);
+            }
           }
         }
 

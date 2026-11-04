@@ -31,7 +31,8 @@ export function permission(kind: "analytics" | "advertising") {
   if (typeof window === "undefined") return false;
   if (navigator.globalPrivacyControl === true) return false;
   const choice = readConsent();
-  return choice ? choice[kind] : !requiresConsent(region);
+  // Opt-out model: everyone is tracked unless they explicitly reject.
+  return choice ? choice[kind] : true;
 }
 export function consentContext() {
   return { region, choice: readConsent() ?? null, advertising: permission("advertising") };

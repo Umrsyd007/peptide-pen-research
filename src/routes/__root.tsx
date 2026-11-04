@@ -84,15 +84,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "theme-color", content: "#ffffff" },
       { name: "google-site-verification", content: "BGlNCM2smi9KPj6lNmsdBNoO-EggAAt2lTmuIQ1iXqA" },
       { name: "robots", content: "index, follow" },
-      { property: "og:site_name", content: "PeptidePen" },
+      { property: "og:site_name", content: "Peptide Pen Research" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { title: "PeptidePen | Needle-Free Injector" },
-      { property: "og:title", content: "PeptidePen | Needle-Free Injector" },
-      { name: "twitter:title", content: "PeptidePen | Needle-Free Injector" },
-      { name: "description", content: "A reusable needle-free injector that delivers with a quick, gentle pulse. Free UK delivery in 3–7 days." },
-      { property: "og:description", content: "A reusable needle-free injector that delivers with a quick, gentle pulse. Free UK delivery in 3–7 days." },
-      { name: "twitter:description", content: "A reusable needle-free injector that delivers with a quick, gentle pulse. Free UK delivery in 3–7 days." },
+      { title: "Peptide Pen Research | Research-Grade Peptide Pens" },
+      { property: "og:title", content: "Peptide Pen Research | Research-Grade Peptide Pens" },
+      { name: "twitter:title", content: "Peptide Pen Research | Research-Grade Peptide Pens" },
+      { name: "description", content: "Pre-mixed, lab-tested research peptide pens with full COA documentation, cold-chain shipping and dosing references. For in-vitro laboratory use only." },
+      { property: "og:description", content: "Pre-mixed, lab-tested research peptide pens with full COA documentation, cold-chain shipping and dosing references. For in-vitro laboratory use only." },
+      { name: "twitter:description", content: "Pre-mixed, lab-tested research peptide pens with full COA documentation, cold-chain shipping and dosing references. For in-vitro laboratory use only." },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -100,14 +100,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     scripts: [
       {
+        children: `(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window, document, "clarity", "script", "z75f9lqmwe");`,
+      },
+      {
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Organization",
-          name: "PeptidePen",
+          name: "Peptide Pen Research",
           url: "https://getpeptidepen.com",
           description:
-            "Needle-free injector devices.",
+            "Research-grade peptide pens supplied for laboratory research use only.",
         }),
       },
       {
@@ -115,7 +118,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "WebSite",
-          name: "PeptidePen",
+          name: "Peptide Pen Research",
           url: "https://getpeptidepen.com",
         }),
       },

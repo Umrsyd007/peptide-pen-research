@@ -6,7 +6,7 @@ export default defineTool({
   name: "search_products",
   title: "Search products",
   description:
-    "Search the PeptidePen catalog by keyword. Matches against product name and categories. Optionally filter to only bestsellers or new arrivals.",
+    "Search the Peptide Pen Research catalog by keyword. Matches against product name and categories. Optionally filter to only bestsellers or new arrivals.",
   inputSchema: {
     query: z.string().trim().min(1).describe("Search term matched against name and categories"),
     tag: z.enum(["NEW", "BESTSELLER"]).optional().describe("Optional tag filter"),

@@ -7,7 +7,7 @@ export default defineTool({
   name: "submit_product_question",
   title: "Submit product question",
   description:
-    "Send a product inquiry to the PeptidePen team on behalf of the signed-in user. The store will follow up by email.",
+    "Send a product inquiry to the Peptide Pen Research team on behalf of the signed-in user. The store will follow up by email.",
   inputSchema: {
     productId: z.string().optional().describe("Product id from list_products/get_product"),
     message: z
@@ -62,11 +62,20 @@ export default defineTool({
         isError: true,
       };
     }
+    try {
+      const { notifyProductQuestion } = await import('@/lib/email/product-question.server');
+      await notifyProductQuestion(supabase, {
+        id: data.id, productId, productName: product?.name,
+        name: name ?? email, email, message,
+      });
+    } catch {
+      console.error('Saved MCP inquiry notification could not be queued');
+    }
     return {
       content: [
         {
           type: "text",
-          text: `Question submitted. The PeptidePen team will reply to ${email}.`,
+          text: `Question submitted. The Peptide Pen Research team will reply to ${email}.`,
         },
       ],
       structuredContent: { id: data.id, email },

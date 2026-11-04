@@ -96,7 +96,7 @@ function Consent() {
     <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-4 py-16">
       <div className="rounded-lg border border-border bg-card p-8 shadow-sm">
         <h1 className="text-xl font-semibold text-foreground">
-          Connect {clientName} to PeptidePen
+          Connect {clientName} to Peptide Pen Research
         </h1>
         <p className="mt-3 text-sm text-muted-foreground">
           {clientName} will be able to use this store as you — browse the catalog and submit

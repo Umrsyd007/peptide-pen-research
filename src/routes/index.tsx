@@ -1,4 +1,4 @@
-import { Price } from "@/components/price";
+import { Price, CurrencyPicker } from "@/components/price";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PRODUCTS } from "@/lib/products";
 import { isRestricted } from "@/lib/products";
@@ -101,6 +101,7 @@ function HomePage() {
             >
               Shop Now <span aria-hidden>↗</span>
             </Link>
+            <CurrencyPicker />
             <details className="md:hidden relative">
               <summary className="list-none cursor-pointer inline-flex items-center justify-center h-11 w-11 rounded-full border border-border bg-card" aria-label="Open menu">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5" aria-hidden="true">
@@ -284,7 +285,7 @@ function HomePage() {
                     <Link to="/products/$productId" params={{ productId: p.id }} className="hover:text-primary transition-colors">{p.name}</Link>
                   </h3>
                   <div className="flex items-center justify-between pt-2 mt-auto">
-                    <p className="text-xl font-black"><Price usd={p.price} /></p>
+                    <p className="text-xl font-black"><Price gbp={p.price} /></p>
                     <Link to="/products/$productId" params={{ productId: p.id }} className="inline-flex h-10 px-4 items-center gap-1 rounded-full bg-foreground text-background text-xs font-bold uppercase tracking-wider hover:bg-primary transition-colors">
                       View ↗
                     </Link>
@@ -326,7 +327,7 @@ function HomePage() {
                   <div className="p-4 space-y-1">
                     <span className="inline-block text-[9px] uppercase tracking-widest font-bold text-primary">New</span>
                     <h3 className="text-sm font-black uppercase line-clamp-2">{p.name}</h3>
-                    <p className="text-sm font-bold"><Price usd={p.price} /></p>
+                    <p className="text-sm font-bold"><Price gbp={p.price} /></p>
                   </div>
                 </Link>
               ))}
@@ -433,7 +434,7 @@ function HomePage() {
                 { q: "Are these products for human use?", a: "No. All products are sold strictly for in-vitro laboratory research and are not for human or veterinary use." },
                 { q: "Do you provide a Certificate of Analysis?", a: "Yes. Every batch ships with a batch-matched COA including HPLC purity and mass spec identity confirmation." },
                 { q: "How are pens shipped?", a: "All pens ship via tracked, insulated cold-chain at 2–8°C. Delivery is typically 2–3 business days in supported regions." },
-                { q: "What payment methods do you accept?", a: "We accept major cards and wire transfer for bulk lab orders. Pricing is shown in USD; settlement is in EUR." },
+                { q: "What payment methods do you accept?", a: "We accept major cards and wire transfer for bulk lab orders. Prices are in pounds (GBP); you can also view and pay in USD or EUR." },
               ].map((f) => (
                 <details key={f.q} className="group rounded-2xl border border-border bg-card p-5 open:shadow-[var(--shadow-glow)]">
                   <summary className="cursor-pointer text-sm sm:text-base font-bold list-none flex items-center justify-between gap-4">

@@ -5,7 +5,7 @@ export function buildStripePayload(
   items: { price: number | string; qty: number }[],
   origin: string,
 ) {
-  const currency = (order.currency || "USD").toLowerCase();
+  const currency = (order.currency || "GBP").toLowerCase();
   const itemsCents = items.reduce(
     (s, it) => s + Math.round(Number(it.price) * 100) * it.qty,
     0,

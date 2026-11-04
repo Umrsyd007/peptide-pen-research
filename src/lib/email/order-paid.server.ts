@@ -29,7 +29,7 @@ export async function notifyOrderPaid(supabase: SupabaseClient, orderNumber: str
     city: order.ship_city, region: order.ship_region, postal: order.ship_postal, country: order.ship_country,
     items: (items ?? []).map((i) => ({ name: i.name, variant: i.variant, qty: i.qty, price: Number(i.price) })),
     subtotal: Number(order.subtotal), shipping: Number(order.shipping), total: Number(order.total),
-    currency: order.currency || 'USD',
+    currency: order.currency || 'GBP',
   }
   const keys = orderEmailKeys(order.id)
 
@@ -59,7 +59,7 @@ export async function notifyOrderPending(supabase: SupabaseClient, orderId: stri
       city: order.ship_city, region: order.ship_region, postal: order.ship_postal, country: order.ship_country,
       items: (items ?? []).map((i) => ({ name: i.name, variant: i.variant, qty: i.qty, price: Number(i.price) })),
       subtotal: Number(order.subtotal), shipping: Number(order.shipping), total: Number(order.total),
-      currency: order.currency || 'USD',
+      currency: order.currency || 'GBP',
     }
     await sendTemplateEmail('order-pending', ADMIN_RECIPIENT, {
       templateData: data, idempotencyKey: `order-pending-${order.id}-admin`, replyTo: order.email,

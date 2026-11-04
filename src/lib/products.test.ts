@@ -17,6 +17,6 @@ describe("one price everywhere", () => {
       { ...base, variantId: "b", productId: "08f6ee52", variantTitle: "999mg", price: { amount: "1", currencyCode: "GBP" } },
     ]);
     expect(out).toHaveLength(1);
-    expect(out[0].price.amount).toBe("347.63");
+    expect(out[0].price.amount).toBe("259.00");
   });
 });

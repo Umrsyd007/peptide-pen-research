@@ -27,7 +27,7 @@ export interface OrderEmailData {
 }
 
 export const money = (n: number | undefined, currency = 'GBP') =>
-  new Intl.NumberFormat('en-GB', { style: 'currency', currency }).format(Number(n ?? 0))
+  new Intl.NumberFormat('en-GB', { style: 'currency', currencyDisplay: 'narrowSymbol', currency }).format(Number(n ?? 0))
 
 export function ItemsTable({ items = [], currency = 'GBP' }: { items?: OrderEmailItem[]; currency?: string }) {
   return (

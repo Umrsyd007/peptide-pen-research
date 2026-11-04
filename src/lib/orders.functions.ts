@@ -102,6 +102,7 @@ export const createOrder = createServerFn({ method: "POST" })
     return {
       id: order.id as string,
       total: Number(order.total),
+      currency,
       orderNumber: order.order_number as string,
       token: await signOrderToken(order.id as string),
     };

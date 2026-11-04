@@ -24,6 +24,8 @@ export function buildStripePayload(
         },
       },
     ],
+    // Charge exactly the order currency; Stripe must not offer its own conversion.
+    adaptive_pricing: { enabled: false },
     billing_address_collection: "auto" as const,
     client_reference_id: ref,
     metadata: { ref },

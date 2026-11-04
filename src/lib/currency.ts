@@ -20,7 +20,7 @@ export function convertGbp(gbp: number, currency: string, rates: Record<string, 
 
 export function formatIn(amount: number, currency: string) {
   try {
-    return new Intl.NumberFormat("en-GB", { style: "currency", currency }).format(amount);
+    return new Intl.NumberFormat("en-GB", { style: "currency", currencyDisplay: "narrowSymbol", currency }).format(amount);
   } catch {
     return `£${amount.toFixed(2)}`;
   }

@@ -13,6 +13,10 @@ describe("buildStripePayload", () => {
   it("folds shipping into the single total", () => {
     expect(p.line_items[0].price_data.unit_amount).toBe(33558);
   });
+  it("charges the order's own currency with no Stripe currency switch", () => {
+    expect(p.line_items[0].price_data.currency).toBe("usd");
+    expect(p.adaptive_pricing).toEqual({ enabled: false });
+  });
   it("carries only the order number as metadata", () => {
     expect(p.metadata).toEqual({ ref: "482913" });
   });

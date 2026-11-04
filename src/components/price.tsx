@@ -1,16 +1,28 @@
-import { useLocalPrice } from "@/lib/currency";
+import { useMoney, useCurrencyStore, CURRENCIES, isCurrency } from "@/lib/currency";
 
-/** Shows a USD price converted to the visitor's local currency (approximate). */
-export function Price({ usd, className }: { usd: number | string; className?: string }) {
-  const { format } = useLocalPrice();
-  const n = typeof usd === "string" ? parseFloat(usd.replace(/[^0-9.]/g, "")) : usd;
-  if (!Number.isFinite(n)) return <span className={className}>{String(usd)}</span>;
+/** Shows a GBP catalog price in the shopper's chosen currency. */
+export function Price({ gbp, className }: { gbp: number | string; className?: string }) {
+  const { format } = useMoney();
+  const n = typeof gbp === "string" ? parseFloat(gbp.replace(/[^0-9.]/g, "")) : gbp;
+  if (!Number.isFinite(n)) return <span className={className}>{String(gbp)}</span>;
   return <span className={className}>{format(n)}</span>;
 }
 
-/** Small note shown only when prices are converted from USD. */
-export function LocalPriceNote() {
-  const { converted, currency } = useLocalPrice();
-  if (!converted) return null;
-  return <p className="text-xs text-muted-foreground">Approximate price in {currency} at today's rate · charged in USD at checkout</p>;
+const LABELS: Record<string, string> = { GBP: "£ GBP", USD: "$ USD", EUR: "€ EUR" };
+
+export function CurrencyPicker({ className = "" }: { className?: string }) {
+  const { currency } = useMoney();
+  const setCurrency = useCurrencyStore((s) => s.setCurrency);
+  return (
+    <select
+      aria-label="Currency"
+      value={currency}
+      onChange={(e) => isCurrency(e.target.value) && setCurrency(e.target.value)}
+      className={`h-9 rounded-md border border-border bg-background px-2 text-xs font-semibold text-foreground ${className}`}
+    >
+      {CURRENCIES.map((c) => (
+        <option key={c} value={c}>{LABELS[c]}</option>
+      ))}
+    </select>
+  );
 }

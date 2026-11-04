@@ -1,4 +1,4 @@
-import { Price, LocalPriceNote } from "@/components/price";
+import { Price, CurrencyPicker } from "@/components/price";
 import { useEffect, useRef, useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { toast } from "sonner";
@@ -54,7 +54,7 @@ export const Route = createFileRoute("/products/$productId")({
                 offers: {
                   "@type": "Offer",
                   price: p.price.replace(/[^0-9.]/g, ""),
-                  priceCurrency: "USD",
+                  priceCurrency: "GBP",
                   availability: "https://schema.org/InStock",
                   url,
                 },
@@ -170,7 +170,7 @@ function ProductDetailPage() {
       item_category: product.categories,
       item_variant: selected?.name,
       price: displayPriceNum,
-      currency: "USD",
+      currency: "GBP",
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product.id, variantIdx]);
@@ -183,7 +183,7 @@ function ProductDetailPage() {
       title: product.name,
       variantTitle: selected.name,
       image: product.image,
-      price: { amount: selected.priceNum.toFixed(2), currencyCode: "USD" },
+      price: { amount: selected.priceNum.toFixed(2), currencyCode: "GBP" },
       quantity: qty,
     });
     trackAddToCart({
@@ -193,7 +193,7 @@ function ProductDetailPage() {
       item_variant: selected.name,
       price: selected.priceNum,
       quantity: qty,
-      currency: "USD",
+      currency: "GBP",
     });
     toast.success(`Added to cart — ${product.name}`, {
       description: selected?.name && selected.name !== "Default" ? selected.name : undefined,
@@ -269,15 +269,14 @@ function ProductDetailPage() {
               <p className="text-base text-muted-foreground leading-relaxed">{desc.tagline}</p>
 
               <div className="flex items-baseline gap-3 pt-2">
-                <Price usd={displayPriceNum} className="text-3xl font-bold" />
+                <Price gbp={displayPriceNum} className="text-3xl font-bold" />
                 {compareAt ? (
-                  <span className="text-sm text-muted-foreground line-through"><Price usd={compareAt} /></span>
+                  <span className="text-sm text-muted-foreground line-through"><Price gbp={compareAt} /></span>
                 ) : (
-                  <span className="text-sm text-muted-foreground line-through"><Price usd={displayPriceNum * 1.25} /></span>
+                  <span className="text-sm text-muted-foreground line-through"><Price gbp={displayPriceNum * 1.25} /></span>
                 )}
                 <Pill tone="accent">Save 20%</Pill>
               </div>
-              <LocalPriceNote />
 
               {/* Variant selector */}
               {variants.length > 0 && (
@@ -302,7 +301,7 @@ function ProductDetailPage() {
                             className="sr-only"
                           />
                           <span className="block">{v.name}</span>
-                          <span className={`block text-[11px] mt-0.5 ${active ? "text-primary" : "text-muted-foreground/80"}`}><Price usd={livePrice} /></span>
+                          <span className={`block text-[11px] mt-0.5 ${active ? "text-primary" : "text-muted-foreground/80"}`}><Price gbp={livePrice} /></span>
                         </label>
                       );
                     })}
@@ -353,7 +352,7 @@ function ProductDetailPage() {
                     ? "Adding…"
                     : !inStock
                       ? "Out of stock"
-                      : <>Add to cart — <Price usd={displayPriceNum} /></>}
+                      : <>Add to cart — <Price gbp={displayPriceNum} /></>}
                 </button>
               </div>
               {restricted && (
@@ -619,7 +618,7 @@ function ProductDetailPage() {
           </p>
           <div className="flex flex-wrap justify-center gap-3 pt-2">
             <a href="#buy-box" className="inline-flex items-center h-11 px-6 rounded-full bg-primary text-primary-foreground font-medium hover:opacity-90 transition">
-              Order now — <Price usd={displayPriceNum} />
+              Order now — <Price gbp={displayPriceNum} />
             </a>
             <Link to="/products" className="inline-flex items-center h-11 px-6 rounded-full border border-border hover:bg-muted/50 transition text-sm font-medium">
               Browse all products
@@ -645,7 +644,7 @@ function ProductDetailPage() {
                 <div className="space-y-1">
                   <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{r.categories.split("•")[0]?.trim()}</p>
                   <p className="text-sm font-medium group-hover:underline">{r.name}</p>
-                  <p className="text-sm font-semibold"><Price usd={r.price} /></p>
+                  <p className="text-sm font-semibold"><Price gbp={r.price} /></p>
                 </div>
               </Link>
             ))}

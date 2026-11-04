@@ -26,10 +26,10 @@ export interface OrderEmailData {
   currency?: string
 }
 
-export const money = (n: number | undefined, currency = 'USD') =>
-  new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(Number(n ?? 0))
+export const money = (n: number | undefined, currency = 'GBP') =>
+  new Intl.NumberFormat('en-GB', { style: 'currency', currency }).format(Number(n ?? 0))
 
-export function ItemsTable({ items = [], currency = 'USD' }: { items?: OrderEmailItem[]; currency?: string }) {
+export function ItemsTable({ items = [], currency = 'GBP' }: { items?: OrderEmailItem[]; currency?: string }) {
   return (
     <Section>
       {items.map((i, idx) => (
@@ -49,7 +49,7 @@ export function ItemsTable({ items = [], currency = 'USD' }: { items?: OrderEmai
   )
 }
 
-export function Totals({ subtotal, shipping, total, currency = 'USD' }: OrderEmailData) {
+export function Totals({ subtotal, shipping, total, currency = 'GBP' }: OrderEmailData) {
   return (
     <Section>
       <Hr style={hr} />
@@ -87,7 +87,7 @@ export const previewOrder: OrderEmailData = {
   subtotal: 165.29,
   shipping: 0,
   total: 165.29,
-  currency: 'USD',
+  currency: 'GBP',
 }
 
 export const main = { backgroundColor: '#ffffff', fontFamily: 'Arial, sans-serif', margin: 0, padding: 0 }

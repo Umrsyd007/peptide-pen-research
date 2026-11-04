@@ -113,7 +113,7 @@ export function CartDrawer({
                             </p>
                           )}
                         <p className="text-sm font-semibold mt-1">
-                          <Price usd={item.price.amount} />
+                          <Price gbp={item.price.amount} />
                         </p>
                       </div>
                       <div className="flex flex-col items-end gap-2 flex-shrink-0">
@@ -162,7 +162,7 @@ export function CartDrawer({
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-muted-foreground">Subtotal</span>
                   <span className="text-xl font-bold">
-                    <Price usd={totalPrice} />
+                    <Price gbp={totalPrice} />
                   </span>
                 </div>
                 <p className="text-[11px] text-muted-foreground">

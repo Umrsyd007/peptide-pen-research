@@ -133,6 +133,7 @@ function Header() {
           <a href="#buy-box" className="hidden sm:inline-flex items-center justify-center h-9 px-4 rounded-full bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition">
             Order
           </a>
+          <CurrencyPicker />
           <CartDrawer />
         </div>
       </div>

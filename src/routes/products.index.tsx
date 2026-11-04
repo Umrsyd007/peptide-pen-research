@@ -1,4 +1,4 @@
-import { Price } from "@/components/price";
+import { Price, CurrencyPicker } from "@/components/price";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { PRODUCTS, type Product, type Tag } from "@/lib/products";
@@ -228,6 +228,7 @@ function ProductsPage() {
             >
               Contact ↗
             </a>
+            <CurrencyPicker />
             <CartDrawer />
             <details className="md:hidden relative">
               <summary

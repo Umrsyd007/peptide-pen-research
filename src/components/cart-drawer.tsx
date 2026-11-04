@@ -35,7 +35,6 @@ export function CartDrawer({
 
 
   const totalItems = items.reduce((s, i) => s + i.quantity, 0);
-  const currency = items[0]?.price.currencyCode ?? "USD";
   const totalPrice = items.reduce(
     (s, i) => s + parseFloat(i.price.amount) * i.quantity,
     0,

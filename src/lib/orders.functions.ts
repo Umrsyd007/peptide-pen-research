@@ -20,6 +20,7 @@ const CreateOrderSchema = z.object({
   ship_postal: z.string().min(1).max(30),
   ship_country: z.string().min(2).max(60),
   items: z.array(ItemSchema).min(1).max(50),
+  currency: z.enum(["GBP", "USD", "EUR"]).optional().default("GBP"),
 });
 
 export type CreateOrderInput = z.input<typeof CreateOrderSchema>;
@@ -36,14 +37,25 @@ export const createOrder = createServerFn({ method: "POST" })
     // Never trust browser-submitted prices: resolve each line from the catalog.
     const { PRODUCTS } = await import("@/lib/products");
     const { PRODUCT_VARIANTS } = await import("@/lib/product-variants");
-    const lines = data.items.map((i) => {
+    const gbpLines = data.items.map((i) => {
       const product = PRODUCTS.find((p) => p.id === i.productId);
       const variant = PRODUCT_VARIANTS[i.productId]?.find(
         (v) => v.name === i.variant,
       );
       if (!product || !variant) throw new Error("An item in your cart is no longer available. Please re-add it.");
-      return { productId: product.id, name: product.name, variant: variant.name, price: variant.priceNum, qty: i.qty };
+      return { productId: product.id, name: product.name, variant: variant.name, priceGbp: variant.priceNum, qty: i.qty };
     });
+
+    // Catalog is in GBP; convert server-side at the current rate for USD/EUR.
+    const { convertGbp } = await import("@/lib/currency");
+    let rates: Record<string, number> | null = null;
+    if (data.currency !== "GBP") {
+      const j = await fetch("https://open.er-api.com/v6/latest/GBP").then((r) => r.json()).catch(() => null);
+      rates = j?.rates ?? null;
+      if (!rates?.[data.currency]) throw new Error("We couldn't get today's exchange rate. Please try again or pay in GBP.");
+    }
+    const currency = data.currency;
+    const lines = gbpLines.map((l) => ({ ...l, price: convertGbp(l.priceGbp, currency, rates).amount }));
     const subtotal =
       Math.round(lines.reduce((s, i) => s + i.price * i.qty, 0) * 100) / 100;
     const shipping = 0;
@@ -57,7 +69,7 @@ export const createOrder = createServerFn({ method: "POST" })
         subtotal,
         shipping,
         total,
-        currency: "USD",
+        currency,
         ship_name: data.ship_name,
         ship_address1: data.ship_address1,
         ship_address2: data.ship_address2 || null,

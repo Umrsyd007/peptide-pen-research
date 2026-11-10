@@ -6,7 +6,7 @@ export default defineTool({
   name: "list_products",
   title: "List products",
   description:
-    "Return every product in the Peptide Pen Research catalog with id, name, categories, price, and tag. Use this to give the user an overview of what's available.",
+    "Return every product in the PeptidePen catalog with id, name, categories, price, and tag. Use this to give the user an overview of what's available.",
   inputSchema: {},
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: () => {

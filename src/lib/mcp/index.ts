@@ -12,10 +12,10 @@ const projectRef = import.meta.env.VITE_SUPABASE_PROJECT_ID ?? "project-ref-unse
 
 export default defineMcp({
   name: "peptide-pen-research-mcp",
-  title: "Peptide Pen Research",
+  title: "PeptidePen",
   version: "0.1.0",
   instructions:
-    "Tools for the Peptide Pen Research catalog. Use `list_products` to browse the catalog, `search_products` to filter by keyword or category, `get_product` for full product details, and `submit_product_question` to send an inquiry to the store team.",
+    "Tools for the PeptidePen catalog. Use `list_products` to browse the catalog, `search_products` to filter by keyword or category, `get_product` for full product details, and `submit_product_question` to send an inquiry to the store team.",
   auth: auth.oauth.issuer({
     issuer: `https://${projectRef}.supabase.co/auth/v1`,
     acceptedAudiences: "authenticated",

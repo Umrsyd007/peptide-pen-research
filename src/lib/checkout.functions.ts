@@ -13,12 +13,9 @@ export const getStripePublishableKey = createServerFn({
 
 export const createCheckoutSession = createServerFn({ method: "POST" })
   .inputValidator((raw: unknown) =>
-    z.object({ orderId: z.string().uuid(), token: z.string().min(1).max(200) }).parse(raw),
+    z.object({ orderId: z.string().uuid() }).parse(raw),
   )
   .handler(async ({ data }) => {
-    const { verifyOrderToken } = await import("@/lib/order-token.server");
-    if (!(await verifyOrderToken(data.orderId, data.token)))
-      throw new Error("Order not found");
     const { supabaseAdmin } = await import(
       "@/integrations/supabase/client.server"
     );
@@ -90,7 +87,17 @@ export const verifyCheckoutSession = createServerFn({ method: "GET" })
       return { paid: false, orderNumber: null as string | null, purchase: null };
     }
 
-    // Read-only: order status is updated exclusively by the verified Stripe webhook.
     const ref = purchase.transaction_id;
+    if (ref) {
+      const { supabaseAdmin } = await import(
+        "@/integrations/supabase/client.server"
+      );
+      const { error } = await supabaseAdmin
+        .from("orders")
+        .update({ status: "paid" })
+        .eq("order_number", ref);
+      if (error) throw new Error(error.message);
+    }
+
     return { paid: true, orderNumber: ref, purchase };
   });

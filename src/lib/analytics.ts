@@ -44,7 +44,7 @@ export function trackPageView(args: { path: string; title?: string }) {
 export function trackViewItem(item: AnalyticsItem) {
   const items = [{ ...item, quantity: item.quantity ?? 1 }];
   const value = (item.price ?? 0) * (item.quantity ?? 1);
-  const currency = item.currency ?? "GBP";
+  const currency = item.currency ?? "USD";
   push({ ecommerce: null });
   push({ event: "view_item", ecommerce: { currency, value, items } });
   gtagEvent("view_item", { currency, value, items });
@@ -53,7 +53,7 @@ export function trackViewItem(item: AnalyticsItem) {
 export function trackAddToCart(item: AnalyticsItem) {
   const items = [{ ...item, quantity: item.quantity ?? 1 }];
   const value = (item.price ?? 0) * (item.quantity ?? 1);
-  const currency = item.currency ?? "GBP";
+  const currency = item.currency ?? "USD";
   push({ ecommerce: null });
   push({ event: "add_to_cart", ecommerce: { currency, value, items } });
   gtagEvent("add_to_cart", { currency, value, items });
@@ -64,7 +64,7 @@ export function trackBeginCheckout(args: {
   value: number;
   currency?: string;
 }) {
-  const currency = args.currency ?? "GBP";
+  const currency = args.currency ?? "USD";
   push({ ecommerce: null });
   push({
     event: "begin_checkout",
@@ -79,7 +79,7 @@ export function trackPurchase(args: {
   value: number;
   currency?: string;
 }) {
-  const currency = args.currency ?? "GBP";
+  const currency = args.currency ?? "USD";
   push({ ecommerce: null });
   push({
     event: "purchase",

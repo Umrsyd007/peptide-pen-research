@@ -31,7 +31,7 @@ export const PRODUCT_VARIANTS: Record<string, ProductVariant[]> = {
   "1b0959b6": [
     {"name": "5mg", "price": "$174.00", "priceNum": 174.0, "sku": "tirzepatide-5mg", "isDefault": true, "dailyDosage": "Dose: 2,5 mg (can be increased up to 6 mg)/week. Units: 50 units/week.", "courseDetails": "Once per week. From 6 months to as long as needed.", "pensRequired": "12 pens for complete course", "penLastsDays": 14},
     {"name": "10mg", "price": "$349.16", "priceNum": 349.16, "sku": "tirzepatide-10mg", "isDefault": false, "dailyDosage": "Dose: 2,5 mg (can be increased up to 6mg)/week. Units: 25 units/week.", "courseDetails": "Once per week. From 6 months to as long as needed.", "pensRequired": "6 pens for complete course", "penLastsDays": 28},
-    {"name": "15mg", "price": "$523.16", "priceNum": 523.16, "sku": "tirzepatide-15mg", "isDefault": false, "dailyDosage": "Dose: 2,5 mg (can be increased upto 6mg)/week. Units: 25 units/week.", "courseDetails": "Once per week. From 6 months to as long as needed.", "pensRequired": "4 pens for complete course", "penLastsDays": 42},
+    {"name": "20mg", "price": "$523.16", "priceNum": 523.16, "sku": "tirzepatide-15mg", "isDefault": false, "dailyDosage": "Dose: 2,5 mg (can be increased upto 6mg)/week. Units: 25 units/week.", "courseDetails": "Once per week. From 6 months to as long as needed.", "pensRequired": "4 pens for complete course", "penLastsDays": 42},
   ],
   "21059df6": [
     {"name": "200mg/3ml", "price": "$149.64", "priceNum": 149.64, "sku": "curcumin-200mg-3ml", "isDefault": true, "dailyDosage": "Dose: 13,33 mg/day. Units: 20 units/day.", "courseDetails": "15 days followed by 15 days rest. Repeat 2-3 cyles, then 3-6 months rest.", "pensRequired": "3 pens for complete course", "penLastsDays": 30},

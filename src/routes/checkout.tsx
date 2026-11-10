@@ -1,3 +1,4 @@
+import { useLocalPrice } from "@/lib/currency";
 import { useMemo, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
@@ -367,5 +368,11 @@ function Row({ k, v, big }: { k: string; v: string; big?: boolean }) {
 }
 
 function CurrencyNotice() {
-  return <p className="text-xs text-muted-foreground">Charged in USD. You can pay in your local currency at the payment step.</p>;
+  const { converted, currency, format } = useLocalPrice();
+  if (!converted) return null;
+  return (
+    <p className="text-xs text-muted-foreground">
+      Your order is charged in USD. Your bank converts it to {currency} at the latest exchange rate, so the final amount may differ slightly (approx. {format(1)} per $1).
+    </p>
+  );
 }

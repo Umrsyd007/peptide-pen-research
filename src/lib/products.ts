@@ -1,9 +1,3 @@
-import injectorImg from "@/assets/injector/g1-hero-800.webp";
-
-// Hosted on the PeptiCool Shopify CDN (same file as the page gallery's first image).
-const PEPTICOOL_IMAGE =
-  "https://www.pepticool.com/cdn/shop/files/hf_20260813_201457_4c21c13a-7874-42cf-836b-d284716090fc_1.png?v=1786660755&width=900";
-
 export type Tag = "NEW" | "BESTSELLER" | null;
 
 export interface Product {
@@ -15,8 +9,10 @@ export interface Product {
   image: string;
 }
 
-// Former peptide catalog — no longer sold or shown.
-export const RETIRED_PRODUCTS: Product[] = [
+// Set to true to show products on the storefront again.
+export const STOREFRONT_OPEN = false;
+
+const ALL_PRODUCTS: Product[] = [
   { id: "08f6ee52", name: "(Ret) - GLP3R (Standard Pen)", categories: "Metabolic & Fat Optimization", price: "$184.44", tag: "BESTSELLER" , image: "/__l5e/assets-v1/7c637d58-c76e-4ddd-b830-9f83ca801425/08f6ee52.png" },
   { id: "72d3cbf2", name: "AC-Selank-nH2", categories: "Cognitive & Neuro • Cellular Longevity", price: "$75.86", tag: "NEW" , image: "/__l5e/assets-v1/434b906a-7615-4b61-a745-b343bcf8deb5/72d3cbf2.png" },
   { id: "d2a5603b", name: "KPV Peptide (Nasal Spray)", categories: "Cellular Longevity • Immune & Inflammation", price: "$58.46", tag: "NEW" , image: "/__l5e/assets-v1/b815d774-9df8-4296-9363-f568c59bc388/d2a5603b.png" },
@@ -54,10 +50,7 @@ export const RETIRED_PRODUCTS: Product[] = [
   { id: "21059df6", name: "Curcumin", categories: "Cognitive & Neuro • Cellular Longevity", price: "$89.78", tag: null , image: "/__l5e/assets-v1/00c31390-f8af-4c06-a63f-951c86f7a545/21059df6.png" },
 ];
 
-export const PRODUCTS: Product[] = [
-  { id: "08f6ee52", name: "Needle-Free Injector", categories: "Needle-free devices", price: "£164", tag: "NEW", image: injectorImg },
-  { id: "1b0959b6", name: "PeptiCool™ — GLP-1 & Vial Travel Cooler", categories: "Travel coolers", price: "£129.76", tag: "NEW", image: PEPTICOOL_IMAGE },
-];
+export const PRODUCTS: Product[] = STOREFRONT_OPEN ? ALL_PRODUCTS : [];
 
 export function getProduct(id: string): Product | undefined {
   return PRODUCTS.find((p) => p.id === id);

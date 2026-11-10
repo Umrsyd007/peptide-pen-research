@@ -17,10 +17,10 @@ export const Route = createFileRoute("/auth")({
   }),
   head: () => ({
     meta: [
-      { title: "Sign in | PeptidePen" },
-      { name: "description", content: "Sign in or create an account for PeptidePen." },
-      { property: "og:title", content: "Sign in | PeptidePen" },
-      { property: "og:description", content: "Sign in or create an account for PeptidePen." },
+      { title: "Sign in | Peptide Pen Research" },
+      { name: "description", content: "Sign in or create an account for Peptide Pen Research." },
+      { property: "og:title", content: "Sign in | Peptide Pen Research" },
+      { property: "og:description", content: "Sign in or create an account for Peptide Pen Research." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex, nofollow" },
@@ -113,7 +113,7 @@ function AuthPage() {
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             {mode === "sign-in"
-              ? "Sign in to your PeptidePen account."
+              ? "Sign in to your Peptide Pen Research account."
               : "Create an account to manage integrations."}
           </p>
         </div>

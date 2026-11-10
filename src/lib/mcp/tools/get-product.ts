@@ -6,7 +6,7 @@ export default defineTool({
   name: "get_product",
   title: "Get product details",
   description:
-    "Return full details for a single product from the PeptidePen catalog. Accepts either the product id (preferred, from list_products) or a case-insensitive product name.",
+    "Return full details for a single product from the Peptide Pen Research catalog. Accepts either the product id (preferred, from list_products) or a case-insensitive product name.",
   inputSchema: {
     id: z.string().optional().describe("Product id, e.g. '08f6ee52'"),
     name: z.string().optional().describe("Product name (case-insensitive exact or partial match)"),

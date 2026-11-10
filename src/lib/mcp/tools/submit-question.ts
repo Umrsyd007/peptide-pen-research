@@ -7,7 +7,7 @@ export default defineTool({
   name: "submit_product_question",
   title: "Submit product question",
   description:
-    "Send a product inquiry to the PeptidePen team on behalf of the signed-in user. The store will follow up by email.",
+    "Send a product inquiry to the Peptide Pen Research team on behalf of the signed-in user. The store will follow up by email.",
   inputSchema: {
     productId: z.string().optional().describe("Product id from list_products/get_product"),
     message: z
@@ -66,7 +66,7 @@ export default defineTool({
       content: [
         {
           type: "text",
-          text: `Question submitted. The PeptidePen team will reply to ${email}.`,
+          text: `Question submitted. The Peptide Pen Research team will reply to ${email}.`,
         },
       ],
       structuredContent: { id: data.id, email },

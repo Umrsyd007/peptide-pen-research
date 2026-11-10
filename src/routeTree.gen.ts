@@ -24,6 +24,8 @@ import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
+import { Route as GuidesPeptideDosageCalculatorRouteImport } from './routes/guides.peptide-dosage-calculator'
+import { Route as GuidesRetatrutideDosageGuideRouteImport } from './routes/guides.retatrutide-dosage-guide'
 import { Route as ProductsIndexRouteImport } from './routes/products.index'
 import { Route as ProductsProductIdRouteImport } from './routes/products.$productId'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
@@ -112,6 +114,18 @@ const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   path: '/email/unsubscribe',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GuidesPeptideDosageCalculatorRoute =
+  GuidesPeptideDosageCalculatorRouteImport.update({
+    id: '/guides/peptide-dosage-calculator',
+    path: '/guides/peptide-dosage-calculator',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const GuidesRetatrutideDosageGuideRoute =
+  GuidesRetatrutideDosageGuideRouteImport.update({
+    id: '/guides/retatrutide-dosage-guide',
+    path: '/guides/retatrutide-dosage-guide',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ProductsIndexRoute = ProductsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -189,6 +203,8 @@ export interface FileRoutesByFullPath {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/account': typeof AuthenticatedAccountRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/guides/peptide-dosage-calculator': typeof GuidesPeptideDosageCalculatorRoute
+  '/guides/retatrutide-dosage-guide': typeof GuidesRetatrutideDosageGuideRoute
   '/products/$productId': typeof ProductsProductIdRoute
   '/products/': typeof ProductsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -215,6 +231,8 @@ export interface FileRoutesByTo {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/account': typeof AuthenticatedAccountRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/guides/peptide-dosage-calculator': typeof GuidesPeptideDosageCalculatorRoute
+  '/guides/retatrutide-dosage-guide': typeof GuidesRetatrutideDosageGuideRoute
   '/products/$productId': typeof ProductsProductIdRoute
   '/products': typeof ProductsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -244,6 +262,8 @@ export interface FileRoutesById {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/guides/peptide-dosage-calculator': typeof GuidesPeptideDosageCalculatorRoute
+  '/guides/retatrutide-dosage-guide': typeof GuidesRetatrutideDosageGuideRoute
   '/products/$productId': typeof ProductsProductIdRoute
   '/products/': typeof ProductsIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -273,6 +293,8 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/account'
     | '/email/unsubscribe'
+    | '/guides/peptide-dosage-calculator'
+    | '/guides/retatrutide-dosage-guide'
     | '/products/$productId'
     | '/products/'
     | '/.lovable/oauth/consent'
@@ -299,6 +321,8 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/account'
     | '/email/unsubscribe'
+    | '/guides/peptide-dosage-calculator'
+    | '/guides/retatrutide-dosage-guide'
     | '/products/$productId'
     | '/products'
     | '/.lovable/oauth/consent'
@@ -327,6 +351,8 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/_authenticated/account'
     | '/email/unsubscribe'
+    | '/guides/peptide-dosage-calculator'
+    | '/guides/retatrutide-dosage-guide'
     | '/products/$productId'
     | '/products/'
     | '/.lovable/oauth/consent'
@@ -355,6 +381,8 @@ export interface RootRouteChildren {
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
+  GuidesPeptideDosageCalculatorRoute: typeof GuidesPeptideDosageCalculatorRoute
+  GuidesRetatrutideDosageGuideRoute: typeof GuidesRetatrutideDosageGuideRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicProductQuestionRoute: typeof ApiPublicProductQuestionRoute
@@ -470,6 +498,20 @@ declare module '@tanstack/react-router' {
       path: '/email/unsubscribe'
       fullPath: '/email/unsubscribe'
       preLoaderRoute: typeof EmailUnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guides/peptide-dosage-calculator': {
+      id: '/guides/peptide-dosage-calculator'
+      path: '/guides/peptide-dosage-calculator'
+      fullPath: '/guides/peptide-dosage-calculator'
+      preLoaderRoute: typeof GuidesPeptideDosageCalculatorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guides/retatrutide-dosage-guide': {
+      id: '/guides/retatrutide-dosage-guide'
+      path: '/guides/retatrutide-dosage-guide'
+      fullPath: '/guides/retatrutide-dosage-guide'
+      preLoaderRoute: typeof GuidesRetatrutideDosageGuideRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/products/': {
@@ -605,6 +647,8 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
+  GuidesPeptideDosageCalculatorRoute: GuidesPeptideDosageCalculatorRoute,
+  GuidesRetatrutideDosageGuideRoute: GuidesRetatrutideDosageGuideRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicProductQuestionRoute: ApiPublicProductQuestionRoute,

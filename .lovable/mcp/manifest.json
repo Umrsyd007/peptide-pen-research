@@ -13,13 +13,13 @@
     "server": {
       "name": "peptide-pen-research-mcp",
       "version": "0.1.0",
-      "title": "PeptidePen"
+      "title": "Peptide Pen Research"
     },
     "tools": [
       {
         "name": "list_products",
         "title": "List products",
-        "description": "Return every product in the PeptidePen catalog with id, name, categories, price, and tag. Use this to give the user an overview of what's available.",
+        "description": "Return every product in the Peptide Pen Research catalog with id, name, categories, price, and tag. Use this to give the user an overview of what's available.",
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,
@@ -35,7 +35,7 @@
       {
         "name": "search_products",
         "title": "Search products",
-        "description": "Search the PeptidePen catalog by keyword. Matches against product name and categories. Optionally filter to only bestsellers or new arrivals.",
+        "description": "Search the Peptide Pen Research catalog by keyword. Matches against product name and categories. Optionally filter to only bestsellers or new arrivals.",
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,
@@ -74,7 +74,7 @@
       {
         "name": "get_product",
         "title": "Get product details",
-        "description": "Return full details for a single product from the PeptidePen catalog. Accepts either the product id (preferred, from list_products) or a case-insensitive product name.",
+        "description": "Return full details for a single product from the Peptide Pen Research catalog. Accepts either the product id (preferred, from list_products) or a case-insensitive product name.",
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,
@@ -99,7 +99,7 @@
       {
         "name": "submit_product_question",
         "title": "Submit product question",
-        "description": "Send a product inquiry to the PeptidePen team on behalf of the signed-in user. The store will follow up by email.",
+        "description": "Send a product inquiry to the Peptide Pen Research team on behalf of the signed-in user. The store will follow up by email.",
         "annotations": {
           "readOnlyHint": false,
           "destructiveHint": false,

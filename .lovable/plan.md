@@ -1,28 +1,38 @@
-# Add a genuine new product line
+# Admin Orders Dashboard
 
-This plan only covers a product you actually source and ship yourself. It does not hide or swap out what the site sells now.
+A private page at `/admin/orders`, visible only to your admin account, showing live orders from your store in a Shopify-style layout.
 
-## Conditions (these will not change)
-- The new product gets its **own web address** (for example `/products/needle-free-injector`). It will not take over `/products/08f6ee52`.
-- It gets its **own prices**, set from what it really costs. They will not mirror the peptide pen variants.
-- The text and photos are **yours** (from your supplier or your own photography). Nothing is copied from jetinject.com.
-- Existing peptide products stay as they are unless you separately decide to remove them, and if you do, they're removed openly.
-- If Stripe asks, you tell them about the new product. I can help draft that note.
+## What you will see
 
-## What I need from you
-1. Product name, and who makes or supplies it
-2. Variants, with real prices in pounds
-3. Photos you have the rights to use
-4. A short description, what comes in the box, and shipping times
+1. **Summary cards (top row)** for the chosen period (Today / 7 days / 30 days):
+   - Orders (paid), items ordered, revenue, pending checkouts, pending value.
+2. **Orders table**
+   - Columns: order number, date, customer name, email, items count, total, status (Paid / Pending / Failed / Expired badges).
+   - Search by order number, name or email.
+   - Status filter tabs: All, Paid, Pending, Failed.
+   - Pagination (25 per page), newest first.
+3. **Order detail panel** (opens when you click a row)
+   - Customer name, email, full shipping address.
+   - Each product with size, quantity, price, line total, and order total.
+   - Copy-address button.
+4. **Export CSV** of the currently filtered orders.
+5. **Admin link** in the account page header, shown only to admins.
 
-## What I'll build
-1. A new product entry with its own variants and prices in pounds
-2. A product page at its own address, using your photos and wording
-3. A spot on the home page featuring the product
-4. A sitemap entry and page title and description for the new page
-5. Cart and checkout work as they do today, charging exactly what's shown
+Out of scope for now: marking orders shipped / tracking numbers (we can add later).
+
+## Access
+
+- Only users with the `admin` role can open the page; everyone else is sent away.
+- I will check whether your account already has the admin role and, if not, add it for the email you sign in with (I'll confirm the email with you first).
 
 ## Technical details
-- Add the item to `src/lib/products.ts` and `src/lib/product-variants.ts` under a new id
-- Reuse the existing product page; upload images as project assets
-- Add a test confirming each variant's price
+
+- Route: `src/routes/_authenticated/admin.orders.tsx` (inside the existing sign-in gate), `ssr: false`, plus a role check.
+- Data via `createServerFn` with `requireSupabaseAuth` in `src/lib/admin-orders.functions.ts`:
+  - Verifies admin via `user_roles` through the user's own client (existing `read_own_roles` policy), throws Forbidden otherwise.
+  - Reads `orders` + `order_items` through the user's client — existing `admin_read_orders` / `admin_read_order_items` policies already allow admins, so no service-role key and no schema changes needed.
+  - Inputs: period, status, search, page; returns rows, totals for cards, and page count.
+- CSV built client-side from a server fn that returns all filtered rows (capped at 5,000).
+- Uses existing shadcn Table, Card, Sheet, Badge, Tabs, Input components and `formatMoney`.
+- Head metadata with `noindex`.
+- Test: small unit test for the summary-card math (revenue only counts paid orders; pending value counts pending only).

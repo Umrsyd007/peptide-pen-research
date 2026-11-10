@@ -24,6 +24,28 @@ export function currencyForLocale(locale: string | undefined) {
   return (region && REGION_CURRENCY[region]) || "USD";
 }
 
+/** Country (from the visitor's location) wins; browser language is the fallback. */
+export function currencyForVisitor(country: string | null | undefined, locale: string | undefined) {
+  const c = country?.toUpperCase();
+  if (c && REGION_CURRENCY[c]) return REGION_CURRENCY[c];
+  if (c) return "USD";
+  return currencyForLocale(locale);
+}
+
+const RATES_KEY = "pp-usd-rates-v1";
+const RATES_TTL = 60 * 60 * 1000;
+
+async function loadRates(): Promise<Record<string, number> | null> {
+  try {
+    const cached = JSON.parse(sessionStorage.getItem(RATES_KEY) || "null");
+    if (cached && Date.now() - cached.at < RATES_TTL) return cached.rates;
+  } catch {}
+  const j = await fetch("https://open.er-api.com/v6/latest/USD").then((r) => r.json());
+  if (!j?.rates) return null;
+  try { sessionStorage.setItem(RATES_KEY, JSON.stringify({ at: Date.now(), rates: j.rates })); } catch {}
+  return j.rates;
+}
+
 type State = { currency: string; rates: Record<string, number> | null; init: () => void };
 
 let started = false;
@@ -33,12 +55,17 @@ export const useCurrencyStore = create<State>((set) => ({
   init: () => {
     if (started || typeof window === "undefined") return;
     started = true;
-    const currency = currencyForLocale(navigator.languages?.[0] ?? navigator.language);
-    if (currency === "USD") return;
-    set({ currency });
-    fetch("https://open.er-api.com/v6/latest/USD")
-      .then((r) => r.json())
-      .then((j) => j?.rates && set({ rates: j.rates }))
+    const locale = navigator.languages?.[0] ?? navigator.language;
+    import("./currency.functions")
+      .then((m) => m.getVisitorCountry())
+      .then((r) => r.country, () => null)
+      .then(async (country) => {
+        const currency = currencyForVisitor(country, locale);
+        if (currency === "USD") return;
+        set({ currency });
+        const rates = await loadRates();
+        if (rates) set({ rates });
+      })
       .catch(() => {});
   },
 }));

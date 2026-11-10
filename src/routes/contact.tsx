@@ -121,10 +121,10 @@ function ContactPage() {
               </div>
             </div>
             <a
-              href="mailto:support@getpeptidepen.com"
+              href="mailto:hello@getpeptidepen.com"
               className="text-sm font-medium text-primary hover:underline break-all"
             >
-              support@getpeptidepen.com
+              hello@getpeptidepen.com
             </a>
           </div>
 

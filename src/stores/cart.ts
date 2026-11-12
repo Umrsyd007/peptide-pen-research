@@ -8,7 +8,7 @@ export function refreshCartPrices(items: CartItem[]): CartItem[] {
   return items.flatMap((i) => {
     const v = PRODUCT_VARIANTS[i.productId]?.find((x) => x.name === i.variantTitle);
     if (!v) return [];
-    return [{ ...i, price: { amount: v.priceNum.toFixed(2), currencyCode: "USD" } }];
+    return [{ ...i, price: { amount: v.priceNum.toFixed(2), currencyCode: "GBP" } }];
   });
 }
 

@@ -1,4 +1,4 @@
-import { useLocalPrice } from "@/lib/currency";
+import { useMoney } from "@/lib/currency";
 import { useMemo, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
@@ -77,11 +77,11 @@ function CheckoutPage() {
     currency: string;
   } | null>(null);
 
-  const currency = items[0]?.price.currencyCode ?? "USD";
+  const { currency, convert } = useMoney();
   const subtotal = useMemo(
     () =>
-      items.reduce((s, i) => s + parseFloat(i.price.amount) * i.quantity, 0),
-    [items],
+      Math.round(items.reduce((s, i) => s + convert(parseFloat(i.price.amount)) * i.quantity, 0) * 100) / 100,
+    [items, convert],
   );
 
   const update = (key: keyof typeof form, value: string) => {
@@ -111,6 +111,7 @@ function CheckoutPage() {
           price: parseFloat(i.price.amount),
           qty: i.quantity,
         })),
+        currency: currency as "GBP" | "USD" | "EUR",
       };
 
       const order = await submitOrder({ data: input });
@@ -126,15 +127,15 @@ function CheckoutPage() {
           item_id: i.productId,
           item_name: i.title,
           item_variant: i.variantTitle,
-          price: parseFloat(i.price.amount),
+          price: convert(parseFloat(i.price.amount)),
           quantity: i.quantity,
-          currency: i.price.currencyCode,
+          currency,
         })),
         value: subtotal,
         currency,
       });
 
-      setSummary({ subtotal, total: order.total, currency });
+      setSummary({ subtotal: order.total, total: order.total, currency: order.currency });
       setStripePromise(loadStripe(key));
       setClientSecret(secret);
       clearCart();
@@ -330,8 +331,8 @@ function CheckoutPage() {
                   </div>
                   <span className="font-mono text-sm">
                     {formatMoney(
-                      parseFloat(i.price.amount) * i.quantity,
-                      i.price.currencyCode,
+                      convert(parseFloat(i.price.amount)) * i.quantity,
+                      currency,
                     )}
                   </span>
                 </li>
@@ -343,7 +344,6 @@ function CheckoutPage() {
             v={formatMoney(displaySubtotal, summary?.currency ?? currency)}
           />
           <Row k="Shipping" v="Free worldwide" />
-          <CurrencyNotice />
           <div className="h-px bg-border" />
           <Row
             k="Total"
@@ -364,15 +364,5 @@ function Row({ k, v, big }: { k: string; v: string; big?: boolean }) {
       <span className={big ? "" : "text-muted-foreground"}>{k}</span>
       <span className="font-mono">{v}</span>
     </div>
-  );
-}
-
-function CurrencyNotice() {
-  const { converted, currency, format } = useLocalPrice();
-  if (!converted) return null;
-  return (
-    <p className="text-xs text-muted-foreground">
-      Your order is charged in USD. Your bank converts it to {currency} at the latest exchange rate, so the final amount may differ slightly (approx. {format(1)} per $1).
-    </p>
   );
 }

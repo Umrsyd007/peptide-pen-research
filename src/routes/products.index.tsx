@@ -1,4 +1,4 @@
-import { Price } from "@/components/price";
+import { Price, CurrencyPicker } from "@/components/price";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { PRODUCTS, type Product, type Tag } from "@/lib/products";
@@ -124,7 +124,7 @@ function ProductCard({ product }: { product: Product }) {
             <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
               From
             </p>
-            <p className="text-xl font-black text-foreground"><Price usd={livePrice} /></p>
+            <p className="text-xl font-black text-foreground"><Price gbp={livePrice} /></p>
           </div>
           <Link
             to="/products/$productId"
@@ -228,6 +228,7 @@ function ProductsPage() {
             >
               Contact ↗
             </a>
+            <CurrencyPicker />
             <CartDrawer />
             <details className="md:hidden relative">
               <summary
@@ -405,8 +406,8 @@ function ProductsPage() {
           )}
 
           <div className="mt-10 rounded-2xl border border-border bg-muted/40 p-4 text-xs text-muted-foreground leading-relaxed">
-            <strong className="text-foreground">Note:</strong> Prices are displayed
-            in USD for convenience. All payments are processed in EUR at checkout.
+            <strong className="text-foreground">Note:</strong> Prices are in pounds (GBP);
+            use the currency menu to view and pay in USD or EUR.
             For in-vitro research use only — not for human or veterinary consumption.
           </div>
         </section>

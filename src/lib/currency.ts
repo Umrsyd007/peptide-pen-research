@@ -26,6 +26,22 @@ export function formatIn(amount: number, currency: string) {
   }
 }
 
+const EUROZONE = new Set(["AT","BE","HR","CY","EE","FI","FR","DE","GR","IE","IT","LV","LT","LU","MT","NL","PT","SK","SI","ES","MC","SM","VA","AD","ME","XK"]);
+
+/** Default currency for a visitor country: UK→GBP, eurozone→EUR, unknown→GBP, else USD. */
+export function currencyForCountry(country: string | null | undefined): Currency {
+  if (!country) return "GBP";
+  const c = country.toUpperCase();
+  if (c === "GB" || c === "UK") return "GBP";
+  if (EUROZONE.has(c)) return "EUR";
+  return "USD";
+}
+
+/** A saved manual choice always beats location. */
+export function pickInitialCurrency(saved: unknown, country: string | null | undefined): Currency {
+  return isCurrency(saved) ? saved : currencyForCountry(country);
+}
+
 const RATES_KEY = "pp-gbp-rates-v1";
 const CHOICE_KEY = "pp-currency-v1";
 const RATES_TTL = 60 * 60 * 1000;
@@ -55,11 +71,20 @@ export const useCurrencyStore = create<State>((set, get) => ({
   init: () => {
     if (started || typeof window === "undefined") return;
     started = true;
-    const saved = localStorage.getItem(CHOICE_KEY);
-    if (isCurrency(saved) && saved !== "GBP") {
-      set({ currency: saved });
+    const apply = (c: Currency) => {
+      if (c === "GBP") return;
+      set({ currency: c });
       loadRates().then((rates) => rates && set({ rates }));
-    }
+    };
+    const saved = localStorage.getItem(CHOICE_KEY);
+    if (isCurrency(saved)) return apply(saved);
+    import("./currency.functions")
+      .then(({ getVisitorCountry }) => getVisitorCountry())
+      .then(({ country }) => {
+        if (isCurrency(localStorage.getItem(CHOICE_KEY))) return; // shopper picked meanwhile
+        apply(pickInitialCurrency(null, country));
+      })
+      .catch(() => {});
   },
   setCurrency: (c) => {
     try { localStorage.setItem(CHOICE_KEY, c); } catch {}

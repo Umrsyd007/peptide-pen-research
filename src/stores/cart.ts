@@ -2,6 +2,31 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { PRODUCT_VARIANTS } from "@/lib/product-variants";
+import { logCartEvent } from "@/lib/cart-events.functions";
+
+/** Persistent anonymous cart session id (shared with checkout). */
+export function getCartSessionId(): string {
+  const k = "peptidepen-cart-session";
+  let id = localStorage.getItem(k);
+  if (!id) { id = crypto.randomUUID(); localStorage.setItem(k, id); }
+  return id;
+}
+
+function track(type: "add" | "update" | "remove", item: CartItem, qty: number, items: CartItem[]) {
+  if (typeof window === "undefined") return;
+  (async () => {
+    let userId: string | null = null;
+    try {
+      const { supabase } = await import("@/integrations/supabase/client");
+      userId = (await supabase.auth.getSession()).data.session?.user.id ?? null;
+    } catch { /* anonymous */ }
+    await logCartEvent({ data: {
+      sessionId: getCartSessionId(), userId, type,
+      productId: item.productId, variant: item.variantTitle, qty, currency: "GBP",
+      cart: items.map((i) => ({ productId: i.productId, variant: i.variantTitle, qty: i.quantity })),
+    } });
+  })().catch(() => {});
+}
 
 /** Re-price saved cart lines from the current catalog; drop lines that no longer exist. */
 export function refreshCartPrices(items: CartItem[]): CartItem[] {
@@ -48,6 +73,7 @@ export const useCartStore = create<CartStore>()(
               )
             : [...items, item],
         });
+        track("add", item, item.quantity, get().items);
       },
       updateQuantity: async (variantId, quantity) => {
         if (quantity <= 0) return get().removeItem(variantId);
@@ -56,9 +82,13 @@ export const useCartStore = create<CartStore>()(
             i.variantId === variantId ? { ...i, quantity: Math.min(50, quantity) } : i,
           ),
         });
+        const it = get().items.find((i) => i.variantId === variantId);
+        if (it) track("update", it, it.quantity, get().items);
       },
       removeItem: async (variantId) => {
+        const gone = get().items.find((i) => i.variantId === variantId);
         set({ items: get().items.filter((i) => i.variantId !== variantId) });
+        if (gone) track("remove", gone, 0, get().items);
       },
       clearCart: () => set({ items: [] }),
     }),

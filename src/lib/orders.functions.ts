@@ -21,6 +21,7 @@ const CreateOrderSchema = z.object({
   ship_country: z.string().min(2).max(60),
   items: z.array(ItemSchema).min(1).max(50),
   currency: z.enum(["GBP", "USD", "EUR"]).optional().default("GBP"),
+  cart_session_id: z.string().uuid().optional(),
 });
 
 export type CreateOrderInput = z.input<typeof CreateOrderSchema>;
@@ -77,6 +78,7 @@ export const createOrder = createServerFn({ method: "POST" })
         ship_region: data.ship_region,
         ship_postal: data.ship_postal,
         ship_country: data.ship_country,
+        cart_session_id: data.cart_session_id ?? null,
       })
       .select("id, total, order_number")
       .single();

@@ -3,6 +3,7 @@ import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { toast } from "sonner";
+import { listCartEvents } from "@/lib/cart-events.functions";
 import { checkIsAdmin, listAdminOrders, type AdminOrder } from "@/lib/admin-orders.functions";
 import type { Period } from "@/lib/admin-orders";
 import { formatMoney } from "@/lib/money";
@@ -56,6 +57,7 @@ function AdminOrdersPage() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState<AdminOrder | null>(null);
+  const [view, setView] = useState<"orders" | "cart">("orders");
 
   const admin = useQuery({ queryKey: ["is-admin"], queryFn: () => isAdminFn() });
   const list = useQuery({
@@ -84,8 +86,25 @@ function AdminOrdersPage() {
     { label: "Pending value", value: s ? formatMoney(s.pendingValue) : "—" },
   ];
 
+  const viewTabs = (
+    <Tabs value={view} onValueChange={(v) => setView(v as "orders" | "cart")} className="mb-6">
+      <TabsList>
+        <TabsTrigger value="orders">Orders</TabsTrigger>
+        <TabsTrigger value="cart">Cart activity</TabsTrigger>
+      </TabsList>
+    </Tabs>
+  );
+  if (view === "cart")
+    return (
+      <main className="mx-auto max-w-7xl px-4 py-8">
+        {viewTabs}
+        <CartActivity />
+      </main>
+    );
+
   return (
     <main className="mx-auto max-w-7xl px-4 py-8">
+      {viewTabs}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <h1 className="text-2xl font-semibold">Orders</h1>
         <Tabs value={period} onValueChange={(v) => { setPeriod(v as Period); setPage(1); }}>
@@ -223,5 +242,68 @@ function AdminOrdersPage() {
         </SheetContent>
       </Sheet>
     </main>
+  );
+}
+
+function CartActivity() {
+  const fn = useServerFn(listCartEvents);
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const q = useQuery({
+    queryKey: ["cart-events", search, page],
+    queryFn: () => fn({ data: { search, page } }),
+    placeholderData: keepPreviousData,
+  });
+  const rows = q.data?.rows ?? [];
+  const pages = Math.max(1, Math.ceil((q.data?.total ?? 0) / 50));
+  return (
+    <>
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <h1 className="text-2xl font-semibold">Cart activity</h1>
+        <Input className="max-w-xs" placeholder="Search IP, product, session…" value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} />
+      </div>
+      <Card className="mt-4">
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Time</TableHead>
+                <TableHead>Action</TableHead>
+                <TableHead>Product</TableHead>
+                <TableHead>Qty</TableHead>
+                <TableHead>Price</TableHead>
+                <TableHead>Cart</TableHead>
+                <TableHead>IP</TableHead>
+                <TableHead>Country</TableHead>
+                <TableHead>Session</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {rows.map((r) => (
+                <TableRow key={r.id}>
+                  <TableCell className="whitespace-nowrap">{new Date(r.created_at).toLocaleString()}</TableCell>
+                  <TableCell><Badge variant="outline">{r.event_type}</Badge></TableCell>
+                  <TableCell>{r.product_id} {r.variant && <span className="text-muted-foreground">· {r.variant}</span>}</TableCell>
+                  <TableCell>{r.qty}</TableCell>
+                  <TableCell>{r.unit_price != null ? `£${r.unit_price.toFixed(2)}` : "—"}</TableCell>
+                  <TableCell>{Array.isArray(r.cart_snapshot) ? `${r.cart_snapshot.length} lines` : "—"}</TableCell>
+                  <TableCell className="font-mono text-xs">{r.ip ?? "—"}</TableCell>
+                  <TableCell>{r.country ?? "—"}</TableCell>
+                  <TableCell className="font-mono text-xs" title={r.session_id}>{r.session_id.slice(0, 8)}</TableCell>
+                </TableRow>
+              ))}
+              {!rows.length && (
+                <TableRow><TableCell colSpan={9} className="py-10 text-center text-muted-foreground">{q.isLoading ? "Loading…" : "No cart activity yet."}</TableCell></TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+      <div className="mt-4 flex items-center justify-end gap-2">
+        <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage(page - 1)}>Previous</Button>
+        <span className="text-sm text-muted-foreground">Page {page} of {pages}</span>
+        <Button variant="outline" size="sm" disabled={page >= pages} onClick={() => setPage(page + 1)}>Next</Button>
+      </div>
+    </>
   );
 }

@@ -895,8 +895,8 @@ export const DEEP_DIVES: Record<string, DeepDiveSection[]> = {
       "Both peptides are advanced metabolic therapies, but Retatrutide activates three receptors (GLP-1, GIP, glucagon) while Tirzepatide targets only two (GLP-1, GIP). This triple receptor action may provide enhanced fat metabolism, thermogenesis, and energy regulation, positioning Retatrutide as a promising option for obesity and metabolic research. Studies continue to clarify the distinct benefits of each peptide in glucose control and cardiovascular health.",
     ] },
     { heading: "Pre-Mixed Pen Dosage Information", body: [
-      "● Retatrutide 30 mg pen: Contains 120 units; each unit equals 250 micrograms (mcg). — ○ 1 unit = 250 mcg — ○ 10 units = 2.5 mg — ○ 20 units = 5 mg — ○ 40 units = 10 mg",
-      "● Retatrutide 60 mg pen: Contains 120 units; each unit equals 500 mcg. — ○ 1 unit = 500 mcg — ○ 5 units = 2.5 mg — ○ 10 units = 5 mg — ○ 20 units = 10 mg — ○ 40 units = 20 mg",
+      "● Retatrutide 6 mg pen: Contains 120 units; each unit equals 50 micrograms (mcg). — ○ 1 unit = 50 mcg — ○ 10 units = 0.5 mg — ○ 20 units = 1 mg — ○ 30 units = 1.5 mg — ○ 40 units = 2 mg",
+      "● Retatrutide 12 mg pen: Contains 120 units; each unit equals 100 mcg. — ○ 1 unit = 100 mcg — ○ 10 units = 1 mg — ○ 20 units = 2 mg — ○ 25 units = 2.5 mg — ○ 40 units = 4 mg — ○ 60 units = 6 mg",
       "This dosing flexibility supports precise research applications.",
     ] },
   ],

@@ -13,8 +13,6 @@ export const Route = createFileRoute("/privacy-policy")({
     <p className="text-sm text-muted-foreground">Updated October 29, 2026</p>
     <h2 className="text-xl font-semibold">Orders and payments</h2>
     <p>We store your order, contact and shipping details to process your purchase and respond to requests. Stripe processes payments and collects payment information directly. Our payment request uses an opaque order reference, amount and currency instead of itemized product names or your shipping details.</p>
-    <h2 className="text-xl font-semibold">Cart activity</h2>
-    <p>When you add, change or remove items in your cart, we record the products, sizes, quantities and prices together with your IP address, approximate country, browser information and a random cart reference. We use this for fraud prevention and order support, link it to your order if you check out, and delete it after 90 days.</p>
     <h2 className="text-xl font-semibold">Google measurement</h2>
     <p>When allowed by your privacy choices and regional requirements, Google Analytics receives page visits and shopping events, including product details, amounts and currency. Google Ads receives page visits, advertising click and cookie identifiers, and confirmed purchase references, amounts and currency for advertising measurement and campaign optimization. Requests also expose normal connection information such as IP address, browser information and page address to Google. We do not enable customer matching or share your name, email or shipping address in these advertising events.</p>
     <h2 className="text-xl font-semibold">Your choices and withdrawal</h2>

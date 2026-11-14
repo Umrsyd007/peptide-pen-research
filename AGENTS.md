@@ -5,4 +5,3 @@
 - Paid-order emails (admin notice + customer receipt) are sent from the Stripe webhook via the shared send helper with per-order idempotency keys. Why: webhook retries must never double-send.
 - Product listing prices are derived from each product's default variant (getLivePrice); never hand-edit Product.price. Why: listing and checkout prices must never disagree.
 - Catalog prices are stored in GBP; the order currency (GBP/USD/EUR) defaults from visitor country (cf-ipcountry) until the shopper picks one, and is converted and fixed server-side in createOrder. Why: browser-sent prices or rates must never decide the charge.
-- Cart activity is logged server-side to cart_events (IP from edge headers only, catalog-validated, admin-read only, 90-day cron cleanup). Why: trusted pre-checkout audit trail.

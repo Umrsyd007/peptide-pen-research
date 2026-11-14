@@ -14,57 +14,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      cart_events: {
-        Row: {
-          cart_snapshot: Json
-          country: string | null
-          created_at: string
-          currency: string
-          event_type: string
-          id: string
-          ip: string | null
-          product_id: string
-          qty: number
-          session_id: string
-          unit_price: number | null
-          user_agent: string | null
-          user_id: string | null
-          variant: string | null
-        }
-        Insert: {
-          cart_snapshot?: Json
-          country?: string | null
-          created_at?: string
-          currency?: string
-          event_type: string
-          id?: string
-          ip?: string | null
-          product_id: string
-          qty?: number
-          session_id: string
-          unit_price?: number | null
-          user_agent?: string | null
-          user_id?: string | null
-          variant?: string | null
-        }
-        Update: {
-          cart_snapshot?: Json
-          country?: string | null
-          created_at?: string
-          currency?: string
-          event_type?: string
-          id?: string
-          ip?: string | null
-          product_id?: string
-          qty?: number
-          session_id?: string
-          unit_price?: number | null
-          user_agent?: string | null
-          user_id?: string | null
-          variant?: string | null
-        }
-        Relationships: []
-      }
       email_send_log: {
         Row: {
           created_at: string
@@ -198,7 +147,6 @@ export type Database = {
           ai_summary: string | null
           ai_summary_created_at: string | null
           ai_summary_status: string
-          cart_session_id: string | null
           created_at: string
           currency: string
           email: string
@@ -221,7 +169,6 @@ export type Database = {
           ai_summary?: string | null
           ai_summary_created_at?: string | null
           ai_summary_status?: string
-          cart_session_id?: string | null
           created_at?: string
           currency?: string
           email: string
@@ -244,7 +191,6 @@ export type Database = {
           ai_summary?: string | null
           ai_summary_created_at?: string | null
           ai_summary_status?: string
-          cart_session_id?: string | null
           created_at?: string
           currency?: string
           email?: string

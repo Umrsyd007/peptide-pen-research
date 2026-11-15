@@ -4,4 +4,4 @@
 - Inquiry submission paths share one server-only notifier that sends through the managed email helper with event-based idempotency keys and records sent/suppressed/failed status for dedupe. Why: every path must send the same way and never double-notify.
 - Paid-order emails (admin notice + customer receipt) are sent from the Stripe webhook via the shared send helper with per-order idempotency keys. Why: webhook retries must never double-send.
 - Product listing prices are derived from each product's default variant (getLivePrice); never hand-edit Product.price. Why: listing and checkout prices must never disagree.
-- Catalog prices are stored in GBP; the order currency (GBP/USD/EUR) defaults from visitor country (cf-ipcountry) until the shopper picks one, and is converted and fixed server-side in createOrder. Why: browser-sent prices or rates must never decide the charge.
+- Catalog prices are stored in GBP; the order currency (GBP/USD/EUR) is chosen by the shopper but converted and fixed server-side in createOrder. Why: browser-sent prices or rates must never decide the charge.

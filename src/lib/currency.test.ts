@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { convertGbp, isCurrency } from "./currency";
+import { convertGbp, isCurrency, currencyForCountry } from "./currency";
 
 describe("currency", () => {
   it("GBP prices are charged as-is", () => {
@@ -11,7 +11,19 @@ describe("currency", () => {
   it("falls back to GBP when no rate is available", () => {
     expect(convertGbp(100, "EUR", null)).toEqual({ amount: 100, currency: "GBP" });
   });
-  it("only offers GBP, USD and EUR", () => {
+  it("offers CAD and AUD", () => {
+    expect(isCurrency("CAD")).toBe(true);
+    expect(isCurrency("AUD")).toBe(true);
+  });
+  it("defaults currency from visitor country", () => {
+    expect(currencyForCountry("CA")).toBe("CAD");
+    expect(currencyForCountry("AU")).toBe("AUD");
+    expect(currencyForCountry("US")).toBe("USD");
+    expect(currencyForCountry("DE")).toBe("EUR");
+    expect(currencyForCountry("GB")).toBe("GBP");
+    expect(currencyForCountry(null)).toBe("GBP");
+  });
+  it("rejects unsupported currencies", () => {
     expect(isCurrency("EUR")).toBe(true);
     expect(isCurrency("JPY")).toBe(false);
   });

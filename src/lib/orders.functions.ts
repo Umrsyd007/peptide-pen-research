@@ -20,7 +20,7 @@ const CreateOrderSchema = z.object({
   ship_postal: z.string().min(1).max(30),
   ship_country: z.string().min(2).max(60),
   items: z.array(ItemSchema).min(1).max(50),
-  currency: z.enum(["GBP", "USD", "EUR"]).optional().default("GBP"),
+  currency: z.enum(["GBP", "USD", "EUR", "CAD", "AUD"]).optional().default("GBP"),
 });
 
 export type CreateOrderInput = z.input<typeof CreateOrderSchema>;

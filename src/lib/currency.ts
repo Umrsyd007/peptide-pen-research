@@ -3,7 +3,7 @@ import { useEffect } from "react";
 
 /** Catalog prices are stored in GBP; shoppers may pick one of these to view and pay in. */
 export const BASE_CURRENCY = "GBP";
-export const CURRENCIES = ["GBP", "USD", "EUR"] as const;
+export const CURRENCIES = ["GBP", "USD", "EUR", "CAD", "AUD"] as const;
 export type Currency = (typeof CURRENCIES)[number];
 
 export function isCurrency(c: unknown): c is Currency {
@@ -18,9 +18,20 @@ export function convertGbp(gbp: number, currency: string, rates: Record<string, 
   return { amount: Math.round(gbp * rate * 100) / 100, currency };
 }
 
+const EURO = new Set(["AT","BE","HR","CY","EE","FI","FR","DE","GR","IE","IT","LV","LT","LU","MT","NL","PT","SK","SI","ES"]);
+/** Default currency for a visitor's two-letter country code; GBP when unknown. */
+export function currencyForCountry(country: string | null | undefined): Currency {
+  const c = (country || "").toUpperCase();
+  if (c === "US") return "USD";
+  if (c === "CA") return "CAD";
+  if (c === "AU") return "AUD";
+  if (EURO.has(c)) return "EUR";
+  return "GBP";
+}
+
 export function formatIn(amount: number, currency: string) {
   try {
-    return new Intl.NumberFormat("en-GB", { style: "currency", currencyDisplay: "narrowSymbol", currency }).format(amount);
+    return new Intl.NumberFormat("en-GB", { style: "currency", currencyDisplay: currency === "CAD" || currency === "AUD" ? "symbol" : "narrowSymbol", currency }).format(amount);
   } catch {
     return `£${amount.toFixed(2)}`;
   }
@@ -56,10 +67,17 @@ export const useCurrencyStore = create<State>((set, get) => ({
     if (started || typeof window === "undefined") return;
     started = true;
     const saved = localStorage.getItem(CHOICE_KEY);
-    if (isCurrency(saved) && saved !== "GBP") {
-      set({ currency: saved });
+    const apply = (c: Currency) => {
+      if (c === "GBP") return;
+      set({ currency: c });
       loadRates().then((rates) => rates && set({ rates }));
-    }
+    };
+    if (isCurrency(saved)) return apply(saved);
+    // First visit: default from the visitor's country (edge header), not saved until they pick.
+    import("./currency.functions")
+      .then((m) => m.getVisitorCountry())
+      .then((country) => { if (!localStorage.getItem(CHOICE_KEY)) apply(currencyForCountry(country)); })
+      .catch(() => {});
   },
   setCurrency: (c) => {
     try { localStorage.setItem(CHOICE_KEY, c); } catch {}

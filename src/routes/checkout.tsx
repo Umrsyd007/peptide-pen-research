@@ -111,7 +111,7 @@ function CheckoutPage() {
           price: parseFloat(i.price.amount),
           qty: i.quantity,
         })),
-        currency: currency as "GBP" | "USD" | "EUR",
+        currency,
       };
 
       const order = await submitOrder({ data: input });

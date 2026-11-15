@@ -8,7 +8,7 @@ export function Price({ gbp, className }: { gbp: number | string; className?: st
   return <span className={className}>{format(n)}</span>;
 }
 
-const LABELS: Record<string, string> = { GBP: "£ GBP", USD: "$ USD", EUR: "€ EUR" };
+const LABELS: Record<string, string> = { GBP: "£ GBP", USD: "$ USD", EUR: "€ EUR", CAD: "$ CAD", AUD: "$ AUD" };
 
 export function CurrencyPicker({ className = "" }: { className?: string }) {
   const { currency } = useMoney();

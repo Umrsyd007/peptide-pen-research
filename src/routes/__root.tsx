@@ -139,6 +139,14 @@ function RootShell({ children }: { children: ReactNode }) {
       <body>
         {children}
         <Scripts />
+        {/* Parley chat widget */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.ParleySettings = { siteKey: "pk_a2_dm0RqD16PvS1aS-fbufoF" };
+  window.Parley = window.Parley || function () { (window.Parley.q = window.Parley.q || []).push(arguments); };
+  (function (d, s) { s = d.createElement("script"); s.async = true; s.src = "https://chatwithparley.tech/widget.js"; d.head.appendChild(s); })(document);`,
+          }}
+        />
       </body>
     </html>
   );

@@ -103,6 +103,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         children: `(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window, document, "clarity", "script", "z75f9lqmwe");`,
       },
       {
+        children: `window.ParleySettings = { siteKey: "pk_a2_dm0RqD16PvS1aS-fbufoF" }; window.Parley = window.Parley || function () { (window.Parley.q = window.Parley.q || []).push(arguments); }; (function (d, s) { s = d.createElement("script"); s.async = true; s.src = "https://chatwithparley.com/widget.js"; d.head.appendChild(s); })(document);`,
+      },
+      {
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",

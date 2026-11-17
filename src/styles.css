@@ -24,6 +24,10 @@
   --color-brand-amex: var(--brand-amex);
   --color-brand-apple: var(--brand-apple);
   --color-brand-on: var(--brand-on);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -69,8 +73,12 @@
 :root {
   /* Payment brand colours (fixed, same in light/dark) */
   --brand-visa: oklch(0.36 0.17 265);
-  --brand-mastercard: oklch(0.68 0.19 45);
-  --brand-amex: oklch(0.55 0.2 255);
+  --success: oklch(0.52 0.14 150);
+  --success-soft: oklch(0.95 0.05 150);
+  --info: oklch(0.5 0.2 262);
+  --info-soft: oklch(0.97 0.02 250);
+  --brand-mastercard: oklch(0.64 0.19 45);
+  --brand-amex: oklch(0.55 0.22 262);
   --brand-apple: oklch(0.15 0 0);
   --brand-on: oklch(1 0 0);
   --radius: 0.875rem;
@@ -80,22 +88,22 @@
   --card-foreground: oklch(0.14 0.01 60);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.14 0.01 60);
-  --primary: oklch(0.62 0.24 25);
+  --primary: oklch(0.6 0.16 150);
   --primary-foreground: oklch(0.99 0 0);
-  --primary-glow: oklch(0.72 0.22 50);
+  --primary-glow: oklch(0.72 0.17 140);
   --secondary: oklch(0.14 0.01 60);
   --secondary-foreground: oklch(0.99 0 0);
   --muted: oklch(0.965 0.005 60);
   --muted-foreground: oklch(0.45 0.015 60);
-  --accent: oklch(0.96 0.04 35);
-  --accent-foreground: oklch(0.62 0.24 25);
+  --accent: oklch(0.96 0.04 150);
+  --accent-foreground: oklch(0.5 0.15 150);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.984 0.003 247.858);
   --border: oklch(0.92 0.008 60);
   --input: oklch(0.92 0.008 60);
-  --ring: oklch(0.62 0.24 25);
-  --gradient-flame: linear-gradient(90deg, oklch(0.62 0.24 25), oklch(0.74 0.2 60));
-  --shadow-glow: 0 20px 60px -20px oklch(0.62 0.24 25 / 0.35);
+  --ring: oklch(0.6 0.16 150);
+  --gradient-flame: linear-gradient(90deg, oklch(0.6 0.16 150), oklch(0.72 0.17 130));
+  --shadow-glow: 0 20px 60px -20px oklch(0.6 0.16 150 / 0.35);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);

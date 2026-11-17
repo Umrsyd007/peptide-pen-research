@@ -302,7 +302,7 @@ export function CheckoutDialog({ open, onOpenChange }: { open: boolean; onOpenCh
                       <span className="flex flex-wrap items-center gap-2 font-medium">
                         {PAYMENT_LABELS[m.id]}
                         {m.extra && <span className="text-xs font-normal text-muted-foreground">{m.extra}</span>}
-                        {m.badge && <Badge variant="secondary" className="text-[10px]">{m.badge}</Badge>}
+                        {m.badge && <span className="rounded-full bg-success-soft px-2 py-0.5 text-[11px] font-medium text-success">{m.badge}</span>}
                       </span>
                       <span className="block text-sm text-muted-foreground">{m.note}</span>
                     </span>
@@ -313,24 +313,31 @@ export function CheckoutDialog({ open, onOpenChange }: { open: boolean; onOpenCh
                   </button>
                 );
               })}
-              <div className="rounded-xl border border-border bg-muted/30 p-4">
-                <p className="font-semibold">{METHOD_INFO[method].title}</p>
-                <p className="mt-1 text-sm text-muted-foreground">{METHOD_INFO[method].body}</p>
+              {method === "card" ? (
+              <div className="rounded-xl border border-info/20 bg-info-soft p-4">
+                <p className="flex items-center gap-2 font-medium text-info"><CreditCard className="h-5 w-5" />Secure Card Payment</p>
+                <p className="mt-1 pl-7 text-sm text-info">We accept all major debit and credit cards, including <strong>Apple Pay</strong> and <strong>Google Pay</strong>. After placing your order, WhatsApp opens with your order and we'll send you a secure payment link to complete the transaction safely.</p>
                 {method === "card" && (
-                  <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border pt-3 text-xs">
+                  <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-info/20 pt-3 text-xs">
                     <span className="text-muted-foreground">We accept:</span>
                     {[
-                      { b: "VISA", c: "border-brand-visa/30 bg-background text-brand-visa" },
-                      { b: "Mastercard", c: "border-brand-mastercard/40 bg-background text-brand-mastercard" },
+                      { b: "VISA", c: "border-border bg-background text-brand-visa" },
+                      { b: "Mastercard", c: "border-brand-mastercard/30 bg-background text-brand-mastercard" },
                       { b: "AMEX", c: "border-brand-amex bg-brand-amex text-brand-on" },
                       { b: "Apple Pay", c: "border-brand-apple bg-brand-apple text-brand-on" },
                       { b: "G Pay", c: "border-border bg-background text-foreground" },
                     ].map(({ b, c }) => (
-                      <span key={b} className={cn("rounded border px-2 py-1 font-bold", c)}>{b}</span>
+                      <span key={b} className={cn("rounded-md border px-3 py-1.5 font-semibold", c)}>{b}</span>
                     ))}
                   </div>
                 )}
               </div>
+              ) : (
+              <div className="rounded-xl border border-border bg-muted/30 p-4">
+                <p className="font-semibold">{METHOD_INFO[method].title}</p>
+                <p className="mt-1 text-sm text-muted-foreground">{METHOD_INFO[method].body}</p>
+              </div>
+              )}
             </div>
           )}
 

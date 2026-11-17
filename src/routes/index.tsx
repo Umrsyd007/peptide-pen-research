@@ -156,8 +156,8 @@ function HomePage() {
                     <path d="M2 8 Q 140 -2, 278 8" stroke="url(#g)" strokeWidth="3" strokeLinecap="round" />
                     <defs>
                       <linearGradient id="g" x1="0" x2="1">
-                        <stop offset="0" stopColor="oklch(0.6 0.16 150)" />
-                        <stop offset="1" stopColor="oklch(0.72 0.17 130)" />
+                        <stop offset="0" stopColor="oklch(0.62 0.24 25)" />
+                        <stop offset="1" stopColor="oklch(0.74 0.2 60)" />
                       </linearGradient>
                     </defs>
                   </svg>

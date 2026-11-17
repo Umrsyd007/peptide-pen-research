@@ -23,6 +23,7 @@ import { template as orderConfirmationTemplate } from './order-confirmation'
 import { template as orderPendingTemplate } from './order-pending'
 import { template as orderReceivedTemplate } from './order-received'
 import { template as paymentLinkTemplate } from './payment-link'
+import { template as paymentLinkReminderTemplate } from './payment-link-reminder'
 
 export const TEMPLATES: Record<string, TemplateEntry> = {
   'product-question': productQuestionTemplate,
@@ -31,4 +32,5 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'order-pending': orderPendingTemplate,
   'order-received': orderReceivedTemplate,
   'payment-link': paymentLinkTemplate,
+  'payment-link-reminder': paymentLinkReminderTemplate,
 }

@@ -16,9 +16,6 @@ We recently sent you a secure payment link to complete your order #[order number
 
 If you haven't received it, please check your Spam or Junk folder for an email from notify.getpeptidepen.com. To make sure future emails reach you, mark it as "Not spam".
 
-For convenience, here is your payment link again:
-[Pay now] button → the matching 20mg or 60mg link
-
 Once payment is complete, your order ships within 3–5 days, tracked and securely shipped.
 
 Questions? Just reach out via the chat on our website.
@@ -29,7 +26,7 @@ Peptide Pen
 Product names are not shown (order number, item count and total only), matching the earlier emails.
 
 ## Steps
-1. Add a reusable "payment link reminder" email using the same look as the existing payment-link email.
-2. Send it to Ian and Becky with their own order details and correct link.
+1. Add a reusable "payment link reminder" email using the same look as the existing payment-link email, with no payment link or button.
+2. Send it to Ian and Becky with their own order details.
 3. Send you a copy at hello@getpeptidepen.com.
 4. Check the email log to confirm both were accepted for delivery.

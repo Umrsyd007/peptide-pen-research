@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { signOrderToken, verifyOrderToken } from "@/lib/order-token.server";
-import { PAYMENT_METHODS, applyDiscount, normalizePhone } from "@/lib/checkout-rules";
+import { PAYMENT_METHODS, isValidIntlPhone } from "@/lib/checkout-rules";
 
 const ItemSchema = z.object({
   productId: z.string().min(1).max(120),
@@ -13,9 +13,8 @@ const ItemSchema = z.object({
 
 const CreateOrderSchema = z.object({
   email: z.string().trim().email().max(255),
-  phone: z.string().max(40).refine((p) => normalizePhone(p) !== null, "Please enter a valid WhatsApp number"),
+  phone: z.string().max(20).refine(isValidIntlPhone, "Please enter a valid phone number"),
   payment_method: z.enum(PAYMENT_METHODS),
-  discount_code: z.string().trim().max(40).optional().default(""),
   ship_name: z.string().min(1).max(120),
   ship_address1: z.string().min(1).max(200),
   ship_address2: z.string().max(200).optional().default(""),
@@ -34,6 +33,9 @@ export const SHIPPING_FLAT = 0;
 export const createOrder = createServerFn({ method: "POST" })
   .inputValidator((raw: unknown) => CreateOrderSchema.parse(raw))
   .handler(async ({ data }) => {
+    const { checkEmailDeliverable } = await import("@/lib/email-check.server");
+    const emailProblem = await checkEmailDeliverable(data.email);
+    if (emailProblem) throw new Error(emailProblem);
     const { supabaseAdmin } = await import(
       "@/integrations/supabase/client.server"
     );
@@ -63,25 +65,16 @@ export const createOrder = createServerFn({ method: "POST" })
     const subtotal =
       Math.round(lines.reduce((s, i) => s + i.price * i.qty, 0) * 100) / 100;
     const shipping = 0;
-    let discountCode: string | null = null;
-    let pct = 0;
-    if (data.discount_code) {
-      const { data: dc } = await supabaseAdmin.from("discount_codes").select("code,percent_off")
-        .eq("code", data.discount_code.toUpperCase()).eq("active", true).maybeSingle();
-      if (!dc) throw new Error("That discount code isn't valid.");
-      discountCode = dc.code; pct = Number(dc.percent_off);
-    }
-    const { discount, total: afterDiscount } = applyDiscount(subtotal, pct);
-    const total = Math.round((afterDiscount + shipping) * 100) / 100;
+    const total = Math.round((subtotal + shipping) * 100) / 100;
 
     const { data: order, error } = await supabaseAdmin
       .from("orders")
       .insert({
         email: data.email,
-        phone: normalizePhone(data.phone),
+        phone: data.phone,
         payment_method: data.payment_method,
-        discount_code: discountCode,
-        discount,
+        discount_code: null,
+        discount: 0,
         status: "pending",
         subtotal,
         shipping,
@@ -123,15 +116,6 @@ export const createOrder = createServerFn({ method: "POST" })
       orderNumber: order.order_number as string,
       token: await signOrderToken(order.id as string),
     };
-  });
-
-export const checkDiscountCode = createServerFn({ method: "POST" })
-  .inputValidator((raw: unknown) => z.object({ code: z.string().trim().min(1).max(40) }).parse(raw))
-  .handler(async ({ data }) => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: dc } = await supabaseAdmin.from("discount_codes").select("code,percent_off")
-      .eq("code", data.code.toUpperCase()).eq("active", true).maybeSingle();
-    return dc ? { valid: true as const, code: dc.code, percentOff: Number(dc.percent_off) } : { valid: false as const };
   });
 
 export const getPlacedOrder = createServerFn({ method: "POST" })

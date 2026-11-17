@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { parsePhoneNumberFromString, type CountryCode } from "libphonenumber-js";
 
 export const PAYMENT_METHODS = ["whatsapp", "card", "bank", "usdt"] as const;
 export type PaymentMethod = (typeof PAYMENT_METHODS)[number];
@@ -9,20 +10,28 @@ export const PAYMENT_LABELS: Record<PaymentMethod, string> = {
   usdt: "USDT (Crypto)",
 };
 
-/** International phone: optional +, 8–15 digits once spaces, dashes, dots and brackets are removed. */
-export function normalizePhone(raw: string): string | null {
-  const t = raw.trim();
-  if (!/^\+?[\d\s\-().]+$/.test(t)) return null;
-  const digits = t.replace(/\D/g, "");
-  if (digits.length < 8 || digits.length > 15 || digits.startsWith("0") && !t.startsWith("+") && digits.length < 10) return null;
-  return (t.startsWith("+") ? "+" : "") + digits;
+/** Local number + country -> full international number (E.164), or null if invalid for that country. */
+export function normalizePhone(country: string, national: string): string | null {
+  if (!/^[\d\s\-().+]+$/.test(national.trim())) return null;
+  const p = parsePhoneNumberFromString(national, country.toUpperCase() as CountryCode);
+  return p && p.isValid() ? p.number : null;
+}
+
+/** Already-international number (as stored/sent to the server). */
+export function isValidIntlPhone(e164: string): boolean {
+  const p = parsePhoneNumberFromString(e164);
+  return !!p && p.isValid() && p.number === e164;
 }
 
 export const contactSchema = z.object({
   name: z.string().trim().min(2, "Full name must be at least 2 characters").max(120),
   email: z.string().trim().max(255).email("Please enter a valid email address")
     .refine((e) => /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(e), "Please enter a valid email address"),
-  phone: z.string().refine((p) => normalizePhone(p) !== null, "Please enter a valid WhatsApp number"),
+  phoneCountry: z.string().length(2, "Choose your country code"),
+  phone: z.string(),
+}).superRefine((v, ctx) => {
+  if (normalizePhone(v.phoneCountry, v.phone) === null)
+    ctx.addIssue({ code: "custom", path: ["phone"], message: "Please enter a valid phone number for this country" });
 });
 
 export const addressSchema = z.object({

@@ -1,9 +1,9 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import {
   ArrowLeft, ArrowRight, Building2, Check, ClipboardCheck, CreditCard, Globe, Home, Loader2,
-  Mail, MapPin, MessageCircle, Package, Phone, Tag, User, Wallet,
+  Mail, MapPin, MessageCircle, Package, Phone, User, ChevronsUpDown, Wallet,
 } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -13,9 +13,15 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useCartStore } from "@/stores/cart";
 import { useMoney, formatIn } from "@/lib/currency";
-import { createOrder, checkDiscountCode } from "@/lib/orders.functions";
+import { createOrder } from "@/lib/orders.functions";
+import { verifyEmailDomain } from "@/lib/email-check.functions";
+import { suggestEmail } from "@/lib/email-check";
+import { getVisitorCountry } from "@/lib/currency.functions";
+import { PHONE_COUNTRIES, countryName, flag, isPhoneCountry } from "@/lib/phone-countries";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import {
-  PAYMENT_LABELS, addressSchema, applyDiscount, contactSchema, type PaymentMethod,
+  PAYMENT_LABELS, addressSchema, contactSchema, normalizePhone, type PaymentMethod,
 } from "@/lib/checkout-rules";
 import { COUNTRIES } from "@/lib/countries";
 import { trackBeginCheckout } from "@/lib/analytics";
@@ -51,18 +57,18 @@ export function CheckoutDialog({ open, onOpenChange }: { open: boolean; onOpenCh
   const setDrawerOpen = useCartStore((s) => s.setDrawerOpen);
   const { currency, convert, format } = useMoney();
   const submitOrder = useServerFn(createOrder);
-  const checkCode = useServerFn(checkDiscountCode);
+  const checkEmail = useServerFn(verifyEmailDomain);
+  const visitorCountry = useServerFn(getVisitorCountry);
 
   const [step, setStep] = useState(0);
-  const [contact, setContact] = useState({ name: "", email: "", phone: "" });
+  const [contact, setContact] = useState({ name: "", email: "", phoneCountry: "GB", phone: "" });
   const [address, setAddress] = useState({ address1: "", address2: "", city: "", postal: "", country: "" });
   const [method, setMethod] = useState<PaymentMethod>("card");
   const [errors, setErrors] = useState<Errors>({});
   const [touched, setTouched] = useState(false);
-  const [codeInput, setCodeInput] = useState("");
-  const [discount, setDiscount] = useState<{ code: string; percentOff: number } | null>(null);
-  const [codeMsg, setCodeMsg] = useState<string | null>(null);
   const [checking, setChecking] = useState(false);
+  const [countryPicked, setCountryPicked] = useState(false);
+  const [typoWarned, setTypoWarned] = useState("");
   const [placing, setPlacing] = useState(false);
   const [placeError, setPlaceError] = useState<string | null>(null);
 
@@ -70,7 +76,22 @@ export function CheckoutDialog({ open, onOpenChange }: { open: boolean; onOpenCh
     () => Math.round(items.reduce((s, i) => s + convert(parseFloat(i.price.amount)) * i.quantity, 0) * 100) / 100,
     [items, convert],
   );
-  const { discount: discountAmt, total } = applyDiscount(subtotal, discount?.percentOff ?? 0);
+  const total = subtotal;
+  const emailSuggestion = suggestEmail(contact.email);
+
+  // Start the phone code and delivery country on the shopper's own country.
+  useEffect(() => {
+    if (!open || countryPicked) return;
+    let alive = true;
+    visitorCountry().then((iso) => {
+      if (!alive || !isPhoneCountry(iso)) return;
+      const up = iso.toUpperCase();
+      setContact((c) => ({ ...c, phoneCountry: up }));
+      const name = countryName(up);
+      setAddress((a) => (a.country || !(COUNTRIES as readonly string[]).includes(name) ? a : { ...a, country: name }));
+    }).catch(() => {});
+    return () => { alive = false; };
+  }, [open, countryPicked, visitorCountry]);
   const itemCount = items.reduce((s, i) => s + i.quantity, 0);
 
   const validate = (which: number, c = contact, a = address): Errors => {
@@ -94,11 +115,25 @@ export function CheckoutDialog({ open, onOpenChange }: { open: boolean; onOpenCh
     if (touched) setErrors(validate(1, contact, next));
   };
 
-  const next = () => {
+  const next = async () => {
     const e = validate(step);
     setTouched(true);
     setErrors(e);
     if (Object.keys(e).length) return;
+    if (step === 0) {
+      // Pause once on a likely typo; a second Continue keeps what they typed.
+      if (emailSuggestion && typoWarned !== contact.email) {
+        setTypoWarned(contact.email);
+        setErrors({ email: "Please check your email — tap the suggestion above, or press Continue to keep it." });
+        return;
+      }
+      setChecking(true);
+      try {
+        const r = await checkEmail({ data: { email: contact.email.trim() } });
+        if (r.error) { setErrors({ email: r.error }); return; }
+      } catch { /* allow through if the check itself fails */ }
+      finally { setChecking(false); }
+    }
     setTouched(false);
     setErrors({});
     setStep((s) => Math.min(3, s + 1));
@@ -110,19 +145,6 @@ export function CheckoutDialog({ open, onOpenChange }: { open: boolean; onOpenCh
     else setStep((s) => s - 1);
   };
 
-  const applyCode = async () => {
-    const code = codeInput.trim();
-    if (!code) return;
-    setChecking(true);
-    setCodeMsg(null);
-    try {
-      const r = await checkCode({ data: { code } });
-      if (r.valid) { setDiscount({ code: r.code, percentOff: r.percentOff }); setCodeMsg(`${r.percentOff}% off applied`); }
-      else { setDiscount(null); setCodeMsg("Invalid code"); }
-    } catch { setCodeMsg("Couldn't check that code. Try again."); }
-    finally { setChecking(false); }
-  };
-
   const placeOrder = async () => {
     setPlacing(true);
     setPlaceError(null);
@@ -130,9 +152,8 @@ export function CheckoutDialog({ open, onOpenChange }: { open: boolean; onOpenCh
       const order = await submitOrder({
         data: {
           email: contact.email.trim(),
-          phone: contact.phone,
+          phone: normalizePhone(contact.phoneCountry, contact.phone) ?? "",
           payment_method: method,
-          discount_code: discount?.code ?? "",
           ship_name: contact.name.trim(),
           ship_address1: address.address1,
           ship_address2: address.address2,
@@ -212,10 +233,20 @@ export function CheckoutDialog({ open, onOpenChange }: { open: boolean; onOpenCh
               <Field id="co-email" label="Email Address *" icon={Mail} error={errors["email"]}>
                 <Input id="co-email" type="email" autoComplete="email" placeholder="your@email.com" className={inputCls(errors["email"])}
                   value={contact.email} onChange={(e) => updateContact("email", e.target.value)} />
+                {emailSuggestion && (
+                  <button type="button" className="text-left text-xs text-muted-foreground"
+                    onClick={() => updateContact("email", emailSuggestion)}>
+                    Did you mean <span className="font-medium text-foreground underline">{emailSuggestion}</span>?
+                  </button>
+                )}
               </Field>
-              <Field id="co-phone" label="WhatsApp Number *" icon={Phone} error={errors["phone"]}>
-                <Input id="co-phone" type="tel" autoComplete="tel" placeholder="+44 7XXX XXXXXX" className={inputCls(errors["phone"])}
-                  value={contact.phone} onChange={(e) => updateContact("phone", e.target.value)} />
+              <Field id="co-phone" label="Phone Number / WhatsApp Number *" icon={Phone} error={errors["phone"]}>
+                <div className="flex gap-2">
+                  <CountryCodePicker value={contact.phoneCountry}
+                    onChange={(iso) => { setCountryPicked(true); updateContact("phoneCountry", iso); }} />
+                  <Input id="co-phone" type="tel" autoComplete="tel-national" placeholder="Phone number" className={cn("flex-1", inputCls(errors["phone"]))}
+                    value={contact.phone} onChange={(e) => updateContact("phone", e.target.value)} />
+                </div>
               </Field>
             </div>
           )}
@@ -317,21 +348,11 @@ export function CheckoutDialog({ open, onOpenChange }: { open: boolean; onOpenCh
                     </div>
                   ))}
                 </div>
-                <div className="mt-4 rounded-lg border border-border p-3">
-                  <p className="flex items-center gap-2 text-sm font-medium"><Tag className="h-4 w-4" /> Discount Code</p>
-                  <div className="mt-2 flex gap-2">
-                    <Input value={codeInput} onChange={(e) => setCodeInput(e.target.value.toUpperCase())} placeholder="ENTER CODE" className="h-10 uppercase" maxLength={40} />
-                    <Button type="button" variant="secondary" onClick={applyCode} disabled={checking || !codeInput.trim()}>
-                      {checking ? <Loader2 className="h-4 w-4 animate-spin" /> : "Apply"}
-                    </Button>
-                  </div>
-                  {codeMsg && <p className={cn("mt-1 text-xs", discount ? "text-primary" : "text-destructive")}>{codeMsg}</p>}
-                </div>
-                <Totals subtotal={subtotal} discount={discountAmt} total={total} currency={currency} />
+                <Totals subtotal={subtotal} discount={0} total={total} currency={currency} />
               </section>
               <section className="rounded-xl border border-border p-4 text-sm">
                 <h4 className="flex items-center gap-2 font-semibold"><User className="h-4 w-4" /> Contact Details</h4>
-                <p className="mt-2">{contact.name}</p><p>{contact.email}</p><p>{contact.phone}</p>
+                <p className="mt-2">{contact.name}</p><p>{contact.email}</p><p>{normalizePhone(contact.phoneCountry, contact.phone) ?? contact.phone}</p>
               </section>
               <section className="rounded-xl border border-border p-4 text-sm">
                 <h4 className="flex items-center gap-2 font-semibold"><MapPin className="h-4 w-4" /> Delivery Address</h4>
@@ -360,7 +381,7 @@ export function CheckoutDialog({ open, onOpenChange }: { open: boolean; onOpenCh
             {step === 0 ? "Cancel" : <><ArrowLeft className="mr-2 h-4 w-4" /> Back</>}
           </Button>
           {step < 3 ? (
-            <Button className="h-12" onClick={next}>Continue <ArrowRight className="ml-2 h-4 w-4" /></Button>
+            <Button className="h-12" onClick={next} disabled={checking}>{checking ? <Loader2 className="h-4 w-4 animate-spin" /> : <>Continue <ArrowRight className="ml-2 h-4 w-4" /></>}</Button>
           ) : (
             <Button className="h-12" onClick={placeOrder} disabled={placing || items.length === 0}>
               {placing ? <Loader2 className="h-4 w-4 animate-spin" /> : <><CreditCard className="mr-2 h-4 w-4" /> Place Order</>}
@@ -381,6 +402,39 @@ function Field({ id, label, icon: Icon, children, error }: { id: string; label: 
       {children}
       {error && <p className="text-xs text-destructive">{error}</p>}
     </div>
+  );
+}
+
+function CountryCodePicker({ value, onChange }: { value: string; onChange: (iso: string) => void }) {
+  const [open, setOpen] = useState(false);
+  const current = PHONE_COUNTRIES.find((c) => c.iso === value);
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button type="button" variant="outline" role="combobox" aria-label="Country code" className="h-11 shrink-0 gap-1 px-3">
+          <span>{flag(value)}</span><span>{current?.dial}</span>
+          <ChevronsUpDown className="h-3.5 w-3.5 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-72 p-0" align="start">
+        <Command>
+          <CommandInput placeholder="Search country or code" />
+          <CommandList>
+            <CommandEmpty>No country found.</CommandEmpty>
+            <CommandGroup>
+              {PHONE_COUNTRIES.map((c) => (
+                <CommandItem key={c.iso} value={`${c.name} ${c.dial} ${c.iso}`}
+                  onSelect={() => { onChange(c.iso); setOpen(false); }}>
+                  <span className="mr-2">{flag(c.iso)}</span>
+                  <span className="flex-1 truncate">{c.name}</span>
+                  <span className="text-muted-foreground">{c.dial}</span>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
   );
 }
 

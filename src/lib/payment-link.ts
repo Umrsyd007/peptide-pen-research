@@ -1,4 +1,4 @@
-import { WHOP_LINK_GBP_20MG } from "@/lib/store-contact";
+import { WHOP_LINK_GBP_20MG, WHOP_LINK_GBP_60MG } from "@/lib/store-contact";
 
 export const RETATRUTIDE_ID = "08f6ee52";
 
@@ -8,12 +8,14 @@ type LinkOrder = {
   order_items: { product_id?: string | null; variant?: string | null }[];
 };
 
-/** Automatic payment link: UK delivery, GBP, cart is only Retatrutide 20mg. */
+/** Automatic payment link: UK delivery, GBP, cart is only Retatrutide 20mg, or only 60mg. */
 export function getPaymentLink(o: LinkOrder): string | null {
   const uk = ["united kingdom", "uk", "gb", "great britain"].includes((o.ship_country ?? "").trim().toLowerCase());
   if (!uk || o.currency !== "GBP" || o.order_items.length === 0) return null;
-  const ok = o.order_items.every((i) => i.product_id === RETATRUTIDE_ID && i.variant === "20mg");
-  return ok ? WHOP_LINK_GBP_20MG : null;
+  const all = (v: string) => o.order_items.every((i) => i.product_id === RETATRUTIDE_ID && i.variant === v);
+  if (all("20mg")) return WHOP_LINK_GBP_20MG;
+  if (all("60mg")) return WHOP_LINK_GBP_60MG;
+  return null;
 }
 
 export const itemCountLabel = (items: { qty: number }[]) => {

@@ -4,10 +4,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import {
-  CheckCircle2, Clock, Copy, Home, Loader2, Mail, MapPin, MessageCircle,
+  CheckCircle2, ClipboardList, Clock, Copy, Home, Loader2, Mail, MapPin, MessageCircle,
   Package, Phone, ShieldCheck, ShoppingBag, Truck, User,
 } from "lucide-react";
-import { CardBrands } from "@/components/checkout/card-brands";
 import { Button } from "@/components/ui/button";
 import { getPlacedOrder } from "@/lib/orders.functions";
 import { PAYMENT_LABELS, type PaymentMethod } from "@/lib/checkout-rules";
@@ -87,8 +86,8 @@ function SuccessPage() {
   return (
     <main className="mx-auto max-w-3xl px-4 py-12">
       <div className="text-center">
-        <CheckCircle2 className="mx-auto h-16 w-16 text-success" />
-        <h1 className="mt-5 text-3xl md:text-4xl font-bold tracking-tight text-success">Order Submitted Successfully!</h1>
+        <CheckCircle2 className="mx-auto h-16 w-16 text-primary" />
+        <h1 className="mt-5 text-3xl md:text-4xl font-bold tracking-tight text-primary">Order Submitted Successfully!</h1>
         <p className="mt-2 text-muted-foreground">Thank you for choosing PeptidePen</p>
       </div>
 
@@ -148,80 +147,50 @@ function SuccessPage() {
       )}
 
       <div className="mt-6 flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
-        <span className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-success" /> Secure Order</span>
-        <span className="flex items-center gap-2"><Truck className="h-4 w-4 text-info" /> Free Shipping</span>
-        <span className="flex items-center gap-2"><Clock className="h-4 w-4 text-warning" /> Fast Processing</span>
+        <span className="flex items-center gap-2"><ShieldCheck className="h-4 w-4" /> Secure Order</span>
+        <span className="flex items-center gap-2"><Truck className="h-4 w-4" /> Free Shipping</span>
+        <span className="flex items-center gap-2"><Clock className="h-4 w-4" /> Fast Processing</span>
       </div>
 
       {o && waUrl && (
-        <section className="mt-6 flex flex-col gap-4 rounded-xl border border-success/30 bg-success-soft p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-4">
-            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-success/15"><Loader2 className="h-6 w-6 animate-spin text-success" /></span>
-            <div>
-              <p className="text-lg font-semibold text-success">Opening WhatsApp…</p>
-              <p className="text-sm text-muted-foreground">Opening WhatsApp with your order details pre-filled. If it doesn't open, use the button.</p>
-            </div>
+        <section className="mt-6 flex flex-col gap-4 rounded-xl border border-primary/30 bg-primary/5 p-5 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="font-semibold text-primary">Opening WhatsApp…</p>
+            <p className="text-sm text-muted-foreground">Your order details are pre-filled. If it doesn't open, use the button.</p>
           </div>
           <div className="flex flex-col gap-2">
-            <Button asChild className="bg-success text-brand-on hover:bg-success/90"><a href={waUrl} target="_blank" rel="noreferrer"><MessageCircle className="mr-2 h-4 w-4" /> Open WhatsApp chat</a></Button>
+            <Button asChild><a href={waUrl} target="_blank" rel="noreferrer"><MessageCircle className="mr-2 h-4 w-4" /> Open WhatsApp chat</a></Button>
             {isMobile && smsUrl && (
-              <Button variant="outline" asChild className="border-success text-success hover:bg-success-soft hover:text-success"><a href={smsUrl}><Phone className="mr-2 h-4 w-4" /> {noWhatsApp ? "No WhatsApp? Send by text message" : "Send by text message"}</a></Button>
+              <Button variant={noWhatsApp ? "default" : "outline"} asChild><a href={smsUrl}><Phone className="mr-2 h-4 w-4" /> {noWhatsApp ? "No WhatsApp? Send by text message" : "Send by text message"}</a></Button>
             )}
           </div>
         </section>
       )}
 
       {o && (
-        <>
-          <h2 className="mt-8 text-center text-2xl font-bold">💳 Complete Your Payment</h2>
-          <section className="mt-4 space-y-4 rounded-xl border border-payment/20 bg-payment-soft p-5">
-            <div className="flex items-center gap-3">
-              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-payment/10 text-xl">💳</span>
-              <div>
-                <p className="text-lg font-semibold text-payment">{NEXT[method].title}</p>
-                <p className="text-sm text-muted-foreground">{method === "whatsapp" ? "Payment arranged on WhatsApp" : "Payment details will be sent separately"}</p>
-              </div>
-            </div>
-            {method === "card" && <CardBrands className="rounded-lg bg-background p-4" />}
-            {method !== "whatsapp" && (
-              <div className="flex gap-3 rounded-lg border border-payment/20 bg-payment/5 p-4">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-payment/10"><Mail className="h-4 w-4 text-payment" /></span>
-                <div>
-                  <p className="font-semibold text-payment">{method === "card" ? "Secure Payment Link Coming Soon" : "Payment Details Coming Soon"}</p>
-                  <p className="text-sm text-payment">You will receive a <strong>separate email</strong> with {method === "card" ? "a secure payment link" : "the payment details"} within the next few minutes.</p>
-                </div>
-              </div>
-            )}
-            <div className="rounded-lg bg-background/70 p-4 text-payment">
-              <p className="flex items-center gap-2 font-medium">📋 What happens next:</p>
-              <ol className="mt-2 list-decimal space-y-1 pl-5 text-sm">
-                {NEXT[method].steps.map((s) => <li key={s}>{s}</li>)}
-              </ol>
-            </div>
-            <p className="rounded-lg border border-warning/30 bg-warning-soft p-4 text-sm text-warning">
-              💬 If you don't receive the payment link within 10 minutes, please check your spam folder or contact us via email.
-            </p>
-          </section>
-        </>
+        <section className="mt-6 rounded-xl border border-border p-5">
+          <h2 className="text-lg font-semibold">Complete Your Payment — {NEXT[method].title}</h2>
+          <div className="mt-4 rounded-lg bg-muted/40 p-4">
+            <p className="flex items-center gap-2 font-medium"><ClipboardList className="h-4 w-4" /> What happens next:</p>
+            <ol className="mt-2 list-decimal space-y-1 pl-5 text-sm text-muted-foreground">
+              {NEXT[method].steps.map((s) => <li key={s}>{s}</li>)}
+            </ol>
+          </div>
+          <p className="mt-4 rounded-lg border border-border bg-accent/40 p-3 text-sm">
+            If you don't hear from us within 10 minutes, please check your spam folder or contact us.
+          </p>
+        </section>
       )}
 
       <div className="mt-8 flex flex-wrap justify-center gap-3">
         {SUPPORT_PHONE && (
           <Button variant="outline" asChild><a href={`tel:${SUPPORT_PHONE.replace(/\s/g, "")}`}><Phone className="mr-2 h-4 w-4" /> Call Support</a></Button>
         )}
-        <Button asChild className="bg-navy text-navy-foreground hover:bg-navy/90"><a href={`mailto:${SUPPORT_EMAIL}?subject=Order%20%23${orderNumber}`}><Mail className="mr-2 h-4 w-4" /> Email Support</a></Button>
+        <Button asChild><a href={`mailto:${SUPPORT_EMAIL}?subject=Order%20%23${orderNumber}`}><Mail className="mr-2 h-4 w-4" /> Email Support</a></Button>
       </div>
       <div className="mt-3 flex flex-wrap justify-center gap-3">
         <Button variant="outline" asChild><Link to="/"><Home className="mr-2 h-4 w-4" /> Back to Home</Link></Button>
         <Button variant="outline" asChild><Link to="/products"><ShoppingBag className="mr-2 h-4 w-4" /> Continue Shopping</Link></Button>
-      </div>
-      <div className="mt-10 border-t border-border pt-8 text-center">
-        <p className="text-sm text-muted-foreground">Trusted by researchers worldwide</p>
-        <div className="mt-3 flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
-          {["Free Worldwide Shipping", "24/7 Customer Support", "99%+ Purity Guaranteed"].map((t) => (
-            <span key={t} className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-success" /> {t}</span>
-          ))}
-        </div>
       </div>
     </main>
   );

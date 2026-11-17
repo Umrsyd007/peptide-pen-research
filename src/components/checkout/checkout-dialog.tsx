@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import { CardBrands } from "@/components/checkout/card-brands";
 import { useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import {
@@ -319,7 +318,18 @@ export function CheckoutDialog({ open, onOpenChange }: { open: boolean; onOpenCh
                 <p className="flex items-center gap-2 font-medium text-info"><CreditCard className="h-5 w-5" />Secure Card Payment</p>
                 <p className="mt-1 pl-7 text-sm text-info">We accept all major debit and credit cards, including <strong>Apple Pay</strong> and <strong>Google Pay</strong>. After placing your order, we'll send you a secure payment link to your email address to complete the transaction safely.</p>
                 {method === "card" && (
-                  <CardBrands className="mt-3 border-t border-info/20 pt-3" />
+                  <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-info/20 pt-3 text-xs">
+                    <span className="text-muted-foreground">We accept:</span>
+                    {[
+                      { b: "VISA", c: "border-border bg-background text-brand-visa" },
+                      { b: "Mastercard", c: "border-brand-mastercard/30 bg-background text-brand-mastercard" },
+                      { b: "AMEX", c: "border-brand-amex bg-brand-amex text-brand-on" },
+                      { b: "Apple Pay", c: "border-brand-apple bg-brand-apple text-brand-on" },
+                      { b: "G Pay", c: "border-border bg-background text-foreground" },
+                    ].map(({ b, c }) => (
+                      <span key={b} className={cn("rounded-md border px-3 py-1.5 font-semibold", c)}>{b}</span>
+                    ))}
+                  </div>
                 )}
               </div>
               ) : (

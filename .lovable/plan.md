@@ -15,6 +15,11 @@ Link: https://whop.com/checkout/plan_88k7Fcp3yNQYy
 - **"Order received" email to the customer:** a "Pay now" button with the link, sent automatically when the order is placed.
 - Orders that don't qualify keep working as they do now. You send their payment details manually.
 
+## Link doesn't reveal our website
+- When a shopper taps Pay now on the confirmation page, their browser won't tell Whop which website they came from. The link is opened without passing our web address along.
+- Links tapped in an email or WhatsApp already don't pass our address.
+- The link itself carries no order number, product or store name, just the plain Whop link.
+
 ## Product names hidden from shoppers
 On the WhatsApp/text message, both customer emails ("Order received" and "Payment confirmed") and the confirmation page, shoppers see only:
 - Order number (for example #482913)
@@ -28,3 +33,5 @@ Product names and sizes are removed from these. Your own admin emails and the ad
 - `buildOrderMessage`: replace the item lines with `"{n} item(s)"` and add an optional payment-link line. Update its tests.
 - `notifyOrderPending` / `notifyOrderPaid`: pass `paymentLink` and `itemCount` to the customer templates. `order-received.tsx` and `order-confirmation.tsx` drop `ItemsTable` and show the item count, total and an optional Pay now button. Admin templates are unchanged.
 - `checkout.success.$orderNumber.tsx`: replace the item list with an item count and add the Pay now button when a link applies.
+- Pay now button uses `rel="noopener noreferrer"` + `referrerPolicy="no-referrer"`. Confirmation page also gets a `referrer` meta set to `no-referrer`.
+- Add this task to roadmap.md when building.

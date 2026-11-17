@@ -22,9 +22,9 @@
 >
 > You can pay securely by card, Apple Pay or Google Pay.
 >
-> Once payment is confirmed, delivery is expected in 1–2 weeks, and we'll email you your tracking number when it ships.
+> Once payment is confirmed, delivery is expected in 3–5 days, tracked and securely shipped.
 >
-> Any questions? Just reply to this email or message us on WhatsApp at +1 630 605 7613.
+> Any questions? Chat with us directly on our website: https://getpeptidepen.com
 >
 > Thanks,
 > The Peptide Pen Team

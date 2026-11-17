@@ -60,7 +60,7 @@ export const listAdminOrders = createServerFn({ method: "POST" })
     let q = sb
       .from("orders")
       .select(
-        "id, order_number, created_at, email, ship_name, ship_address1, ship_address2, ship_city, ship_region, ship_postal, ship_country, status, subtotal, shipping, total, currency, order_items(name, variant, price, qty)",
+        "id, order_number, created_at, email, phone, payment_method, discount, ship_name, ship_address1, ship_address2, ship_city, ship_region, ship_postal, ship_country, status, subtotal, shipping, total, currency, order_items(name, variant, price, qty)",
         { count: "exact" },
       )
       .gte("created_at", since)
@@ -92,6 +92,8 @@ export type AdminOrder = {
   order_number: string;
   created_at: string;
   email: string;
+  phone: string | null;
+  payment_method: string | null;
   ship_name: string | null;
   ship_address1: string | null;
   ship_address2: string | null;
@@ -106,3 +108,19 @@ export type AdminOrder = {
   currency: string;
   order_items: { name: string; variant: string | null; price: number; qty: number }[];
 };
+
+export const markOrderPaid = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((raw: unknown) => z.object({ id: z.string().uuid() }).parse(raw))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.supabase, context.userId);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: o, error } = await supabaseAdmin.from("orders").update({ status: "paid" })
+      .eq("id", data.id).neq("status", "paid").select("order_number").maybeSingle();
+    if (error) throw new Error(error.message);
+    if (o) {
+      const { notifyOrderPaid } = await import("@/lib/email/order-paid.server");
+      await notifyOrderPaid(supabaseAdmin, o.order_number);
+    }
+    return { ok: true };
+  });

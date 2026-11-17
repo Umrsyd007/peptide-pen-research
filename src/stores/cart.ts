@@ -25,6 +25,8 @@ export interface CartItem {
 interface CartStore {
   items: CartItem[];
   isLoading: boolean;
+  drawerOpen: boolean;
+  setDrawerOpen: (open: boolean) => void;
   addItem: (item: CartItem) => Promise<void>;
   updateQuantity: (variantId: string, quantity: number) => Promise<void>;
   removeItem: (variantId: string) => Promise<void>;
@@ -36,6 +38,8 @@ export const useCartStore = create<CartStore>()(
     (set, get) => ({
       items: [],
       isLoading: false,
+      drawerOpen: false,
+      setDrawerOpen: (open) => set({ drawerOpen: open }),
       addItem: async (item) => {
         const items = get().items;
         const existing = items.find((i) => i.variantId === item.variantId);
@@ -47,6 +51,7 @@ export const useCartStore = create<CartStore>()(
                   : i,
               )
             : [...items, item],
+          drawerOpen: true,
         });
       },
       updateQuantity: async (variantId, quantity) => {

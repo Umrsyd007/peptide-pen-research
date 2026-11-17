@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { sendTemplateEmail } from '@/lib/email-templates/send-email'
 import type { OrderEmailData } from '@/lib/email-templates/order-shared'
+import { PAYMENT_LABELS, type PaymentMethod } from '@/lib/checkout-rules'
 
 export const ADMIN_RECIPIENT = 'hello@getpeptidepen.com'
 
@@ -49,7 +50,7 @@ export async function notifyOrderPending(supabase: SupabaseClient, orderId: stri
   try {
     const { data: order } = await supabase
       .from('orders')
-      .select('id,order_number,email,subtotal,shipping,total,currency,ship_name,ship_address1,ship_address2,ship_city,ship_region,ship_postal,ship_country,created_at')
+      .select('id,order_number,email,subtotal,shipping,total,currency,ship_name,ship_address1,ship_address2,ship_city,ship_region,ship_postal,ship_country,created_at,phone,payment_method,discount')
       .eq('id', orderId).maybeSingle()
     if (!order) return
     const { data: items } = await supabase.from('order_items').select('name,variant,qty,price').eq('order_id', order.id)
@@ -60,10 +61,18 @@ export async function notifyOrderPending(supabase: SupabaseClient, orderId: stri
       items: (items ?? []).map((i) => ({ name: i.name, variant: i.variant, qty: i.qty, price: Number(i.price) })),
       subtotal: Number(order.subtotal), shipping: Number(order.shipping), total: Number(order.total),
       currency: order.currency || 'GBP',
+      phone: order.phone, discount: Number(order.discount ?? 0),
+      paymentMethod: PAYMENT_LABELS[order.payment_method as PaymentMethod] ?? order.payment_method,
     }
-    await sendTemplateEmail('order-pending', ADMIN_RECIPIENT, {
-      templateData: data, idempotencyKey: `order-pending-${order.id}-admin`, replyTo: order.email,
-    })
+    const results = await Promise.allSettled([
+      sendTemplateEmail('order-pending', ADMIN_RECIPIENT, {
+        templateData: data, idempotencyKey: `order-pending-${order.id}-admin`, replyTo: order.email,
+      }),
+      sendTemplateEmail('order-received', order.email, {
+        templateData: data, idempotencyKey: `order-received-${order.id}-customer`, replyTo: ADMIN_RECIPIENT,
+      }),
+    ])
+    results.forEach((r) => { if (r.status === 'rejected') console.error('Order received email failed', { orderId, error: String(r.reason) }) })
   } catch (e) {
     console.error('Pending order email failed', { orderId, error: e instanceof Error ? e.message : String(e) })
   }

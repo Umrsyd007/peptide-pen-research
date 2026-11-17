@@ -24,6 +24,10 @@ export interface OrderEmailData {
   shipping?: number
   total?: number
   currency?: string
+  phone?: string | null
+  paymentMethod?: string | null
+  discount?: number
+  totalLabel?: string
 }
 
 export const money = (n: number | undefined, currency = 'GBP') =>
@@ -49,13 +53,14 @@ export function ItemsTable({ items = [], currency = 'GBP' }: { items?: OrderEmai
   )
 }
 
-export function Totals({ subtotal, shipping, total, currency = 'GBP' }: OrderEmailData) {
+export function Totals({ subtotal, shipping, total, discount, totalLabel = 'Total paid', currency = 'GBP' }: OrderEmailData) {
   return (
     <Section>
       <Hr style={hr} />
       <Row><Column><Text style={meta}>Subtotal</Text></Column><Column align="right"><Text style={meta}>{money(subtotal, currency)}</Text></Column></Row>
       <Row><Column><Text style={meta}>Shipping</Text></Column><Column align="right"><Text style={meta}>{shipping ? money(shipping, currency) : 'Free'}</Text></Column></Row>
-      <Row><Column><Text style={totalText}>Total paid</Text></Column><Column align="right"><Text style={totalText}>{money(total, currency)}</Text></Column></Row>
+      {discount ? <Row><Column><Text style={meta}>Discount</Text></Column><Column align="right"><Text style={meta}>−{money(discount, currency)}</Text></Column></Row> : null}
+      <Row><Column><Text style={totalText}>{totalLabel}</Text></Column><Column align="right"><Text style={totalText}>{money(total, currency)}</Text></Column></Row>
     </Section>
   )
 }

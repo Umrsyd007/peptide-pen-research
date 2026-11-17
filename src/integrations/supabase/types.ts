@@ -65,6 +65,30 @@ export type Database = {
         }
         Relationships: []
       }
+      discount_codes: {
+        Row: {
+          active: boolean
+          code: string
+          created_at: string
+          id: string
+          percent_off: number
+        }
+        Insert: {
+          active?: boolean
+          code: string
+          created_at?: string
+          id?: string
+          percent_off: number
+        }
+        Update: {
+          active?: boolean
+          code?: string
+          created_at?: string
+          id?: string
+          percent_off?: number
+        }
+        Relationships: []
+      }
       email_send_log: {
         Row: {
           created_at: string
@@ -201,9 +225,13 @@ export type Database = {
           cart_session_id: string | null
           created_at: string
           currency: string
+          discount: number
+          discount_code: string | null
           email: string
           id: string
           order_number: string
+          payment_method: string | null
+          phone: string | null
           ship_address1: string | null
           ship_address2: string | null
           ship_city: string | null
@@ -224,9 +252,13 @@ export type Database = {
           cart_session_id?: string | null
           created_at?: string
           currency?: string
+          discount?: number
+          discount_code?: string | null
           email: string
           id?: string
           order_number?: string
+          payment_method?: string | null
+          phone?: string | null
           ship_address1?: string | null
           ship_address2?: string | null
           ship_city?: string | null
@@ -247,9 +279,13 @@ export type Database = {
           cart_session_id?: string | null
           created_at?: string
           currency?: string
+          discount?: number
+          discount_code?: string | null
           email?: string
           id?: string
           order_number?: string
+          payment_method?: string | null
+          phone?: string | null
           ship_address1?: string | null
           ship_address2?: string | null
           ship_city?: string | null

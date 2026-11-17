@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
-import { ExternalLink, Loader2, Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
+import { useState } from "react";
+import { Loader2, Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -13,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCartStore } from "@/stores/cart";
 import { Price } from "@/components/price";
+import { CheckoutDialog } from "@/components/checkout/checkout-dialog";
 
 
 interface CartDrawerProps {
@@ -25,8 +25,10 @@ export function CartDrawer({
   triggerVariant = "outline",
   triggerClassName,
 }: CartDrawerProps) {
-  const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
+  const open = useCartStore((s) => s.drawerOpen);
+  const setOpen = useCartStore((s) => s.setDrawerOpen);
+  const clearCart = useCartStore((s) => s.clearCart);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
   const items = useCartStore((s) => s.items);
   const isLoading = useCartStore((s) => s.isLoading);
   const isSyncing = false;
@@ -41,13 +43,11 @@ export function CartDrawer({
   );
 
 
-  const handleCheckout = () => {
-    setOpen(false);
-    navigate({ to: "/checkout" });
-  };
+  const handleCheckout = () => setCheckoutOpen(true);
 
 
   return (
+    <>
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button
@@ -158,14 +158,17 @@ export function CartDrawer({
                 </div>
               </div>
               <div className="flex-shrink-0 space-y-3 pt-4 border-t bg-background">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">Subtotal</span>
-                  <span className="text-xl font-bold">
-                    <Price gbp={totalPrice} />
-                  </span>
+                <div className="space-y-1.5 text-sm">
+                  <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><Price gbp={totalPrice} /></div>
+                  <div className="flex justify-between"><span className="text-muted-foreground">Consultation Charge</span><span>FREE</span></div>
+                  <div className="flex justify-between"><span className="text-muted-foreground">Express Shipping</span><span>FREE</span></div>
                 </div>
-                <p className="text-[11px] text-muted-foreground">
-                  Free worldwide shipping.
+                <div className="flex justify-between items-center border-t border-border pt-3">
+                  <span className="text-lg font-bold">Total</span>
+                  <span className="text-xl font-bold"><Price gbp={totalPrice} /></span>
+                </div>
+                <p className="rounded-lg border border-border bg-muted/40 p-3 text-xs text-muted-foreground">
+                  All orders include free worldwide shipping and 24/7 customer support.
                 </p>
                 <Button
                   onClick={handleCheckout}
@@ -175,11 +178,11 @@ export function CartDrawer({
                   {isLoading || isSyncing ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
-                    <>
-                      <ExternalLink className="w-4 h-4 mr-2" />
-                      Checkout securely
-                    </>
+                    "Checkout"
                   )}
+                </Button>
+                <Button variant="outline" className="w-full h-11" onClick={clearCart}>
+                  Clear Cart
                 </Button>
               </div>
             </>
@@ -187,5 +190,7 @@ export function CartDrawer({
         </div>
       </SheetContent>
     </Sheet>
+    <CheckoutDialog open={checkoutOpen} onOpenChange={setCheckoutOpen} />
+    </>
   );
 }

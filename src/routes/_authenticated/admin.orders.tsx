@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import { useQuery, keepPreviousData, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { toast } from "sonner";
-import { checkIsAdmin, listAdminOrders, type AdminOrder } from "@/lib/admin-orders.functions";
+import { checkIsAdmin, listAdminOrders, markOrderPaid, type AdminOrder } from "@/lib/admin-orders.functions";
+import { PAYMENT_LABELS, type PaymentMethod } from "@/lib/checkout-rules";
 import type { Period } from "@/lib/admin-orders";
 import { formatMoney } from "@/lib/money";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -51,6 +52,8 @@ function addressLines(o: AdminOrder) {
 function AdminOrdersPage() {
   const isAdminFn = useServerFn(checkIsAdmin);
   const listFn = useServerFn(listAdminOrders);
+  const markPaidFn = useServerFn(markOrderPaid);
+  const queryClient = useQueryClient();
   const [period, setPeriod] = useState<Period>("30d");
   const [status, setStatus] = useState<Status>("all");
   const [search, setSearch] = useState("");
@@ -183,6 +186,26 @@ function AdminOrdersPage() {
                   <h3 className="font-medium">Customer</h3>
                   <p className="mt-1">{selected.ship_name}</p>
                   <a className="underline" href={`mailto:${selected.email}`}>{selected.email}</a>
+                  {selected.phone && (
+                    <div><a className="underline" href={`https://wa.me/${selected.phone.replace(/\D/g, "")}`} target="_blank" rel="noreferrer">{selected.phone}</a></div>
+                  )}
+                  {selected.payment_method && (
+                    <p className="mt-1 text-muted-foreground">Payment: {PAYMENT_LABELS[selected.payment_method as PaymentMethod] ?? selected.payment_method}</p>
+                  )}
+                  {selected.status !== "paid" && (
+                    <Button
+                      size="sm"
+                      className="mt-3"
+                      onClick={async () => {
+                        try {
+                          await markPaidFn({ data: { id: selected.id } });
+                          toast.success("Marked paid — receipt emails sent");
+                          setSelected({ ...selected, status: "paid" });
+                          queryClient.invalidateQueries({ queryKey: ["admin-orders"] });
+                        } catch (e) { toast.error(e instanceof Error ? e.message : "Failed"); }
+                      }}
+                    >Mark paid</Button>
+                  )}
                 </section>
                 <section>
                   <div className="flex items-center justify-between">

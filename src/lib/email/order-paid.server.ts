@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { sendTemplateEmail } from '@/lib/email-templates/send-email'
 import type { OrderEmailData } from '@/lib/email-templates/order-shared'
+import { getPaymentLink } from '@/lib/payment-link'
 import { PAYMENT_LABELS, type PaymentMethod } from '@/lib/checkout-rules'
 
 export const ADMIN_RECIPIENT = 'hello@getpeptidepen.com'
@@ -22,7 +23,7 @@ export async function notifyOrderPaid(supabase: SupabaseClient, orderNumber: str
     return
   }
   const { data: items } = await supabase
-    .from('order_items').select('name,variant,qty,price').eq('order_id', order.id)
+    .from('order_items').select('name,variant,qty,price,product_id').eq('order_id', order.id)
 
   const data: OrderEmailData = {
     orderNumber: order.order_number, createdAt: order.created_at, email: order.email,
@@ -53,7 +54,7 @@ export async function notifyOrderPending(supabase: SupabaseClient, orderId: stri
       .select('id,order_number,email,subtotal,shipping,total,currency,ship_name,ship_address1,ship_address2,ship_city,ship_region,ship_postal,ship_country,created_at,phone,payment_method,discount')
       .eq('id', orderId).maybeSingle()
     if (!order) return
-    const { data: items } = await supabase.from('order_items').select('name,variant,qty,price').eq('order_id', order.id)
+    const { data: items } = await supabase.from('order_items').select('name,variant,qty,price,product_id').eq('order_id', order.id)
     const data: OrderEmailData = {
       orderNumber: order.order_number, createdAt: order.created_at, email: order.email,
       shipName: order.ship_name, address1: order.ship_address1, address2: order.ship_address2,
@@ -64,12 +65,13 @@ export async function notifyOrderPending(supabase: SupabaseClient, orderId: stri
       phone: order.phone, discount: Number(order.discount ?? 0),
       paymentMethod: PAYMENT_LABELS[order.payment_method as PaymentMethod] ?? order.payment_method,
     }
+    const paymentLink = getPaymentLink({ currency: order.currency, ship_country: order.ship_country, order_items: items ?? [] })
     const results = await Promise.allSettled([
       sendTemplateEmail('order-pending', ADMIN_RECIPIENT, {
         templateData: data, idempotencyKey: `order-pending-${order.id}-admin`, replyTo: order.email,
       }),
       sendTemplateEmail('order-received', order.email, {
-        templateData: data, idempotencyKey: `order-received-${order.id}-customer`, replyTo: ADMIN_RECIPIENT,
+        templateData: { ...data, paymentLink }, idempotencyKey: `order-received-${order.id}-customer`, replyTo: ADMIN_RECIPIENT,
       }),
     ])
     results.forEach((r) => { if (r.status === 'rejected') console.error('Order received email failed', { orderId, error: String(r.reason) }) })

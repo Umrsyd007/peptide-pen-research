@@ -1,5 +1,5 @@
 import React from 'react'
-import { Column, Hr, Row, Section, Text } from '@react-email/components'
+import { Button, Column, Hr, Row, Section, Text } from '@react-email/components'
 
 export interface OrderEmailItem {
   name: string
@@ -28,6 +28,7 @@ export interface OrderEmailData {
   paymentMethod?: string | null
   discount?: number
   totalLabel?: string
+  paymentLink?: string | null
 }
 
 export const money = (n: number | undefined, currency = 'GBP') =>
@@ -49,6 +50,20 @@ export function ItemsTable({ items = [], currency = 'GBP' }: { items?: OrderEmai
           </Column>
         </Row>
       ))}
+    </Section>
+  )
+}
+
+export function ItemCount({ items = [] }: { items?: OrderEmailItem[] }) {
+  const n = items.reduce((s, i) => s + i.qty, 0)
+  return <Text style={value}>{n} item{n === 1 ? '' : 's'}</Text>
+}
+
+export function PayButton({ href }: { href?: string | null }) {
+  if (!href) return null
+  return (
+    <Section style={{ margin: '0 0 16px 0' }}>
+      <Button href={href} style={{ backgroundColor: '#e11d2a', color: '#ffffff', padding: '14px 24px', borderRadius: '10px', fontWeight: 700, fontSize: '15px', textDecoration: 'none' }}>Pay now</Button>
     </Section>
   )
 }

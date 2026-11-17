@@ -124,7 +124,7 @@ export const getPlacedOrder = createServerFn({ method: "POST" })
     if (!(await verifyOrderToken(data.id, data.token))) throw new Error("Order not found");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: o } = await supabaseAdmin.from("orders")
-      .select("order_number,email,phone,payment_method,ship_name,ship_address1,ship_address2,ship_city,ship_region,ship_postal,ship_country,subtotal,discount,discount_code,shipping,total,currency,order_items(name,variant,price,qty)")
+      .select("order_number,email,phone,payment_method,ship_name,ship_address1,ship_address2,ship_city,ship_region,ship_postal,ship_country,subtotal,discount,discount_code,shipping,total,currency,order_items(name,variant,price,qty,product_id)")
       .eq("id", data.id).maybeSingle();
     if (!o) throw new Error("Order not found");
     return {

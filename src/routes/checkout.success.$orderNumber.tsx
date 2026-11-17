@@ -12,6 +12,7 @@ import { getPlacedOrder } from "@/lib/orders.functions";
 import { PAYMENT_LABELS, type PaymentMethod } from "@/lib/checkout-rules";
 import { formatIn } from "@/lib/currency";
 import { buildOrderMessage } from "@/lib/order-message";
+import { getPaymentLink, itemCountLabel } from "@/lib/payment-link";
 import { SUPPORT_EMAIL, SUPPORT_PHONE, WHATSAPP_NUMBER } from "@/lib/store-contact";
 
 export const Route = createFileRoute("/checkout/success/$orderNumber")({
@@ -28,6 +29,7 @@ export const Route = createFileRoute("/checkout/success/$orderNumber")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "robots", content: "noindex" },
+      { name: "referrer", content: "no-referrer" },
     ],
   }),
   component: SuccessPage,
@@ -52,7 +54,8 @@ function SuccessPage() {
   });
 
   const method = (o?.payment_method ?? "card") as PaymentMethod;
-  const msg = o ? buildOrderMessage(o, method, formatIn) : "";
+  const payLink = o ? getPaymentLink(o) : null;
+  const msg = o ? buildOrderMessage(o, method, formatIn, payLink) : "";
   const waUrl = WHATSAPP_NUMBER ? `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}` : null;
   const smsUrl = WHATSAPP_NUMBER ? `sms:+${WHATSAPP_NUMBER}?&body=${encodeURIComponent(msg)}` : null;
   const [isMobile, setIsMobile] = useState(false);
@@ -122,17 +125,8 @@ function SuccessPage() {
             </div>
           </div>
           <div className="border-t border-border">
-            <p className="flex items-center gap-2 px-5 py-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground"><ShoppingBag className="h-4 w-4" /> Items ordered ({o.order_items.length})</p>
-            {o.order_items.map((i, idx) => (
-              <div key={idx} className="flex items-center gap-3 border-t border-border px-5 py-3 text-sm">
-                <span className="rounded-md bg-muted px-2 py-1 font-semibold">{i.qty}x</span>
-                <div className="flex-1">
-                  <p className="font-medium">{i.name}{i.variant ? ` · ${i.variant}` : ""}</p>
-                  <p className="text-xs text-muted-foreground">{formatIn(i.price, o.currency)} each</p>
-                </div>
-                <span className="font-semibold">{formatIn(i.price * i.qty, o.currency)}</span>
-              </div>
-            ))}
+            <p className="flex items-center gap-2 px-5 py-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground"><ShoppingBag className="h-4 w-4" /> Items ordered</p>
+            <p className="border-t border-border px-5 py-3 text-sm font-medium">{itemCountLabel(o.order_items)}</p>
           </div>
           <div className="space-y-1.5 border-t border-border px-5 py-4 text-sm">
             <div className="flex justify-between text-muted-foreground"><span>Subtotal</span><span>{formatIn(o.subtotal, o.currency)}</span></div>
@@ -151,6 +145,16 @@ function SuccessPage() {
         <span className="flex items-center gap-2"><Truck className="h-4 w-4" /> Free Shipping</span>
         <span className="flex items-center gap-2"><Clock className="h-4 w-4" /> Fast Processing</span>
       </div>
+
+      {o && payLink && (
+        <section className="mt-6 flex flex-col gap-4 rounded-xl border border-border p-5 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="font-semibold">Your secure payment link is ready</p>
+            <p className="text-sm text-muted-foreground">Pay {formatIn(o.total, o.currency)} by card, Apple Pay or Google Pay.</p>
+          </div>
+          <Button asChild size="lg"><a href={payLink} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer">Pay now</a></Button>
+        </section>
+      )}
 
       {o && waUrl && (
         <section className="mt-6 flex flex-col gap-4 rounded-xl border border-primary/30 bg-primary/5 p-5 sm:flex-row sm:items-center sm:justify-between">

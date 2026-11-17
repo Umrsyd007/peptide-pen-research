@@ -2,7 +2,7 @@ import React from 'react'
 import { Body, Container, Head, Heading, Html, Preview, Section, Text } from '@react-email/components'
 import type { TemplateEntry } from './registry'
 import {
-  Address, ItemsTable, Totals, card, container, footer, h1, label, main,
+  Address, ItemCount, PayButton, Totals, card, container, footer, h1, label, main,
   previewOrder, subhead, type OrderEmailData,
 } from './order-shared'
 
@@ -18,7 +18,7 @@ const OrderConfirmationEmail = (d: OrderEmailData) => (
         </Text>
         <Section style={card}>
           <Text style={label}>Order summary</Text>
-          <ItemsTable items={d.items} currency={d.currency} />
+          <ItemCount items={d.items} />
           <Totals {...d} />
         </Section>
         <Section style={card}>

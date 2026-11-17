@@ -5,11 +5,16 @@ const fmt = (n: number, c: string) => `${c} ${n.toFixed(2)}`;
 const order = { order_number: "482913", total: 300, currency: "GBP", order_items: [{ qty: 2, name: "Pen", variant: "20mg", price: 150 }] };
 
 describe("buildOrderMessage", () => {
-  it("lists items and total", () => {
+  it("shows order number, item count and total but no product names", () => {
     const m = buildOrderMessage(order, "card", fmt);
     expect(m).toContain("Order #482913");
-    expect(m).toContain("2x Pen 20mg GBP 300.00");
+    expect(m).toContain("2 items");
     expect(m).toContain("Total GBP 300.00");
+    expect(m).not.toContain("Pen");
+    expect(m).not.toContain("20mg");
+  });
+  it("includes payment link when given", () => {
+    expect(buildOrderMessage(order, "card", fmt, "https://whop.com/checkout/plan_88k7Fcp3yNQYy")).toContain("Payment link: https://whop.com/checkout/plan_88k7Fcp3yNQYy");
   });
   it("card asks for payment link", () => {
     expect(buildOrderMessage(order, "card", fmt)).toContain("Payment method: Card / Payment Link\n____________________\nPlease send the secure payment link for this order.");

@@ -14,3 +14,4 @@
 - [x] Header picker (GBP/USD/EUR) that also sets checkout and receipt currency.
 
 - [x] WhatsApp-for-all-methods checkout + text message fallback
+- [x] Whop payment link for UK/GBP 20mg Retatrutide orders; product names hidden from shopper messages, emails, confirmation page

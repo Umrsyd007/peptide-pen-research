@@ -168,7 +168,7 @@ export function CartDrawer({
                   <span className="text-xl font-bold"><Price gbp={totalPrice} /></span>
                 </div>
                 <p className="rounded-lg border border-border bg-muted/40 p-3 text-xs text-muted-foreground">
-                  All orders include free worldwide shipping and 24/7 customer support.
+                  All orders include free consultation, personalised dosage guidance & 24/7 customer support
                 </p>
                 <Button
                   onClick={handleCheckout}

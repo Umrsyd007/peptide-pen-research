@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -11,9 +10,8 @@ import { Button } from "@/components/ui/button";
 import { getPlacedOrder } from "@/lib/orders.functions";
 import { PAYMENT_LABELS, type PaymentMethod } from "@/lib/checkout-rules";
 import { formatIn } from "@/lib/currency";
-import { buildOrderMessage } from "@/lib/order-message";
 import { getPaymentLink, itemCountLabel } from "@/lib/payment-link";
-import { SUPPORT_EMAIL, SUPPORT_PHONE, WHATSAPP_NUMBER } from "@/lib/store-contact";
+import { SUPPORT_EMAIL, SUPPORT_PHONE } from "@/lib/store-contact";
 
 export const Route = createFileRoute("/checkout/success/$orderNumber")({
   validateSearch: (s: Record<string, unknown>) => ({
@@ -37,9 +35,9 @@ export const Route = createFileRoute("/checkout/success/$orderNumber")({
 
 const NEXT: Record<PaymentMethod, { title: string; steps: string[] }> = {
   whatsapp: { title: "Pay via WhatsApp", steps: ["Open the WhatsApp chat — your order details are pre-filled", "Send the message so we can arrange payment", "Your order is processed as soon as payment is confirmed"] },
-  card: { title: "Secure Card Payment", steps: ["Check your email or WhatsApp for the secure payment link", "Click the link to open the secure payment page", "Complete payment using your card, Apple Pay, or Google Pay", "Your order is processed immediately once payment is confirmed"] },
-  bank: { title: "Bank Transfer", steps: ["We'll send our bank details to your email or WhatsApp", "Transfer the total using your order ID as the reference", "Your order is processed once the transfer arrives"] },
-  usdt: { title: "USDT (Crypto)", steps: ["We'll send the wallet address and exact amount", "Send the USDT payment", "Your order is processed once the payment confirms"] },
+  card: { title: "Secure Card Payment", steps: ["Check your email for the secure payment link", "Click the link to open the secure payment page", "Complete payment using your card, Apple Pay, or Google Pay", "Your order is processed immediately once payment is confirmed"] },
+  bank: { title: "Bank Transfer", steps: ["We'll email you our bank details", "Transfer the total using your order ID as the reference", "Your order is processed once the transfer arrives"] },
+  usdt: { title: "USDT (Crypto)", steps: ["We'll email you the wallet address and exact amount", "Send the USDT payment", "Your order is processed once the payment confirms"] },
 };
 
 function SuccessPage() {
@@ -55,32 +53,6 @@ function SuccessPage() {
 
   const method = (o?.payment_method ?? "card") as PaymentMethod;
   const payLink = o ? getPaymentLink(o) : null;
-  const msg = o ? buildOrderMessage(o, method, formatIn, payLink) : "";
-  const waUrl = WHATSAPP_NUMBER ? `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}` : null;
-  const smsUrl = WHATSAPP_NUMBER ? `sms:+${WHATSAPP_NUMBER}?&body=${encodeURIComponent(msg)}` : null;
-  const [isMobile, setIsMobile] = useState(false);
-  const [noWhatsApp, setNoWhatsApp] = useState(false);
-  const opened = useRef(false);
-  useEffect(() => {
-    setIsMobile(/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Mac/.test(navigator.userAgent)));
-  }, []);
-  useEffect(() => {
-    if (!o || !waUrl || opened.current) return;
-    opened.current = true;
-    // Websites can't tell whether WhatsApp is installed; if the page never loses focus, offer SMS.
-    let left = false;
-    const onLeave = () => { if (document.visibilityState === "hidden" || !document.hasFocus()) left = true; };
-    document.addEventListener("visibilitychange", onLeave);
-    window.addEventListener("blur", onLeave);
-    window.open(waUrl, "_blank", "noopener");
-    const timer = window.setTimeout(() => { if (!left) setNoWhatsApp(true); }, 2500);
-    return () => {
-      window.clearTimeout(timer);
-      document.removeEventListener("visibilitychange", onLeave);
-      window.removeEventListener("blur", onLeave);
-    };
-  }, [o, waUrl]);
-
   const copy = () => {
     navigator.clipboard.writeText(orderNumber);
     toast.success("Order ID copied");
@@ -153,21 +125,6 @@ function SuccessPage() {
             <p className="text-sm text-muted-foreground">Pay {formatIn(o.total, o.currency)} by card, Apple Pay or Google Pay.</p>
           </div>
           <Button asChild size="lg"><a href={payLink} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer">Pay now</a></Button>
-        </section>
-      )}
-
-      {o && waUrl && (
-        <section className="mt-6 flex flex-col gap-4 rounded-xl border border-primary/30 bg-primary/5 p-5 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="font-semibold text-primary">Opening WhatsApp…</p>
-            <p className="text-sm text-muted-foreground">Your order details are pre-filled. If it doesn't open, use the button.</p>
-          </div>
-          <div className="flex flex-col gap-2">
-            <Button asChild><a href={waUrl} target="_blank" rel="noreferrer"><MessageCircle className="mr-2 h-4 w-4" /> Open WhatsApp chat</a></Button>
-            {isMobile && smsUrl && (
-              <Button variant={noWhatsApp ? "default" : "outline"} asChild><a href={smsUrl}><Phone className="mr-2 h-4 w-4" /> {noWhatsApp ? "No WhatsApp? Send by text message" : "Send by text message"}</a></Button>
-            )}
-          </div>
         </section>
       )}
 

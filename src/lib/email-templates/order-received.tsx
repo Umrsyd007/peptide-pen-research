@@ -14,7 +14,7 @@ const OrderReceivedEmail = (d: OrderEmailData) => (
       <Container style={container}>
         <Heading style={h1}>Order received</Heading>
         <Text style={subhead}>
-          Thanks{d.shipName ? `, ${d.shipName}` : ''}! Your order #{d.orderNumber} has been placed. We'll send you a secure payment link by email or WhatsApp shortly. Your order is processed as soon as payment is confirmed.
+          Thanks{d.shipName ? `, ${d.shipName}` : ''}! Your order #{d.orderNumber} has been placed. We'll send you a secure payment link by email shortly. Your order is processed as soon as payment is confirmed.
         </Text>
         <PayButton href={d.paymentLink} />
         <Section style={card}>

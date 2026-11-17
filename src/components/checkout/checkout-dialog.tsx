@@ -35,7 +35,6 @@ const STEPS = [
 ] as const;
 
 const METHODS: { id: PaymentMethod; icon: typeof CreditCard; note: string; extra?: string; badge?: string }[] = [
-  { id: "whatsapp", icon: MessageCircle, note: "Chat with us to arrange payment", badge: "Recommended" },
   { id: "card", icon: CreditCard, note: "Secure payment link via email", extra: "(Apple Pay / Google Pay)" },
   { id: "bank", icon: Building2, note: "Direct bank transfer (UK/International)" },
   { id: "usdt", icon: Wallet, note: "Pay with cryptocurrency" },
@@ -43,9 +42,9 @@ const METHODS: { id: PaymentMethod; icon: typeof CreditCard; note: string; extra
 
 const METHOD_INFO: Record<PaymentMethod, { title: string; body: string }> = {
   whatsapp: { title: "Pay via WhatsApp", body: "After placing your order, WhatsApp opens with your order details so we can arrange payment with you directly." },
-  card: { title: "Secure Card Payment", body: "We accept all major debit and credit cards, including Apple Pay and Google Pay. After placing your order, WhatsApp opens with your order and we'll send you a secure payment link (via WhatsApp or email) to complete the transaction safely." },
-  bank: { title: "Bank Transfer", body: "After placing your order, WhatsApp opens with your order so we can send our bank details and your order reference." },
-  usdt: { title: "USDT (Crypto)", body: "After placing your order, WhatsApp opens with your order so we can send the wallet address and exact amount." },
+  card: { title: "Secure Card Payment", body: "We accept all major debit and credit cards, including Apple Pay and Google Pay. After placing your order, we'll send you a secure payment link to your email address to complete the transaction safely." },
+  bank: { title: "Bank Transfer", body: "After placing your order, we'll email you our bank details and your order reference." },
+  usdt: { title: "USDT (Crypto)", body: "After placing your order, we'll email you the wallet address and exact amount." },
 };
 
 type Errors = Record<string, string | undefined>;
@@ -240,7 +239,7 @@ export function CheckoutDialog({ open, onOpenChange }: { open: boolean; onOpenCh
                   </button>
                 )}
               </Field>
-              <Field id="co-phone" label="Phone Number / WhatsApp Number *" icon={Phone} error={errors["phone"]}>
+              <Field id="co-phone" label="Phone Number *" icon={Phone} error={errors["phone"]}>
                 <div className="flex gap-2">
                   <CountryCodePicker value={contact.phoneCountry}
                     onChange={(iso) => { setCountryPicked(true); updateContact("phoneCountry", iso); }} />

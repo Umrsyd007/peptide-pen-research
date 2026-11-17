@@ -244,7 +244,7 @@ export function CheckoutDialog({ open, onOpenChange }: { open: boolean; onOpenCh
                 <div className="flex gap-2">
                   <CountryCodePicker value={contact.phoneCountry}
                     onChange={(iso) => { setCountryPicked(true); updateContact("phoneCountry", iso); }} />
-                  <Input id="co-phone" name="tel" type="tel" inputMode="tel" autoComplete="tel" placeholder="Phone number" className={cn("flex-1", inputCls(errors["phone"]))}
+                  <Input id="co-phone" name="phone" type="tel" inputMode="tel" autoComplete="tel" placeholder="Phone number" className={cn("flex-1", inputCls(errors["phone"]))}
                     value={contact.phone} onChange={(e) => updateContact("phone", e.target.value)} />
                 </div>
               </Field>
@@ -255,26 +255,26 @@ export function CheckoutDialog({ open, onOpenChange }: { open: boolean; onOpenCh
             <div className="space-y-4">
               <StepTitle title="Delivery Address" sub="Where should we send your order?" />
               <Field id="co-a1" label="Address Line 1 *" icon={Home} error={errors["address1"]}>
-                <Input id="co-a1" name="address-line1" autoComplete="shipping address-line1" placeholder="Street address" className={inputCls(errors["address1"])}
+                <Input id="co-a1" name="address1" autoComplete="address-line1" placeholder="Street address" className={inputCls(errors["address1"])}
                   value={address.address1} onChange={(e) => updateAddress("address1", e.target.value)} />
               </Field>
               <Field id="co-a2" label="Address Line 2" icon={Building2}>
-                <Input id="co-a2" name="address-line2" autoComplete="shipping address-line2" placeholder="Apartment, suite, unit, etc. (optional)" className="h-11"
+                <Input id="co-a2" name="address2" autoComplete="address-line2" placeholder="Apartment, suite, unit, etc. (optional)" className="h-11"
                   value={address.address2} onChange={(e) => updateAddress("address2", e.target.value)} />
               </Field>
               <div className="grid grid-cols-2 gap-4">
                 <Field id="co-city" label="City *" icon={MapPin} error={errors["city"]}>
-                  <Input id="co-city" name="city" autoComplete="shipping address-level2" placeholder="City" className={inputCls(errors["city"])}
+                  <Input id="co-city" name="city" autoComplete="address-level2" placeholder="City" className={inputCls(errors["city"])}
                     value={address.city} onChange={(e) => updateAddress("city", e.target.value)} />
                 </Field>
                 <Field id="co-postal" label="Postcode/Zip *" error={errors["postal"]}>
-                  <Input id="co-postal" name="postal-code" autoComplete="shipping postal-code" placeholder="Postcode/Zip" className={inputCls(errors["postal"])}
+                  <Input id="co-postal" name="zip" autoComplete="postal-code" placeholder="Postcode/Zip" className={inputCls(errors["postal"])}
                     value={address.postal} onChange={(e) => updateAddress("postal", e.target.value)} />
                 </Field>
               </div>
               <Field id="co-country" label="Country *" error={errors["country"]}>
                 <Select value={address.country} onValueChange={(v) => updateAddress("country", v)}>
-                  <SelectTrigger id="co-country" className={inputCls(errors["country"])}>
+                  <SelectTrigger id="co-country" data-autofill="country" className={inputCls(errors["country"])}>
                     <span className="flex items-center gap-2"><Globe className="h-4 w-4 text-muted-foreground" /><SelectValue placeholder="Select a country" /></span>
                   </SelectTrigger>
                   <SelectContent className="max-h-72">

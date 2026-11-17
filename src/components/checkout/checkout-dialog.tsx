@@ -222,16 +222,16 @@ export function CheckoutDialog({ open, onOpenChange }: { open: boolean; onOpenCh
           </ol>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-6 py-6">
+        <form id="checkout-form" autoComplete="on" onSubmit={(e) => e.preventDefault()} className="flex-1 overflow-y-auto px-6 py-6">
           {step === 0 && (
             <div className="space-y-4">
               <StepTitle title="Contact Information" sub="How can we reach you?" />
               <Field id="co-name" label="Full Name *" icon={User} error={errors["name"]}>
-                <Input id="co-name" autoComplete="name" placeholder="Enter your full name" className={inputCls(errors["name"])}
+                <Input id="co-name" name="name" autoComplete="name" placeholder="Enter your full name" className={inputCls(errors["name"])}
                   value={contact.name} onChange={(e) => updateContact("name", e.target.value)} />
               </Field>
               <Field id="co-email" label="Email Address *" icon={Mail} error={errors["email"]}>
-                <Input id="co-email" type="email" autoComplete="email" placeholder="your@email.com" className={inputCls(errors["email"])}
+                <Input id="co-email" name="email" type="email" inputMode="email" autoComplete="email" placeholder="your@email.com" className={inputCls(errors["email"])}
                   value={contact.email} onChange={(e) => updateContact("email", e.target.value)} />
                 {emailSuggestion && (
                   <button type="button" className="text-left text-xs text-muted-foreground"
@@ -244,7 +244,7 @@ export function CheckoutDialog({ open, onOpenChange }: { open: boolean; onOpenCh
                 <div className="flex gap-2">
                   <CountryCodePicker value={contact.phoneCountry}
                     onChange={(iso) => { setCountryPicked(true); updateContact("phoneCountry", iso); }} />
-                  <Input id="co-phone" type="tel" autoComplete="tel-national" placeholder="Phone number" className={cn("flex-1", inputCls(errors["phone"]))}
+                  <Input id="co-phone" name="tel" type="tel" inputMode="tel" autoComplete="tel" placeholder="Phone number" className={cn("flex-1", inputCls(errors["phone"]))}
                     value={contact.phone} onChange={(e) => updateContact("phone", e.target.value)} />
                 </div>
               </Field>
@@ -255,20 +255,20 @@ export function CheckoutDialog({ open, onOpenChange }: { open: boolean; onOpenCh
             <div className="space-y-4">
               <StepTitle title="Delivery Address" sub="Where should we send your order?" />
               <Field id="co-a1" label="Address Line 1 *" icon={Home} error={errors["address1"]}>
-                <Input id="co-a1" autoComplete="address-line1" placeholder="Street address" className={inputCls(errors["address1"])}
+                <Input id="co-a1" name="address-line1" autoComplete="shipping address-line1" placeholder="Street address" className={inputCls(errors["address1"])}
                   value={address.address1} onChange={(e) => updateAddress("address1", e.target.value)} />
               </Field>
               <Field id="co-a2" label="Address Line 2" icon={Building2}>
-                <Input id="co-a2" autoComplete="address-line2" placeholder="Apartment, suite, unit, etc. (optional)" className="h-11"
+                <Input id="co-a2" name="address-line2" autoComplete="shipping address-line2" placeholder="Apartment, suite, unit, etc. (optional)" className="h-11"
                   value={address.address2} onChange={(e) => updateAddress("address2", e.target.value)} />
               </Field>
               <div className="grid grid-cols-2 gap-4">
                 <Field id="co-city" label="City *" icon={MapPin} error={errors["city"]}>
-                  <Input id="co-city" autoComplete="address-level2" placeholder="City" className={inputCls(errors["city"])}
+                  <Input id="co-city" name="city" autoComplete="shipping address-level2" placeholder="City" className={inputCls(errors["city"])}
                     value={address.city} onChange={(e) => updateAddress("city", e.target.value)} />
                 </Field>
                 <Field id="co-postal" label="Postcode/Zip *" error={errors["postal"]}>
-                  <Input id="co-postal" autoComplete="postal-code" placeholder="Postcode/Zip" className={inputCls(errors["postal"])}
+                  <Input id="co-postal" name="postal-code" autoComplete="shipping postal-code" placeholder="Postcode/Zip" className={inputCls(errors["postal"])}
                     value={address.postal} onChange={(e) => updateAddress("postal", e.target.value)} />
                 </Field>
               </div>
@@ -374,7 +374,7 @@ export function CheckoutDialog({ open, onOpenChange }: { open: boolean; onOpenCh
               {placeError && <p className="text-sm text-destructive">{placeError}</p>}
             </div>
           )}
-        </div>
+        </form>
 
         <div className="grid grid-cols-2 gap-3 border-t border-border px-6 py-4">
           <Button variant="outline" className="h-12" onClick={back} disabled={placing}>

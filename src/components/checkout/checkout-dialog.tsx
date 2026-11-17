@@ -43,9 +43,9 @@ const METHODS: { id: PaymentMethod; icon: typeof CreditCard; note: string; extra
 
 const METHOD_INFO: Record<PaymentMethod, { title: string; body: string }> = {
   whatsapp: { title: "Pay via WhatsApp", body: "After placing your order, WhatsApp opens with your order details so we can arrange payment with you directly." },
-  card: { title: "Secure Card Payment", body: "We accept all major debit and credit cards, including Apple Pay and Google Pay. After placing your order, we'll send you a secure payment link to complete the transaction safely." },
-  bank: { title: "Bank Transfer", body: "After placing your order, we'll send our bank details and your order reference by email or WhatsApp." },
-  usdt: { title: "USDT (Crypto)", body: "After placing your order, we'll send the wallet address and exact amount by email or WhatsApp." },
+  card: { title: "Secure Card Payment", body: "We accept all major debit and credit cards, including Apple Pay and Google Pay. After placing your order, WhatsApp opens with your order and we'll send you a secure payment link (via WhatsApp or email) to complete the transaction safely." },
+  bank: { title: "Bank Transfer", body: "After placing your order, WhatsApp opens with your order so we can send our bank details and your order reference." },
+  usdt: { title: "USDT (Crypto)", body: "After placing your order, WhatsApp opens with your order so we can send the wallet address and exact amount." },
 };
 
 type Errors = Record<string, string | undefined>;

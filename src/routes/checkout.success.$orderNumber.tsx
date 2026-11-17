@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { getPlacedOrder } from "@/lib/orders.functions";
 import { PAYMENT_LABELS, type PaymentMethod } from "@/lib/checkout-rules";
 import { formatIn } from "@/lib/currency";
+import { buildOrderMessage } from "@/lib/order-message";
 import { SUPPORT_EMAIL, SUPPORT_PHONE, WHATSAPP_NUMBER } from "@/lib/store-contact";
 
 export const Route = createFileRoute("/checkout/success/$orderNumber")({
@@ -51,19 +52,31 @@ function SuccessPage() {
   });
 
   const method = (o?.payment_method ?? "card") as PaymentMethod;
-  const waText = o
-    ? `Hi! I just placed order #${o.order_number} (${formatIn(o.total, o.currency)}). ` +
-      o.order_items.map((i) => `${i.qty}x ${i.name}${i.variant ? ` ${i.variant}` : ""}`).join(", ") +
-      `. Name: ${o.ship_name}. I'd like to arrange payment.`
-    : "";
-  const waUrl = WHATSAPP_NUMBER ? `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waText)}` : null;
+  const msg = o ? buildOrderMessage(o, method, formatIn) : "";
+  const waUrl = WHATSAPP_NUMBER ? `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}` : null;
+  const smsUrl = WHATSAPP_NUMBER ? `sms:+${WHATSAPP_NUMBER}?&body=${encodeURIComponent(msg)}` : null;
+  const [isMobile, setIsMobile] = useState(false);
+  const [noWhatsApp, setNoWhatsApp] = useState(false);
   const opened = useRef(false);
   useEffect(() => {
-    if (o && method === "whatsapp" && waUrl && !opened.current) {
-      opened.current = true;
-      window.open(waUrl, "_blank", "noopener");
-    }
-  }, [o, method, waUrl]);
+    setIsMobile(/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Mac/.test(navigator.userAgent)));
+  }, []);
+  useEffect(() => {
+    if (!o || !waUrl || opened.current) return;
+    opened.current = true;
+    // Websites can't tell whether WhatsApp is installed; if the page never loses focus, offer SMS.
+    let left = false;
+    const onLeave = () => { if (document.visibilityState === "hidden" || !document.hasFocus()) left = true; };
+    document.addEventListener("visibilitychange", onLeave);
+    window.addEventListener("blur", onLeave);
+    window.open(waUrl, "_blank", "noopener");
+    const timer = window.setTimeout(() => { if (!left) setNoWhatsApp(true); }, 2500);
+    return () => {
+      window.clearTimeout(timer);
+      document.removeEventListener("visibilitychange", onLeave);
+      window.removeEventListener("blur", onLeave);
+    };
+  }, [o, waUrl]);
 
   const copy = () => {
     navigator.clipboard.writeText(orderNumber);
@@ -139,13 +152,18 @@ function SuccessPage() {
         <span className="flex items-center gap-2"><Clock className="h-4 w-4" /> Fast Processing</span>
       </div>
 
-      {o && method === "whatsapp" && waUrl && (
+      {o && waUrl && (
         <section className="mt-6 flex flex-col gap-4 rounded-xl border border-primary/30 bg-primary/5 p-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="font-semibold text-primary">Opening WhatsApp…</p>
             <p className="text-sm text-muted-foreground">Your order details are pre-filled. If it doesn't open, use the button.</p>
           </div>
-          <Button asChild><a href={waUrl} target="_blank" rel="noreferrer"><MessageCircle className="mr-2 h-4 w-4" /> Open WhatsApp chat</a></Button>
+          <div className="flex flex-col gap-2">
+            <Button asChild><a href={waUrl} target="_blank" rel="noreferrer"><MessageCircle className="mr-2 h-4 w-4" /> Open WhatsApp chat</a></Button>
+            {isMobile && smsUrl && (
+              <Button variant={noWhatsApp ? "default" : "outline"} asChild><a href={smsUrl}><Phone className="mr-2 h-4 w-4" /> {noWhatsApp ? "No WhatsApp? Send by text message" : "Send by text message"}</a></Button>
+            )}
+          </div>
         </section>
       )}
 

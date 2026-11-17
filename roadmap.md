@@ -12,3 +12,5 @@
 # Pounds and currency picker
 - [x] Convert catalog to GBP, remove USD conversion notes.
 - [x] Header picker (GBP/USD/EUR) that also sets checkout and receipt currency.
+
+- [x] WhatsApp-for-all-methods checkout + text message fallback

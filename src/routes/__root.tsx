@@ -14,6 +14,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 import { trackPageView } from "@/lib/analytics";
+import { useCartStore } from "@/stores/cart";
 import { TrackingConsent } from "@/components/tracking-consent";
 
 function NotFoundComponent() {
@@ -150,6 +151,10 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
+
+  useEffect(() => {
+    void useCartStore.persist.rehydrate();
+  }, []);
 
   // Fire page_view on every SPA navigation
   useEffect(() => {

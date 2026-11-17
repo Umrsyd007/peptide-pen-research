@@ -70,6 +70,8 @@ export const useCartStore = create<CartStore>()(
     {
       name: "peptidepen-cart-v2",
       storage: createJSONStorage(() => localStorage),
+      // Load saved cart after hydration so server and first client render match.
+      skipHydration: true,
       partialize: (s) => ({ items: s.items }),
       merge: (persisted, current) => ({
         ...current,

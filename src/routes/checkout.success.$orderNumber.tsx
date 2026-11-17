@@ -4,14 +4,14 @@ import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import {
   CheckCircle2, ClipboardList, Clock, Copy, Home, Loader2, Mail, MapPin, MessageCircle,
-  Package, Phone, ShieldCheck, ShoppingBag, Truck, User,
+  Package, ShieldCheck, ShoppingBag, Truck, User,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getPlacedOrder } from "@/lib/orders.functions";
 import { PAYMENT_LABELS, type PaymentMethod } from "@/lib/checkout-rules";
 import { formatIn } from "@/lib/currency";
 import { getPaymentLink, itemCountLabel } from "@/lib/payment-link";
-import { SUPPORT_EMAIL, SUPPORT_PHONE } from "@/lib/store-contact";
+import { SUPPORT_EMAIL } from "@/lib/store-contact";
 
 export const Route = createFileRoute("/checkout/success/$orderNumber")({
   validateSearch: (s: Record<string, unknown>) => ({
@@ -144,9 +144,6 @@ function SuccessPage() {
       )}
 
       <div className="mt-8 flex flex-wrap justify-center gap-3">
-        {SUPPORT_PHONE && (
-          <Button variant="outline" asChild><a href={`tel:${SUPPORT_PHONE.replace(/\s/g, "")}`}><Phone className="mr-2 h-4 w-4" /> Call Support</a></Button>
-        )}
         <Button asChild><a href={`mailto:${SUPPORT_EMAIL}?subject=Order%20%23${orderNumber}`}><Mail className="mr-2 h-4 w-4" /> Email Support</a></Button>
       </div>
       <div className="mt-3 flex flex-wrap justify-center gap-3">

@@ -419,7 +419,7 @@ function CountryCodePicker({ value, onChange }: { value: string; onChange: (iso:
       <PopoverContent className="w-72 p-0" align="start">
         <Command>
           <CommandInput placeholder="Search country or code" />
-          <CommandList>
+          <CommandList className="max-h-64 overscroll-contain" onWheel={(e) => e.stopPropagation()} onTouchMove={(e) => e.stopPropagation()}>
             <CommandEmpty>No country found.</CommandEmpty>
             <CommandGroup>
               {PHONE_COUNTRIES.map((c) => (

@@ -319,8 +319,14 @@ export function CheckoutDialog({ open, onOpenChange }: { open: boolean; onOpenCh
                 {method === "card" && (
                   <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border pt-3 text-xs">
                     <span className="text-muted-foreground">We accept:</span>
-                    {["VISA", "Mastercard", "AMEX", "Apple Pay", "G Pay"].map((b) => (
-                      <span key={b} className="rounded border border-border bg-background px-2 py-1 font-semibold">{b}</span>
+                    {[
+                      { b: "VISA", c: "border-brand-visa/30 bg-background text-brand-visa" },
+                      { b: "Mastercard", c: "border-brand-mastercard/40 bg-background text-brand-mastercard" },
+                      { b: "AMEX", c: "border-brand-amex bg-brand-amex text-brand-on" },
+                      { b: "Apple Pay", c: "border-brand-apple bg-brand-apple text-brand-on" },
+                      { b: "G Pay", c: "border-border bg-background text-foreground" },
+                    ].map(({ b, c }) => (
+                      <span key={b} className={cn("rounded border px-2 py-1 font-bold", c)}>{b}</span>
                     ))}
                   </div>
                 )}

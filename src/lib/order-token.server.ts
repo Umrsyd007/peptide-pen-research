@@ -1,7 +1,7 @@
 // Server-only HMAC tokens proving the caller created a given order.
 async function key() {
-  const secret = process.env["STRIPE_SECRET_KEY"];
-  if (!secret) throw new Error("Stripe is not configured");
+  const secret = process.env["ORDER_TOKEN_SECRET"] || process.env["SUPABASE_SERVICE_ROLE_KEY"];
+  if (!secret) throw new Error("Order token secret is not configured");
   return crypto.subtle.importKey("raw", new TextEncoder().encode(`order-token:${secret}`), { name: "HMAC", hash: "SHA-256" }, false, ["sign", "verify"]);
 }
 const toHex = (b: ArrayBuffer) => [...new Uint8Array(b)].map((x) => x.toString(16).padStart(2, "0")).join("");

@@ -2,7 +2,7 @@ import React from 'react'
 import { Body, Container, Head, Heading, Html, Preview, Section, Text } from '@react-email/components'
 import type { TemplateEntry } from './registry'
 import {
-  Address, ItemCount, PayButton, Totals, card, container, footer, h1, label, main, money,
+  Address, ItemCount, Totals, card, container, footer, h1, label, main, money,
   previewOrder, subhead, value, type OrderEmailData,
 } from './order-shared'
 
@@ -16,7 +16,6 @@ const OrderReceivedEmail = (d: OrderEmailData) => (
         <Text style={subhead}>
           Thanks{d.shipName ? `, ${d.shipName}` : ''}! Your order #{d.orderNumber} has been placed. We'll send you a secure payment link by email shortly. Your order is processed as soon as payment is confirmed.
         </Text>
-        <PayButton href={d.paymentLink} />
         <Section style={card}>
           <Text style={label}>Order ID</Text>
           <Text style={value}>#{d.orderNumber}</Text>

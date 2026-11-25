@@ -1,4 +1,4 @@
-// Local, persistent cart. Checkout is handled by our own orders + Stripe.
+// Local, persistent cart. Checkout is handled by our own orders.
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { PRODUCT_VARIANTS } from "@/lib/product-variants";

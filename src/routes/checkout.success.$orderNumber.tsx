@@ -3,14 +3,13 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import {
-  CheckCircle2, ClipboardList, Clock, Copy, Home, Loader2, Mail, MapPin, MessageCircle,
+  CheckCircle2, ClipboardList, Clock, Copy, Home, Loader2, Mail, MapPin,
   Package, ShieldCheck, ShoppingBag, Truck, User,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getPlacedOrder } from "@/lib/orders.functions";
 import { PAYMENT_LABELS, type PaymentMethod } from "@/lib/checkout-rules";
 import { formatIn } from "@/lib/currency";
-import { getPaymentLink, itemCountLabel } from "@/lib/payment-link";
 import { SUPPORT_EMAIL } from "@/lib/store-contact";
 
 export const Route = createFileRoute("/checkout/success/$orderNumber")({
@@ -34,10 +33,14 @@ export const Route = createFileRoute("/checkout/success/$orderNumber")({
 });
 
 const NEXT: Record<PaymentMethod, { title: string; steps: string[] }> = {
-  whatsapp: { title: "Pay via WhatsApp", steps: ["Open the WhatsApp chat — your order details are pre-filled", "Send the message so we can arrange payment", "Your order is processed as soon as payment is confirmed"] },
   card: { title: "Secure Card Payment", steps: ["Check your email for the secure payment link", "Click the link to open the secure payment page", "Complete payment using your card, Apple Pay, or Google Pay", "Your order is processed immediately once payment is confirmed"] },
   bank: { title: "Bank Transfer", steps: ["We'll email you our bank details", "Transfer the total using your order ID as the reference", "Your order is processed once the transfer arrives"] },
   usdt: { title: "USDT (Crypto)", steps: ["We'll email you the wallet address and exact amount", "Send the USDT payment", "Your order is processed once the payment confirms"] },
+};
+
+const itemCountLabel = (items: { qty: number }[]) => {
+  const n = items.reduce((s, i) => s + i.qty, 0);
+  return `${n} item${n === 1 ? "" : "s"}`;
 };
 
 function SuccessPage() {
@@ -52,7 +55,7 @@ function SuccessPage() {
   });
 
   const method = (o?.payment_method ?? "card") as PaymentMethod;
-  const payLink = o ? getPaymentLink(o) : null;
+  const next = NEXT[method] ?? NEXT.card;
   const copy = () => {
     navigator.clipboard.writeText(orderNumber);
     toast.success("Order ID copied");
@@ -118,23 +121,13 @@ function SuccessPage() {
         <span className="flex items-center gap-2"><Clock className="h-4 w-4" /> Fast Processing</span>
       </div>
 
-      {o && payLink && (
-        <section className="mt-6 flex flex-col gap-4 rounded-xl border border-border p-5 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="font-semibold">Your secure payment link is ready</p>
-            <p className="text-sm text-muted-foreground">Pay {formatIn(o.total, o.currency)} by card, Apple Pay or Google Pay.</p>
-          </div>
-          <Button asChild size="lg"><a href={payLink} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer">Pay now</a></Button>
-        </section>
-      )}
-
       {o && (
         <section className="mt-6 rounded-xl border border-border p-5">
-          <h2 className="text-lg font-semibold">Complete Your Payment — {NEXT[method].title}</h2>
+          <h2 className="text-lg font-semibold">Complete Your Payment — {next.title}</h2>
           <div className="mt-4 rounded-lg bg-muted/40 p-4">
             <p className="flex items-center gap-2 font-medium"><ClipboardList className="h-4 w-4" /> What happens next:</p>
             <ol className="mt-2 list-decimal space-y-1 pl-5 text-sm text-muted-foreground">
-              {NEXT[method].steps.map((s) => <li key={s}>{s}</li>)}
+              {next.steps.map((s) => <li key={s}>{s}</li>)}
             </ol>
           </div>
           <p className="mt-4 rounded-lg border border-border bg-accent/40 p-3 text-sm">

@@ -1,12 +1,11 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { sendTemplateEmail } from '@/lib/email-templates/send-email'
 import type { OrderEmailData } from '@/lib/email-templates/order-shared'
-import { getPaymentLink } from '@/lib/payment-link'
 import { PAYMENT_LABELS, type PaymentMethod } from '@/lib/checkout-rules'
 
 export const ADMIN_RECIPIENT = 'hello@getpeptidepen.com'
 
-/** Stable per-order keys so Stripe webhook retries never send twice. */
+/** Stable per-order keys so a repeated "mark paid" never sends twice. */
 export function orderEmailKeys(orderId: string) {
   return { admin: `order-paid-${orderId}-admin`, customer: `order-paid-${orderId}-customer` }
 }
@@ -65,13 +64,12 @@ export async function notifyOrderPending(supabase: SupabaseClient, orderId: stri
       phone: order.phone, discount: Number(order.discount ?? 0),
       paymentMethod: PAYMENT_LABELS[order.payment_method as PaymentMethod] ?? order.payment_method,
     }
-    const paymentLink = getPaymentLink({ currency: order.currency, ship_country: order.ship_country, order_items: items ?? [] })
     const results = await Promise.allSettled([
       sendTemplateEmail('order-pending', ADMIN_RECIPIENT, {
         templateData: data, idempotencyKey: `order-pending-${order.id}-admin`, replyTo: order.email,
       }),
       sendTemplateEmail('order-received', order.email, {
-        templateData: { ...data, paymentLink }, idempotencyKey: `order-received-${order.id}-customer`, replyTo: ADMIN_RECIPIENT,
+        templateData: data, idempotencyKey: `order-received-${order.id}-customer`, replyTo: ADMIN_RECIPIENT,
       }),
     ])
     results.forEach((r) => { if (r.status === 'rejected') console.error('Order received email failed', { orderId, error: String(r.reason) }) })

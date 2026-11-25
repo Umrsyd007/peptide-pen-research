@@ -28,7 +28,6 @@ export interface OrderEmailData {
   paymentMethod?: string | null
   discount?: number
   totalLabel?: string
-  paymentLink?: string | null
 }
 
 export const money = (n: number | undefined, currency = 'GBP') =>

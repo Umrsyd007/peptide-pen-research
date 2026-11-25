@@ -1,8 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { paidPurchase } from "./paid-purchase";
 import { requiresConsent, CONSENT_KEY, CONSENT_VERSION } from "./tracking-consent";
 import { sendPaidPurchase } from "./google-tracking";
-const paid = { payment_status: "paid", metadata: { ref: "482913" }, amount_total: 16529, currency: "usd" };
 describe("purchase measurement", () => {
   beforeEach(() => {
     const store = new Map<string,string>();
@@ -11,8 +9,6 @@ describe("purchase measurement", () => {
     vi.stubGlobal("navigator", {});
     localStorage.setItem(CONSENT_KEY, JSON.stringify({ visitor: "test", version: CONSENT_VERSION, analytics: true, advertising: true }));
   });
-  it("reports the real paid amount, currency and opaque reference", () => { expect(paidPurchase(paid)).toEqual({ transaction_id: "482913", value: 165.29, currency: "USD" }); });
-  it("does not report an unpaid completed session", () => { expect(paidPurchase({ ...paid, payment_status: "unpaid" })).toBeNull(); });
   it("uses the exact supplied Google purchase event once per order", () => {
     const args = { transaction_id: "482913", value: 165.29, currency: "USD", permittedAtPayment: true };
     expect(sendPaidPurchase(args)).toBe(true);

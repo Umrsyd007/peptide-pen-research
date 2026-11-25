@@ -1,10 +1,9 @@
 import { z } from "zod";
 import { parsePhoneNumberFromString, type CountryCode } from "libphonenumber-js";
 
-export const PAYMENT_METHODS = ["whatsapp", "card", "bank", "usdt"] as const;
+export const PAYMENT_METHODS = ["card", "bank", "usdt"] as const;
 export type PaymentMethod = (typeof PAYMENT_METHODS)[number];
 export const PAYMENT_LABELS: Record<PaymentMethod, string> = {
-  whatsapp: "Pay via WhatsApp",
   card: "Debit/Credit Card",
   bank: "Bank Transfer",
   usdt: "USDT (Crypto)",

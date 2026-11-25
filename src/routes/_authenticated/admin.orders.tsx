@@ -187,7 +187,7 @@ function AdminOrdersPage() {
                   <p className="mt-1">{selected.ship_name}</p>
                   <a className="underline" href={`mailto:${selected.email}`}>{selected.email}</a>
                   {selected.phone && (
-                    <div><a className="underline" href={`https://wa.me/${selected.phone.replace(/\D/g, "")}`} target="_blank" rel="noreferrer">{selected.phone}</a></div>
+                    <div><a className="underline" href={`tel:${selected.phone.replace(/[^\d+]/g, "")}`}>{selected.phone}</a></div>
                   )}
                   {selected.payment_method && (
                     <p className="mt-1 text-muted-foreground">Payment: {PAYMENT_LABELS[selected.payment_method as PaymentMethod] ?? selected.payment_method}</p>

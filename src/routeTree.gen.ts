@@ -31,7 +31,6 @@ import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as AuthenticatedAdminOrdersRouteImport } from './routes/_authenticated/admin.orders'
 import { Route as ApiPublicProductQuestionRouteImport } from './routes/api/public/product-question'
-import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
 import { Route as CheckoutSuccessOrderNumberRouteImport } from './routes/checkout.success.$orderNumber'
 import { Route as LovableEmailEventsRouteImport } from './routes/lovable/email/events'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -152,11 +151,6 @@ const ApiPublicProductQuestionRoute =
     path: '/api/public/product-question',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiPublicStripeWebhookRoute = ApiPublicStripeWebhookRouteImport.update({
-  id: '/api/public/stripe-webhook',
-  path: '/api/public/stripe-webhook',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const CheckoutSuccessOrderNumberRoute =
   CheckoutSuccessOrderNumberRouteImport.update({
     id: '/success/$orderNumber',
@@ -197,7 +191,6 @@ export interface FileRoutesByFullPath {
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/orders': typeof AuthenticatedAdminOrdersRoute
   '/api/public/product-question': typeof ApiPublicProductQuestionRoute
-  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/checkout/success/$orderNumber': typeof CheckoutSuccessOrderNumberRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -223,7 +216,6 @@ export interface FileRoutesByTo {
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/orders': typeof AuthenticatedAdminOrdersRoute
   '/api/public/product-question': typeof ApiPublicProductQuestionRoute
-  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/checkout/success/$orderNumber': typeof CheckoutSuccessOrderNumberRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -252,7 +244,6 @@ export interface FileRoutesById {
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/_authenticated/admin/orders': typeof AuthenticatedAdminOrdersRoute
   '/api/public/product-question': typeof ApiPublicProductQuestionRoute
-  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/checkout/success/$orderNumber': typeof CheckoutSuccessOrderNumberRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -281,7 +272,6 @@ export interface FileRouteTypes {
     | '/.mcp/invoke-tool/$tool'
     | '/admin/orders'
     | '/api/public/product-question'
-    | '/api/public/stripe-webhook'
     | '/checkout/success/$orderNumber'
     | '/lovable/email/events'
     | '/lovable/email/transactional/preview'
@@ -307,7 +297,6 @@ export interface FileRouteTypes {
     | '/.mcp/invoke-tool/$tool'
     | '/admin/orders'
     | '/api/public/product-question'
-    | '/api/public/stripe-webhook'
     | '/checkout/success/$orderNumber'
     | '/lovable/email/events'
     | '/lovable/email/transactional/preview'
@@ -335,7 +324,6 @@ export interface FileRouteTypes {
     | '/.mcp/invoke-tool/$tool'
     | '/_authenticated/admin/orders'
     | '/api/public/product-question'
-    | '/api/public/stripe-webhook'
     | '/checkout/success/$orderNumber'
     | '/lovable/email/events'
     | '/lovable/email/transactional/preview'
@@ -360,7 +348,6 @@ export interface RootRouteChildren {
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicProductQuestionRoute: typeof ApiPublicProductQuestionRoute
-  ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
   LovableEmailEventsRoute: typeof LovableEmailEventsRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
 }
@@ -521,13 +508,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicProductQuestionRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/stripe-webhook': {
-      id: '/api/public/stripe-webhook'
-      path: '/api/public/stripe-webhook'
-      fullPath: '/api/public/stripe-webhook'
-      preLoaderRoute: typeof ApiPublicStripeWebhookRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/checkout/success/$orderNumber': {
       id: '/checkout/success/$orderNumber'
       path: '/success/$orderNumber'
@@ -611,7 +591,6 @@ const rootRouteChildren: RootRouteChildren = {
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicProductQuestionRoute: ApiPublicProductQuestionRoute,
-  ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
   LovableEmailEventsRoute: LovableEmailEventsRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
 }

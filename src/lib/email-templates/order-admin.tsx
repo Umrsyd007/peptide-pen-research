@@ -14,7 +14,7 @@ const OrderAdminEmail = (d: OrderEmailData) => (
       <Container style={container}>
         <Heading style={h1}>New paid order #{d.orderNumber}</Heading>
         <Text style={subhead}>
-          Stripe confirmed payment{d.createdAt ? ` for an order placed ${new Date(d.createdAt).toUTCString()}` : ''}.
+          Payment confirmed{d.createdAt ? ` for an order placed ${new Date(d.createdAt).toUTCString()}` : ''}.
         </Text>
         <Section style={card}>
           <Text style={label}>Customer</Text>

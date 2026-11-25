@@ -12,7 +12,7 @@ export const Route = createFileRoute("/privacy-policy")({
     <h1 className="text-3xl font-bold">Privacy policy</h1>
     <p className="text-sm text-muted-foreground">Updated October 29, 2026</p>
     <h2 className="text-xl font-semibold">Orders and payments</h2>
-    <p>We store your order, contact and shipping details to process your purchase and respond to requests. Stripe processes payments and collects payment information directly. Our payment request uses an opaque order reference, amount and currency instead of itemized product names or your shipping details.</p>
+    <p>We store your order, contact and shipping details to process your purchase and respond to requests. Payment is completed outside this site using the method you choose at checkout; we do not collect or store card details here.</p>
     <h2 className="text-xl font-semibold">Google measurement</h2>
     <p>When allowed by your privacy choices and regional requirements, Google Analytics receives page visits and shopping events, including product details, amounts and currency. Google Ads receives page visits, advertising click and cookie identifiers, and confirmed purchase references, amounts and currency for advertising measurement and campaign optimization. Requests also expose normal connection information such as IP address, browser information and page address to Google. We do not enable customer matching or share your name, email or shipping address in these advertising events.</p>
     <h2 className="text-xl font-semibold">Your choices and withdrawal</h2>

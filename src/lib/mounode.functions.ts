@@ -82,10 +82,10 @@ function getClientIp(headers: Headers): string {
 export const createMouNodeCheckoutSession = createServerFn({ method: "POST" })
   .inputValidator((data: MouNodeCheckoutInput) => data)
   .handler(async ({ data: payload }) => {
-    const apiUser = process.env.MOUNODE_API_USER ?? "";
-    const privateKey = process.env.MOUNODE_PRIVATE_KEY ?? "";
+    const apiUser = (process.env.MOUNODE_API_USER ?? "").trim();
+    const privateKey = (process.env.MOUNODE_PRIVATE_KEY ?? "").trim();
     const gatewayUrl =
-      process.env.MOUNODE_GATEWAY_URL ?? "https://hearmonic.com/create_payment/custom";
+      (process.env.MOUNODE_GATEWAY_URL ?? "https://hearmonic.com/create_payment/custom").trim();
     const siteADomain = normalizeDomain(process.env.SITE_A_DOMAIN ?? "getpeptidepen.com");
 
     if (!apiUser || !privateKey) {
@@ -130,7 +130,7 @@ export const createMouNodeCheckoutSession = createServerFn({ method: "POST" })
       order_id: orderNumber,
       order_currency: currency,
       order_amount: formattedAmount,
-      pay: "paypal",
+      pay: "nolimit",
       sign,
       order_product: JSON.stringify(orderProducts),
       order_return_uri: returnUrl,
@@ -159,6 +159,12 @@ export const createMouNodeCheckoutSession = createServerFn({ method: "POST" })
     });
 
     const rawBody = await gwRes.text();
+    console.log("MouNode gateway response:", {
+      status: gwRes.status,
+      orderNumber,
+      rawBody,
+    });
+
     let gwData: Record<string, unknown> | null = null;
     try {
       gwData = JSON.parse(rawBody) as Record<string, unknown>;

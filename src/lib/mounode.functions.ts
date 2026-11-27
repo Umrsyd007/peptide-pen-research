@@ -29,11 +29,39 @@ export type MouNodeCheckoutInput = {
   order_return_uri?: string;
 };
 
+const COUNTRY_TO_ISO: Record<string, string> = {
+  "United States": "US",
+  "United Kingdom": "GB",
+  Canada: "CA",
+  Australia: "AU",
+  Germany: "DE",
+  France: "FR",
+  Spain: "ES",
+  Italy: "IT",
+  Netherlands: "NL",
+  Ireland: "IE",
+  "New Zealand": "NZ",
+  Singapore: "SG",
+  "United Arab Emirates": "AE",
+};
+
+function toIsoCountry(raw?: string): string {
+  const trimmed = (raw || "").trim();
+  if (/^[A-Za-z]{2}$/.test(trimmed)) return trimmed.toUpperCase();
+  return COUNTRY_TO_ISO[trimmed] ?? "US";
+}
+
 function sanitizeOrderNumber(raw?: string): string {
   const cleaned = (raw || "").replace(/[^A-Za-z0-9_]/g, "");
   if (cleaned.length >= 4) return cleaned;
   const rand = crypto.randomUUID().replace(/[^A-Za-z0-9]/g, "").slice(0, 8).toUpperCase();
   return `ORD_${Date.now()}_${rand}`;
+}
+
+function normalizeDomain(raw?: string): string {
+  const trimmed = (raw || "").trim();
+  if (!trimmed) return "getpeptidepen.com";
+  return trimmed.replace(/^https?:\/\//i, "").replace(/^www\./i, "").split("/")[0];
 }
 
 function splitName(fullName?: string): { firstName: string; lastName: string } {
@@ -58,7 +86,7 @@ export const createMouNodeCheckoutSession = createServerFn({ method: "POST" })
     const privateKey = process.env.MOUNODE_PRIVATE_KEY ?? "";
     const gatewayUrl =
       process.env.MOUNODE_GATEWAY_URL ?? "https://hearmonic.com/create_payment/custom";
-    const siteADomain = process.env.SITE_A_DOMAIN ?? "getpeptidepen.com";
+    const siteADomain = normalizeDomain(process.env.SITE_A_DOMAIN ?? "getpeptidepen.com");
 
     if (!apiUser || !privateKey) {
       throw new Error("Missing MOUNODE_API_USER or MOUNODE_PRIVATE_KEY on server.");
@@ -72,13 +100,27 @@ export const createMouNodeCheckoutSession = createServerFn({ method: "POST" })
     const email = String(payload.email || "").trim();
     const items = Array.isArray(payload.items) ? payload.items : [];
 
-    const sign = md5(`${apiUser}${privateKey}${currency}${formattedAmount}${orderNumber}`).toLowerCase();
+    const orderProducts = items.map((item) => ({
+      name: String(item.name || "Item"),
+      model: String(item.productId || item.name || "ITEM").slice(0, 64),
+      price: Number(item.price || 0).toFixed(2),
+      quantity: Math.max(1, Number(item.qty || 1)),
+      option: item.variant ? [{ name: "Variant", value: String(item.variant) }] : [],
+      weight: 0,
+      products_image: "",
+    }));
+
+    const sign = md5(
+      `${apiUser}${privateKey}${currency}${formattedAmount}${orderNumber}`,
+    ).toLowerCase();
     const vt = md5(`${orderNumber}${privateKey}`).toLowerCase();
 
-    const notifyUrl = `https://${siteADomain}/api/mounode-notify?vt=${vt}`;
+    const notifyUrl = `https://${siteADomain}/api/mounode-notify?vt=${encodeURIComponent(vt)}`;
     const successUrl =
-      payload.order_success_uri || `https://${siteADomain}/checkout/success/${orderNumber}`;
-    const returnUrl = payload.order_return_uri || `https://${siteADomain}/checkout/cancel`;
+      payload.order_success_uri ||
+      `https://${siteADomain}/checkout/success/${encodeURIComponent(orderNumber)}`;
+    const returnUrl =
+      payload.order_return_uri || `https://${siteADomain}/checkout/cancel`;
 
     const headers = getRequestHeaders();
 
@@ -90,17 +132,21 @@ export const createMouNodeCheckoutSession = createServerFn({ method: "POST" })
       order_amount: formattedAmount,
       pay: "paypal",
       sign,
-      order_product: JSON.stringify(items),
+      order_product: JSON.stringify(orderProducts),
       order_return_uri: returnUrl,
       order_success_uri: successUrl,
       order_notify_uri: notifyUrl,
       ip: getClientIp(headers),
+      user_agent: headers.get("user-agent") ?? "",
+      lan: headers.get("accept-language") ?? "en-US",
       billing_first_name: firstName,
       billing_last_name: lastName,
       billing_address1: String(payload.ship_address1 || ""),
       billing_city: String(payload.ship_city || ""),
-      billing_country: String(payload.ship_country || "US"),
+      billing_state: String(payload.ship_region || ""),
+      billing_country: toIsoCountry(payload.ship_country),
       billing_zip: String(payload.ship_postal || ""),
+      billing_phone: String(payload.phone || ""),
       billing_email: email,
       reorder: "reorder",
       jump: "1",
@@ -112,7 +158,20 @@ export const createMouNodeCheckoutSession = createServerFn({ method: "POST" })
       body: formBody.toString(),
     });
 
-    const gwData = await gwRes.json();
+    const rawBody = await gwRes.text();
+    let gwData: Record<string, unknown> | null = null;
+    try {
+      gwData = JSON.parse(rawBody) as Record<string, unknown>;
+    } catch {
+      throw new Error(rawBody || `Gateway HTTP ${gwRes.status}`);
+    }
+
+    if (!gwRes.ok) {
+      throw new Error(
+        String(gwData?.message || gwData?.msg || `Gateway HTTP ${gwRes.status}`),
+      );
+    }
+
     if (Number(gwData?.code) === 1 && gwData?.linkform) {
       return {
         linkform: String(gwData.linkform),
@@ -120,5 +179,7 @@ export const createMouNodeCheckoutSession = createServerFn({ method: "POST" })
       };
     }
 
-    throw new Error(gwData?.msg || "Gateway rejected order");
+    throw new Error(
+      String(gwData?.message || gwData?.msg || rawBody || "Gateway rejected order"),
+    );
   });

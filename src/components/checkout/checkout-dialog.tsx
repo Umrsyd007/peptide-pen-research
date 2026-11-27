@@ -3,7 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import {
   ArrowLeft, ArrowRight, Building2, Check, ClipboardCheck, CreditCard, Globe, Home, Loader2,
-  Mail, MapPin, MessageCircle, Package, Phone, User, ChevronsUpDown, Wallet,
+  Mail, MapPin, Package, Phone, User, ChevronsUpDown, Wallet,
 } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -26,6 +26,7 @@ import {
 import { COUNTRIES } from "@/lib/countries";
 import { trackBeginCheckout } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
 
 const STEPS = [
   { key: "contact", label: "Contact", icon: User, sub: "Enter your contact information" },
@@ -77,7 +78,6 @@ export function CheckoutDialog({ open, onOpenChange }: { open: boolean; onOpenCh
   const total = subtotal;
   const emailSuggestion = suggestEmail(contact.email);
 
-  // Start the phone code and delivery country on the shopper's own country.
   useEffect(() => {
     if (!open || countryPicked) return;
     let alive = true;
@@ -119,7 +119,6 @@ export function CheckoutDialog({ open, onOpenChange }: { open: boolean; onOpenCh
     setErrors(e);
     if (Object.keys(e).length) return;
     if (step === 0) {
-      // Pause once on a likely typo; a second Continue keeps what they typed.
       if (emailSuggestion && typoWarned !== contact.email) {
         setTypoWarned(contact.email);
         setErrors({ email: "Please check your email — tap the suggestion above, or press Continue to keep it." });
@@ -147,6 +146,14 @@ export function CheckoutDialog({ open, onOpenChange }: { open: boolean; onOpenCh
     setPlacing(true);
     setPlaceError(null);
     try {
+      const formattedItems = items.map((i) => ({
+        productId: i.productId,
+        name: i.title,
+        variant: i.variantTitle ?? "",
+        price: convert(parseFloat(i.price.amount)).toFixed(2),
+        qty: i.quantity,
+      }));
+
       const order = await submitOrder({
         data: {
           email: contact.email.trim(),
@@ -161,18 +168,69 @@ export function CheckoutDialog({ open, onOpenChange }: { open: boolean; onOpenCh
           ship_country: address.country,
           currency,
           items: items.map((i) => ({
-            productId: i.productId, name: i.title, variant: i.variantTitle ?? "",
-            price: parseFloat(i.price.amount), qty: i.quantity,
+            productId: i.productId,
+            name: i.title,
+            variant: i.variantTitle ?? "",
+            price: parseFloat(i.price.amount),
+            qty: i.quantity,
           })),
         },
       });
+
       trackBeginCheckout({
         items: items.map((i) => ({
-          item_id: i.productId, item_name: i.title, item_variant: i.variantTitle,
-          price: convert(parseFloat(i.price.amount)), quantity: i.quantity, currency,
+          item_id: i.productId,
+          item_name: i.title,
+          item_variant: i.variantTitle,
+          price: convert(parseFloat(i.price.amount)),
+          quantity: i.quantity,
+          currency,
         })),
-        value: total, currency,
+        value: total,
+        currency,
       });
+
+      const cleanOrderNumber = String(order.orderNumber).replace(/[^A-Za-z0-9_]/g, "_");
+
+      if (method === "card") {
+        const { data, error } = await supabase.functions.invoke("create-mounode-checkout", {
+          body: {
+            order_number: cleanOrderNumber,
+            email: contact.email.trim(),
+            phone: normalizePhone(contact.phoneCountry, contact.phone) ?? "",
+            ship_name: contact.name.trim(),
+            ship_address1: address.address1,
+            ship_address2: address.address2,
+            ship_city: address.city,
+            ship_region: "",
+            ship_postal: address.postal,
+            ship_country: address.country,
+            subtotal,
+            shipping: 0,
+            discount: 0,
+            total,
+            currency,
+            items: formattedItems,
+            order_success_uri: `${window.location.origin}/checkout/success/${cleanOrderNumber}`,
+            order_return_uri: `${window.location.origin}/checkout/cancel`,
+          },
+        });
+
+        if (error) {
+          throw new Error(error.message || "Failed to initialize payment gateway.");
+        }
+        if (!data?.linkform) {
+          throw new Error(data?.error || "Payment gateway did not return a checkout URL.");
+        }
+
+        clearCart();
+        onOpenChange(false);
+        setDrawerOpen(false);
+        setStep(0);
+        window.location.assign(data.linkform);
+        return;
+      }
+
       clearCart();
       onOpenChange(false);
       setDrawerOpen(false);

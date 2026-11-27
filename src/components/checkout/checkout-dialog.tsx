@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useCartStore } from "@/stores/cart";
 import { useMoney, formatIn } from "@/lib/currency";
 import { createOrder } from "@/lib/orders.functions";
+import { createMouNodeCheckoutSession } from "@/lib/mounode.functions";
 import { verifyEmailDomain } from "@/lib/email-check.functions";
 import { suggestEmail } from "@/lib/email-check";
 import { getVisitorCountry } from "@/lib/currency.functions";
@@ -26,7 +27,6 @@ import {
 import { COUNTRIES } from "@/lib/countries";
 import { trackBeginCheckout } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
-import { supabase } from "@/integrations/supabase/client";
 
 const STEPS = [
   { key: "contact", label: "Contact", icon: User, sub: "Enter your contact information" },
@@ -56,6 +56,7 @@ export function CheckoutDialog({ open, onOpenChange }: { open: boolean; onOpenCh
   const setDrawerOpen = useCartStore((s) => s.setDrawerOpen);
   const { currency, convert, format } = useMoney();
   const submitOrder = useServerFn(createOrder);
+  const startMouNodeSession = useServerFn(createMouNodeCheckoutSession);
   const checkEmail = useServerFn(verifyEmailDomain);
   const visitorCountry = useServerFn(getVisitorCountry);
 
@@ -193,8 +194,8 @@ export function CheckoutDialog({ open, onOpenChange }: { open: boolean; onOpenCh
       const cleanOrderNumber = String(order.orderNumber).replace(/[^A-Za-z0-9_]/g, "_");
 
       if (method === "card") {
-        const { data, error } = await supabase.functions.invoke("create-mounode-checkout", {
-          body: {
+        const res = await startMouNodeSession({
+          data: {
             order_number: cleanOrderNumber,
             email: contact.email.trim(),
             phone: normalizePhone(contact.phoneCountry, contact.phone) ?? "",
@@ -216,18 +217,11 @@ export function CheckoutDialog({ open, onOpenChange }: { open: boolean; onOpenCh
           },
         });
 
-        if (error) {
-          throw new Error(error.message || "Failed to initialize payment gateway.");
-        }
-        if (!data?.linkform) {
-          throw new Error(data?.error || "Payment gateway did not return a checkout URL.");
-        }
-
         clearCart();
         onOpenChange(false);
         setDrawerOpen(false);
         setStep(0);
-        window.location.assign(data.linkform);
+        window.location.assign(res.linkform);
         return;
       }
 
@@ -440,10 +434,15 @@ export function CheckoutDialog({ open, onOpenChange }: { open: boolean; onOpenCh
                   <p className="text-sm text-muted-foreground">Click "Place Order" below to confirm. You'll receive a confirmation email with next steps.</p>
                 </div>
               </div>
-              {placeError && <p className="text-sm text-destructive">{placeError}</p>}
             </div>
           )}
         </form>
+
+        {placeError && (
+          <div className="border-t border-destructive/20 bg-destructive/10 px-6 py-2.5 text-sm text-destructive">
+            {placeError}
+          </div>
+        )}
 
         <div className="grid grid-cols-2 gap-3 border-t border-border px-6 py-4">
           <Button variant="outline" className="h-12" onClick={back} disabled={placing}>

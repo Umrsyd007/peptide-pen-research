@@ -23,6 +23,7 @@ import { Route as TermsOfServiceRouteImport } from './routes/terms-of-service'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
+import { Route as ApiMounodeNotifyRouteImport } from './routes/api/mounode-notify'
 import { Route as GuidesPeptideDosageCalculatorRouteImport } from './routes/guides.peptide-dosage-calculator'
 import { Route as GuidesRetatrutideDosageGuideRouteImport } from './routes/guides.retatrutide-dosage-guide'
 import { Route as ProductsIndexRouteImport } from './routes/products.index'
@@ -106,6 +107,11 @@ const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
   path: '/account',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiMounodeNotifyRoute = ApiMounodeNotifyRouteImport.update({
+  id: '/api/mounode-notify',
+  path: '/api/mounode-notify',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GuidesPeptideDosageCalculatorRoute =
   GuidesPeptideDosageCalculatorRouteImport.update({
     id: '/guides/peptide-dosage-calculator',
@@ -183,6 +189,7 @@ export interface FileRoutesByFullPath {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/account': typeof AuthenticatedAccountRoute
+  '/api/mounode-notify': typeof ApiMounodeNotifyRoute
   '/guides/peptide-dosage-calculator': typeof GuidesPeptideDosageCalculatorRoute
   '/guides/retatrutide-dosage-guide': typeof GuidesRetatrutideDosageGuideRoute
   '/products/$productId': typeof ProductsProductIdRoute
@@ -208,6 +215,7 @@ export interface FileRoutesByTo {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/account': typeof AuthenticatedAccountRoute
+  '/api/mounode-notify': typeof ApiMounodeNotifyRoute
   '/guides/peptide-dosage-calculator': typeof GuidesPeptideDosageCalculatorRoute
   '/guides/retatrutide-dosage-guide': typeof GuidesRetatrutideDosageGuideRoute
   '/products/$productId': typeof ProductsProductIdRoute
@@ -236,6 +244,7 @@ export interface FileRoutesById {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
+  '/api/mounode-notify': typeof ApiMounodeNotifyRoute
   '/guides/peptide-dosage-calculator': typeof GuidesPeptideDosageCalculatorRoute
   '/guides/retatrutide-dosage-guide': typeof GuidesRetatrutideDosageGuideRoute
   '/products/$productId': typeof ProductsProductIdRoute
@@ -264,6 +273,7 @@ export interface FileRouteTypes {
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/account'
+    | '/api/mounode-notify'
     | '/guides/peptide-dosage-calculator'
     | '/guides/retatrutide-dosage-guide'
     | '/products/$productId'
@@ -289,6 +299,7 @@ export interface FileRouteTypes {
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/account'
+    | '/api/mounode-notify'
     | '/guides/peptide-dosage-calculator'
     | '/guides/retatrutide-dosage-guide'
     | '/products/$productId'
@@ -316,6 +327,7 @@ export interface FileRouteTypes {
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/_authenticated/account'
+    | '/api/mounode-notify'
     | '/guides/peptide-dosage-calculator'
     | '/guides/retatrutide-dosage-guide'
     | '/products/$productId'
@@ -343,6 +355,7 @@ export interface RootRouteChildren {
   TermsOfServiceRoute: typeof TermsOfServiceRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  ApiMounodeNotifyRoute: typeof ApiMounodeNotifyRoute
   GuidesPeptideDosageCalculatorRoute: typeof GuidesPeptideDosageCalculatorRoute
   GuidesRetatrutideDosageGuideRoute: typeof GuidesRetatrutideDosageGuideRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
@@ -451,6 +464,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/account'
       preLoaderRoute: typeof AuthenticatedAccountRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/api/mounode-notify': {
+      id: '/api/mounode-notify'
+      path: '/api/mounode-notify'
+      fullPath: '/api/mounode-notify'
+      preLoaderRoute: typeof ApiMounodeNotifyRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/guides/peptide-dosage-calculator': {
       id: '/guides/peptide-dosage-calculator'
@@ -586,6 +606,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  ApiMounodeNotifyRoute: ApiMounodeNotifyRoute,
   GuidesPeptideDosageCalculatorRoute: GuidesPeptideDosageCalculatorRoute,
   GuidesRetatrutideDosageGuideRoute: GuidesRetatrutideDosageGuideRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,

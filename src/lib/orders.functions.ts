@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { signOrderToken, verifyOrderToken } from "@/lib/order-token.server";
 import { PAYMENT_METHODS, isValidIntlPhone } from "@/lib/checkout-rules";
+import { getServerSupabaseClient } from "@/lib/supabase-server";
 
 const ItemSchema = z.object({
   productId: z.string().min(1).max(120),
@@ -36,9 +37,8 @@ export const createOrder = createServerFn({ method: "POST" })
     const { checkEmailDeliverable } = await import("@/lib/email-check.server");
     const emailProblem = await checkEmailDeliverable(data.email);
     if (emailProblem) throw new Error(emailProblem);
-    const { supabaseAdmin } = await import(
-      "@/integrations/supabase/client.server"
-    );
+
+    const db = await getServerSupabaseClient();
 
     // Never trust browser-submitted prices: resolve each line from the catalog.
     const { PRODUCTS } = await import("@/lib/products");
@@ -67,7 +67,7 @@ export const createOrder = createServerFn({ method: "POST" })
     const shipping = 0;
     const total = Math.round((subtotal + shipping) * 100) / 100;
 
-    const { data: order, error } = await supabaseAdmin
+    const { data: order, error } = await db
       .from("orders")
       .insert({
         email: data.email,
@@ -101,13 +101,13 @@ export const createOrder = createServerFn({ method: "POST" })
       price: i.price,
       qty: i.qty,
     }));
-    const { error: itemsErr } = await supabaseAdmin
+    const { error: itemsErr } = await db
       .from("order_items")
       .insert(rows);
     if (itemsErr) throw new Error(itemsErr.message);
 
     const { notifyOrderPending } = await import("@/lib/email/order-paid.server");
-    await notifyOrderPending(supabaseAdmin, order.id);
+    await notifyOrderPending(db as never, order.id);
 
     return {
       id: order.id as string,
@@ -122,8 +122,8 @@ export const getPlacedOrder = createServerFn({ method: "POST" })
   .inputValidator((raw: unknown) => z.object({ id: z.string().uuid(), token: z.string().min(1).max(200) }).parse(raw))
   .handler(async ({ data }) => {
     if (!(await verifyOrderToken(data.id, data.token))) throw new Error("Order not found");
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: o } = await supabaseAdmin.from("orders")
+    const db = await getServerSupabaseClient();
+    const { data: o } = await db.from("orders")
       .select("order_number,email,phone,payment_method,ship_name,ship_address1,ship_address2,ship_city,ship_region,ship_postal,ship_country,subtotal,discount,discount_code,shipping,total,currency,order_items(name,variant,price,qty,product_id)")
       .eq("id", data.id).maybeSingle();
     if (!o) throw new Error("Order not found");

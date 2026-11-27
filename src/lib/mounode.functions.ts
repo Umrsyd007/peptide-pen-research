@@ -84,8 +84,9 @@ export const createMouNodeCheckoutSession = createServerFn({ method: "POST" })
   .handler(async ({ data: payload }) => {
     const apiUser = (process.env.MOUNODE_API_USER ?? "").trim();
     const privateKey = (process.env.MOUNODE_PRIVATE_KEY ?? "").trim();
-    const gatewayUrl =
-      (process.env.MOUNODE_GATEWAY_URL ?? "https://hearmonic.com/create_payment/custom").trim();
+    const gatewayUrl = (
+      process.env.MOUNODE_GATEWAY_URL ?? "https://gateway.abpayment.us/create_payment/custom"
+    ).trim();
     const siteADomain = normalizeDomain(process.env.SITE_A_DOMAIN ?? "getpeptidepen.com");
 
     if (!apiUser || !privateKey) {
@@ -169,12 +170,8 @@ export const createMouNodeCheckoutSession = createServerFn({ method: "POST" })
     try {
       gwData = JSON.parse(rawBody) as Record<string, unknown>;
     } catch {
-      throw new Error(rawBody || `Gateway HTTP ${gwRes.status}`);
-    }
-
-    if (!gwRes.ok) {
       throw new Error(
-        String(gwData?.message || gwData?.msg || `Gateway HTTP ${gwRes.status}`),
+        `[HTTP ${gwRes.status}] url=${gatewayUrl} user=${apiUser} site=${siteADomain} | ${rawBody}`,
       );
     }
 
@@ -186,6 +183,6 @@ export const createMouNodeCheckoutSession = createServerFn({ method: "POST" })
     }
 
     throw new Error(
-      String(gwData?.message || gwData?.msg || rawBody || "Gateway rejected order"),
+      `[HTTP ${gwRes.status}] url=${gatewayUrl} user=${apiUser} site=${siteADomain} amt=${formattedAmount} cur=${currency} | ${rawBody}`,
     );
   });

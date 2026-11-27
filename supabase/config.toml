@@ -1,7 +1,7 @@
 project_id = "caxskmuobsvvybkducdd"
 
 [functions.create-mounode-checkout]
-verify_jwt = true
+verify_jwt = false
 
 [functions.mounode-notify]
 verify_jwt = false
